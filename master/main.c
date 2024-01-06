@@ -44,10 +44,16 @@ void Start_Page(){
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-
             main_page();
         }
     }
+}
+void Main_Page(){
+    printf("1. Adding new building");
+    ptintf("2. Deleting the buildings");
+    printf("3. Reports");
+    printf("4. settings");
+    printf("5. sign out");
 }
 void main(){
     Start_Page();
