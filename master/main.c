@@ -13,11 +13,12 @@ void sign_up(){
     printf("Are you sure you want to add this user to the application?")
     system("cls");
     Sleep(2000);
-    printf("the user has added to the application successfully");
+    printf("the user has added to the application successfully!");
     System("cls");
 }
 void sign_in(){
-
+    printf("Please enter your user name: ");
+    printf("Please enter your password: ");
 }
 void main_page(){
     system("cls");
