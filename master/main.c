@@ -67,7 +67,7 @@ void sale_buildings(){
     printf("3. Normal filed");
     printf("4. back");
 }
-void adding_sale_buildings(){
+void adding_sale_buildings_Residential(){
     printf("PLease enter the municipality's area: ");
     printf("Please enter the address of building: ");
     printf("PLease enter model of building(apartment or Villa): ");
