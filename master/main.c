@@ -58,9 +58,15 @@ void Main_Page(){
 void adding_page(){
     printf("1. For sale buildings");
     printf("2. For rent buildings");
-    printf("3. For mortgage buildings")ک
+    printf("3. For mortgage buildings");
+    printf("4. back");
 }
-
+void sale_buildings(){
+    printf("1. Residential buildings");
+    printf("2. Commercial");
+    printf("3. Normal filed");
+    printf("4. back");
+}
 void main(){
     Start_Page();
 }
