@@ -20,7 +20,7 @@ void sign_in(){
     printf("Please enter your user name: ");
     printf("Please enter your password: ");
 }
-void main_page(){
+void Start_Page(){
     system("cls");
     int checker = 0;
     printf("1. sign up\n");
@@ -50,5 +50,5 @@ void main_page(){
     }
 }
 void main(){
-    main_page();
+    Start_Page();
 }
