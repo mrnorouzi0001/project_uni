@@ -55,6 +55,12 @@ void Main_Page(){
     printf("4. settings");
     printf("5. sign out");
 }
+void adding_page(){
+    printf("1. For sale buildings");
+    printf("2. For rent buildings");
+    printf("3. For mortgage buildings")ک
+}
+
 void main(){
     Start_Page();
 }
