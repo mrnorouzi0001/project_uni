@@ -1,7 +1,20 @@
 #include<stdio.h>
 #include<windows.h>
 void sign_up(){
-
+    system("cls");
+    printf("        you will use this information for using the application\n");
+    printf("\nPlease enter a user name: ");
+    printf("\nPleas enter a password: ");
+    printf("            personal information")
+    printf("\nPlease enter your name: ");
+    printf("\nPlease enter your last name: ");
+    printf("\nPlease enter Your phone number: ");
+    printf("\nPlease enter Your email:  ");
+    printf("Are you sure you want to add this user to the application?")
+    system("cls");
+    Sleep(2000);
+    printf("the user has added to the application successfully");
+    System("cls");
 }
 void sign_in(){
 
