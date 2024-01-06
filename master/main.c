@@ -48,7 +48,6 @@ void main_page(){
             main_page();
         }
     }
-
 }
 void main(){
     main_page();
