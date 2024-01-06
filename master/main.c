@@ -7,6 +7,7 @@ void sign_in(){
 
 }
 void main_page(){
+    system("cls");
     int checker = 0;
     printf("1. sign up\n");
     printf("2. sign in\n");
@@ -29,7 +30,7 @@ void main_page(){
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            system("cls");
+
             main_page();
         }
     }
