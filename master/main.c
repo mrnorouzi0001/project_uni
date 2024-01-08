@@ -58,7 +58,7 @@ void Main_Page(){
 void adding_page(){
     printf("1. For sale buildings");
     printf("2. For rent buildings");
-    printf("4. back");
+    printf("3. back");
 }
 void sale_buildings(){
     printf("1. Residential buildings");
@@ -154,6 +154,42 @@ void reports_admin(){
     printf("12. Deleted buildings");
     printf("13. Users activity");
 
+}
+void report_model_main(){
+    printf("1. Sale");
+    printf("2. rent");
+    printf("3. back");
+}
+void report_model_building_model(int mode){
+    printf("1. Residential buildings");
+    printf("2. Commercial");
+    printf("3. Normal filed");
+    printf("4. back");
+}
+void report_sale(int mode_main , int mode_building){
+    printf("Municipality's area: ");
+    printf("Address of building: ");
+    printf("Model of building: ");
+    printf("Age of building: ");
+    printf("The size of the infrastructure: ");
+    printf("Amount of floors: ");
+    printf("The size of the main land: ");
+    printf("Phone number of owner: ");
+    printf("Amount of rooms: ");
+    printf("Price: ");
+}
+void report_rent(int mode_main , int mode_building){
+    printf("Municipality's area: ");
+    printf("Address of building: ");
+    printf("Model of building: ");
+    printf("Age of building: ");
+    printf("The size of the infrastructure: ");
+    printf("Amount of floors: ");
+    printf("The size of the main land: ");
+    printf("Phone number of owner: ");
+    printf("Amount of rooms: ");
+    printf("prepayment Price: ")
+    printf("Rent Price: ");
 }
 void reports_user(){
     printf("1. Specific model of buildings ");
