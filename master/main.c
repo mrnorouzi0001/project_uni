@@ -139,6 +139,22 @@ void adding_rent_buildings_filed(){
     printf("PLease enter price of prepayment: ");
     printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
 }
+void reports_admin(){
+    printf("1. Specific model of buildings ");
+    printf("2. Buildings with Specific area");
+    printf("3. Buildings with Specific age");
+    printf("4. Buildings with Specific infrastructure size");
+    printf("5. Buildings with Specific prices");
+    printf("6. Buildings with Specific Room's amount");
+    printf("7. Total price of building");
+    printf("8. Buildings with Specific rent and mortgage price");
+    printf("9. Users Financial turnover");
+    printf("10. Date of registered buildings");
+    printf("11. Buildings with Specific floors");
+    printf("12. Deleted buildings");
+    printf("13. Users activity");
+
+}
 void main(){
     Start_Page();
 }
