@@ -91,6 +91,14 @@ void adding_sale_buildings_commercial(){
     printf("PLease enter amount of rooms: ");
     printf("PLease enter price: ");
 }
+void adding_sale_buildings_filed(){
+    printf("PLease enter the municipality's area: ");
+    printf("Please enter the address of building: ");
+    printf("PLease enter model of building(farm or in-city): ");
+    printf("Please enter The size of the infrastructure: ");
+    printf("Please enter phone number of owner: ");
+    printf("PLease enter price: ");
+}
 void main(){
     Start_Page();
 }
