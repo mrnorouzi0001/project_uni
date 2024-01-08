@@ -99,6 +99,12 @@ void adding_sale_buildings_filed(){
     printf("Please enter phone number of owner: ");
     printf("PLease enter price: ");
 }
+void rent_buildings(){
+    printf("1. Residential buildings");
+    printf("2. Commercial");
+    printf("3. Normal filed");
+    printf("4. back");
+}
 void main(){
     Start_Page();
 }
