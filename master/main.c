@@ -58,7 +58,6 @@ void Main_Page(){
 void adding_page(){
     printf("1. For sale buildings");
     printf("2. For rent buildings");
-    printf("3. For mortgage buildings");
     printf("4. back");
 }
 void sale_buildings(){
@@ -116,7 +115,7 @@ void adding_rent_buildings_Residential(){
     printf("Please enter phone number of owner: ");
     printf("PLease enter amount of rooms: ");
     printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month): ");
+    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
 }
 void adding_rent_buildings_commercial(){
     printf("PLease enter the municipality's area: ");
@@ -129,7 +128,7 @@ void adding_rent_buildings_commercial(){
     printf("Please enter phone number of owner: ");
     printf("PLease enter amount of rooms: ");
     printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month): ");
+    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
 }
 void adding_rent_buildings_filed(){
     printf("PLease enter the municipality's area: ");
@@ -138,7 +137,7 @@ void adding_rent_buildings_filed(){
     printf("Please enter The size of the infrastructure: ");
     printf("Please enter phone number of owner: ");
     printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month): ");
+    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
 }
 void main(){
     Start_Page();
