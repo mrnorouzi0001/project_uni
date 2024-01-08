@@ -155,6 +155,18 @@ void reports_admin(){
     printf("13. Users activity");
 
 }
+void reports_user(){
+    printf("1. Specific model of buildings ");
+    printf("2. Buildings with Specific area");
+    printf("3. Buildings with Specific age");
+    printf("4. Buildings with Specific infrastructure size");
+    printf("5. Buildings with Specific prices");
+    printf("6. Buildings with Specific Room's amount");
+    printf("7. Total price of building");
+    printf("8. Buildings with Specific rent and mortgage price");
+    printf("9. Date of registered buildings");
+    printf("10. Buildings with Specific floors");
+}
 void main(){
     Start_Page();
 }
