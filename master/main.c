@@ -1,24 +1,115 @@
 #include<stdio.h>
 #include<windows.h>
+void Start_Page();
+void make_list_user(FILE *user_fp);
+struct user{
+    char user_name[30];
+    char password[20];
+    char name[25];
+    char last_name[45];
+    char phone[12];
+    char email[35];
+    struct user *link;
+}*start_user , *last_user;
+typedef struct user USER;
+USER *current_user;
 void sign_up(){
     system("cls");
+    FILE *user_fp;
+    user_fp = fopen("Files\\users\\user.txt" , "a+");
+    if(user_fp == NULL){
+        printf("There is a problem with user file. the program will restart itself");
+        free(user_fp);
+        exit(0);
+    }
+    USER *user;
+    user = malloc(sizeof(USER));
     printf("        you will use this information for using the application\n");
     printf("\nPlease enter a user name: ");
+    gets(user->user_name);
     printf("\nPleas enter a password: ");
-    printf("            personal information");
+    gets(user->password);
+    printf("\n            personal information\n");
     printf("\nPlease enter your name: ");
+    gets(user->name);
     printf("\nPlease enter your last name: ");
+    gets(user->last_name);
     printf("\nPlease enter Your phone number: ");
+    gets(user->phone);
     printf("\nPlease enter Your email:  ");
-    printf("Are you sure you want to add this user to the application?");
-    system("cls");
-    Sleep(2000);
-    printf("the user has added to the application successfully!");
-    system("cls");
+    gets(user->email);
+    printf("Are you sure you want to add this user to the application?(Y/N)");
+    if(getchar() == 'Y'){
+        fputs(user->user_name , user_fp);
+        fputs("\n" , user_fp);
+        fputs(user->password , user_fp);
+        fputs("\n", user_fp);
+        fputs(user->name , user_fp);
+        fputs("\n", user_fp);
+        fputs(user->last_name , user_fp);
+        fputs("\n", user_fp);
+        fputs(user->phone , user_fp);
+        fputs("\n", user_fp);
+        fputs(user->email , user_fp);
+        fputs("\n", user_fp);
+        system("cls");
+        Sleep(2000);
+        printf("the user has added to the application successfully!");
+        free(user);
+        free(user_fp);
+
+        Sleep(2000);
+        Start_Page();
+    }
+    else{
+        free(user);
+        free(user_fp);
+        system("cls");
+        Start_Page();
+    }
 }
 void sign_in(){
+    system("cls");
+    FILE *user_fp;
+    user_fp = fopen("Files\\users\\user.txt" , "r");
+    if(user_fp == NULL){
+        printf("There is a problem with user file. the program will restart itself");
+        free(user_fp);
+        exit(0);
+    }
+   char user_name[30] , password[25];
     printf("Please enter your user name: ");
-    printf("Please enter your password: ");
+    gets(user_name);
+    strcat(user_name  , "\n");
+    make_list_user(user_fp);
+    int tries = 0;
+    if(search_username_list_user(user_name) == 1){
+        while(1){
+            printf("Please enter your password: ");
+            gets(password);
+            strcat(password  , "\n");
+            if(search_password_list_user(user_name ,password) == 1){
+                break;
+            }
+            else{
+                printf("wrong password! %d tries left!\n" , tries);
+                tries++;
+            }
+        }
+        printf("logging in. please wait!");
+        Sleep(2000);
+        //make_null_list_user();
+        system("cls");
+        free(user_fp);
+        main_page();
+    }
+    else{
+        printf("we don't have this user name!");
+        Sleep(2000);
+        free(user_fp);
+        //make_null_list_user();
+        Start_Page();
+    }
 }
 void main_page(){
     printf("1. Adding new building\n");
@@ -34,6 +125,7 @@ void Start_Page(){
     printf("2. sign in\n");
     printf("3. exit\n");
     scanf("%d" , &checker);
+    getchar();
     switch(checker){
         case 1 :{
             sign_up();
@@ -51,7 +143,7 @@ void Start_Page(){
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            main_page();
+            Start_Page();
         }
     }
 }
@@ -269,6 +361,55 @@ void user_Edit(){
     printf("Please enter your new Email(if don't want to change leave it alone:");
     printf("Please enter your new password(if don't want to change leave it alone):");
     printf("Please enter your new password again: ");
+}
+void make_list_user(FILE *user_fp){
+    USER *temp;
+    temp = malloc(sizeof(USER));
+    while(1){
+        if(feof(user_fp)){
+            break;
+        }
+        fgets(temp->user_name , 30 , user_fp);
+        fgets(temp->password , 20 , user_fp);
+        fgets(temp->name , 25 , user_fp);
+        fgets(temp->last_name , 45 , user_fp);
+        fgets(temp->phone , 12 , user_fp);
+        fgets(temp->email , 35 , user_fp);
+        if(start_user==NULL)
+        {
+            start_user = temp;
+            start_user->link = NULL;
+            last_user = start_user;
+        }else
+        {
+            last_user->link = temp;
+            last_user = temp;
+            last_user->link = NULL;
+        }
+    }
+}
+int search_username_list_user(char user_name[30]){
+    USER *temp;
+    temp = start_user;
+    while(temp != NULL){
+        if(strcmp(temp->user_name , user_name) == 0){
+            return 1;
+        }
+        temp = temp->link;
+    }
+    return 0;
+}
+int search_password_list_user(char user_name[30] , char password[20]){
+    USER *temp;
+    temp = start_user;
+    while(temp != NULL){
+        if(strcmp(temp->user_name , user_name) == 0 && strcmp(temp->password , password) == 0){
+            current_user = temp;
+            return 1;
+        }
+        temp = temp->link;
+    }
+    return 0;
 }
 void main(){
     Start_Page();
