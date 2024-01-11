@@ -318,6 +318,7 @@ void adding_sale_buildings_Residential(){
     itoa(id ,char_id ,10);
     free(file_ID);
     file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
     if(getchar() == 'Y'){
         system("cls");
@@ -608,5 +609,8 @@ int search_password_list_user(char user_name[30] , char password[20]){
     return 0;
 }
 void main(){
-    Start_Page();
+    current_user = malloc(sizeof(USER));
+    strcpy(current_user->user_name , "amir");
+    adding_sale_buildings_Residential();
+    //Start_Page();
 }
