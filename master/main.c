@@ -605,8 +605,6 @@ int search_password_list_user(char user_name[30] , char password[20]){
     return 0;
 }
 void main(){
-    current_user = malloc(sizeof(USER));
-    strcpy(current_user->user_name , "amir");
-    adding_sale_buildings_Residential();
-    //Start_Page();
+
+    Start_Page();
 }
