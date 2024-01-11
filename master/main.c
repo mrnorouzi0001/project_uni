@@ -278,8 +278,10 @@ void adding_sale_buildings_Residential(){
     system("cls");
     FILE *file_sale_res;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt" , "a+");
-
+    BUILDING_SALE *building;
+    building = malloc(sizeof(BUILDING_SALE));
     printf("PLease enter the municipality's area: ");
+    fgets(building->municipalitys_area , sizeof(char * ))
     printf("Please enter the address of building: ");
     printf("PLease enter model of building(apartment or Villa): ");
     printf("PLease enter age of building: ");
