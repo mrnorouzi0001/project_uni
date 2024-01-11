@@ -350,14 +350,15 @@ void adding_sale_buildings_Residential(){
         free(building);
         close(file_ID);
         close(file_sale_res);
+        system("cls");
         printf("building has added successfully");
         Sleep(2000);
         sale_buildings();
     }
     else{
         free(building);
-        free(file_ID);
-        free(file_sale_res);
+        close(file_ID);
+        close(file_sale_res);
         sale_buildings();
     }
 
