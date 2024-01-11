@@ -317,8 +317,7 @@ void adding_sale_buildings_Residential(){
     fputs(char_id , file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
     if(getchar() == 'Y'){
-        printf("%s\n" , building->municipalitys_area);
-       // system("cls");
+        system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area , file_sale_res);
