@@ -137,6 +137,7 @@ void sign_in(){
 }
 void main_page(){
     int option = 0;
+    system("cls");
     printf("1. Adding new building\n");
     printf("2. Deleting the buildings\n");
     printf("3. Reports\n");
