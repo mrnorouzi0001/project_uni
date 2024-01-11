@@ -282,11 +282,7 @@ void adding_sale_buildings_Residential(){
     system("cls");
     FILE *file_sale_res , *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt" , "a+");
-    if(file_sale_res == NULL){
-        printf("suck");
-        exit(0);
-    }
-    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "r");
+    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "r+");
     BUILDING_SALE *building;
     building = malloc(sizeof(BUILDING_SALE));
     printf("Please enter the municipality's area: ");
@@ -352,8 +348,8 @@ void adding_sale_buildings_Residential(){
         fputs(building->isactive , file_sale_res);
         fputs("\n" , file_sale_res);
         free(building);
-        free(file_ID);
-        free(file_sale_res);
+        close(file_ID);
+        close(file_sale_res);
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
