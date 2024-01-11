@@ -3,7 +3,6 @@
 void Start_Page();
 void make_list_user(FILE *user_fp);
 struct building_sale{
-    int id;
     char municipalitys_area[3];
     char address_of_building[100];
     char model[20];
@@ -15,6 +14,8 @@ struct building_sale{
     char amount_of_rooms[3];
     char price[13];
     char user[30];
+    char id[7];
+    char isactive[2];
     unsigned long int time;
     struct user *link;
 }*start_user , *last_user;
@@ -275,22 +276,90 @@ void sale_buildings(){
     }
 }
 void adding_sale_buildings_Residential(){
+    int id = 0;
+    char char_id[7] , temp[25];
     system("cls");
-    FILE *file_sale_res;
+    FILE *file_sale_res , *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt" , "a+");
+    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "r");
     BUILDING_SALE *building;
     building = malloc(sizeof(BUILDING_SALE));
-    printf("PLease enter the municipality's area: ");
-    fgets(building->municipalitys_area , sizeof(char * ))
-    printf("Please enter the address of building: ");
-    printf("PLease enter model of building(apartment or Villa): ");
-    printf("PLease enter age of building: ");
-    printf("Please enter The size of the infrastructure: ");
-    printf("PLease enter amount of floors: ");
-    printf("PLease enter The size of the main land: ");
-    printf("Please enter phone number of owner: ");
-    printf("PLease enter amount of rooms: ");
-    printf("PLease enter price: ");
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
+    printf("\nPlease enter the address of building: ");
+    gets(building->address_of_building);
+    printf("\nPlease enter model of building(apartment or villa): ");
+    gets(building->model);
+    printf("\nPlease enter age of building: ");
+    gets(building->age_of_building);
+    printf("\nPlease enter The size of the infrastructure: ");
+    gets(building->size_of_the_infrastructure);
+    printf("\nPlease enter amount of floors: ");
+    gets(building->amount_of_floors);
+    printf("\nPlease enter The size of the main land: ");
+    gets(building->size_of_the_main_land);
+    printf("\nPlease enter phone number of owner: ");
+    gets(building->phone_number_of_owner);
+    printf("\nPlease enter amount of rooms: ");
+    gets(building->amount_of_rooms);
+    printf("\nPlease enter price: ");
+    gets(building->price);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    free(file_ID);
+    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "w+");
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->address_of_building , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->model , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->age_of_building , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->size_of_the_infrastructure , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->amount_of_floors , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->size_of_the_main_land , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->phone_number_of_owner , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->amount_of_rooms , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->price , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->user , file_sale_res);
+        fputs("\n" , file_sale_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->isactive , file_sale_res);
+        fputs("\n" , file_sale_res);
+        free(building);
+        free(file_ID);
+        free(file_sale_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        sale_buildings();
+    }
+    else{
+        free(building);
+        free(file_ID);
+        free(file_sale_res);
+        sale_buildings();
+    }
+
 }
 void adding_sale_buildings_commercial(){
     printf("PLease enter the municipality's area: ");
