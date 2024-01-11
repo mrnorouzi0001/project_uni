@@ -317,10 +317,10 @@ void adding_sale_buildings_Residential(){
     fputs(char_id , file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
     if(getchar() == 'Y'){
-        system("cls");
+        printf("%s\n" , building->municipalitys_area);
+       // system("cls");
         printf("processing");
         Sleep(2000);
-        printf("%s" , building->municipalitys_area);
         fputs(building->municipalitys_area , file_sale_res);
         fputs("\n" , file_sale_res);
         fputs(building->address_of_building , file_sale_res);
@@ -349,9 +349,8 @@ void adding_sale_buildings_Residential(){
         fputs(building->isactive , file_sale_res);
         fputs("\n" , file_sale_res);
         free(building);
-        free(file_ID);
-        free(file_sale_res);
-        system("cls");
+        close(file_ID);
+        close(file_sale_res);
         printf("building has added successfully");
         Sleep(2000);
         sale_buildings();
