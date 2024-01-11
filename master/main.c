@@ -2,6 +2,23 @@
 #include<windows.h>
 void Start_Page();
 void make_list_user(FILE *user_fp);
+struct building_sale{
+    int id;
+    char municipalitys_area[3];
+    char address_of_building[100];
+    char model[20];
+    char age_of_building[5];
+    char size_of_the_infrastructure[10];
+    char amount_of_floors[4];
+    char size_of_the_main_land[10];
+    char phone_number_of_owner[12];
+    char amount_of_rooms[3];
+    char price[13];
+    char user[30];
+    unsigned long int time;
+    struct user *link;
+}*start_user , *last_user;
+
 struct user{
     char user_name[30];
     char password[20];
@@ -10,8 +27,11 @@ struct user{
     char phone[12];
     char email[35];
     struct user *link;
-}*start_user , *last_user;
+}*start_building_sale , *last_building_sale;
+
+typedef struct building_sale BUILDING_SALE;
 typedef struct user USER;
+
 USER *current_user;
 void sign_up(){
     system("cls");
@@ -84,7 +104,6 @@ void sign_in(){
     strcat(user_name  , "\n");
     make_list_user(user_fp);
     int tries = 0;
-    printf("%s" , start_user->user_name);
     if(search_username_list_user(user_name) == 1){
         while(1){
             printf("Please enter your password: ");
@@ -122,7 +141,7 @@ void main_page(){
     printf("3. Reports\n");
     printf("4. settings\n");
     printf("5. sign out\n");
-    printf("Please choice your option");
+    printf("Please choice your option: ");
     scanf("%d" , &option);
     getchar();
     switch(option){
@@ -152,6 +171,12 @@ void main_page(){
             printf("Logging out");
             Sleep(2000);
             Start_Page();
+        }
+        default:{
+            printf("Please enter a valid option");
+            Sleep(2000);
+            system("cls");
+            main_page();
         }
     }
 }
@@ -185,17 +210,75 @@ void Start_Page(){
     }
 }
 void adding_building(){
+    int checker = 0;
+    system("cls");
     printf("1. For sale buildings\n");
     printf("2. For rent buildings\n");
-    printf("3. back");
+    printf("3. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+            sale_buildings();
+            break;
+        }
+        case 2 :{
+            rent_buildings();
+            break;
+        }
+        case 3 :{
+            main_page();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            adding_building();
+        }
+    }
 }
 void sale_buildings(){
+    system("cls");
+    int checker = 0;
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
     printf("4. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+            adding_sale_buildings_Residential();
+            break;
+        }
+        case 2 :{
+            adding_sale_buildings_commercial();
+            break;
+        }
+        case 3 :{
+            adding_sale_buildings_filed();
+            break;
+        }
+        case 4:{
+            adding_building();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            sale_buildings();
+        }
+    }
 }
 void adding_sale_buildings_Residential(){
+    system("cls");
+    FILE *file_sale_res;
+    file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt" , "a+");
+
     printf("PLease enter the municipality's area: ");
     printf("Please enter the address of building: ");
     printf("PLease enter model of building(apartment or Villa): ");
