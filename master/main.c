@@ -57,13 +57,14 @@ void sign_up(){
         printf("the user has added to the application successfully!");
         free(user);
         free(user_fp);
-
+        close(user_fp);
         Sleep(2000);
         Start_Page();
     }
     else{
         free(user);
         free(user_fp);
+        close(user_fp);
         system("cls");
         Start_Page();
     }
@@ -77,12 +78,13 @@ void sign_in(){
         free(user_fp);
         exit(0);
     }
-   char user_name[30] , password[25];
+    char user_name[30] , password[25];
     printf("Please enter your user name: ");
     gets(user_name);
     strcat(user_name  , "\n");
     make_list_user(user_fp);
     int tries = 0;
+    printf("%s" , start_user->user_name);
     if(search_username_list_user(user_name) == 1){
         while(1){
             printf("Please enter your password: ");
@@ -92,7 +94,7 @@ void sign_in(){
                 break;
             }
             else{
-                printf("wrong password! %d tries left!\n" , tries);
+                printf("wrong password! %d tries left!\n" , tries + 1);
                 tries++;
             }
         }
@@ -101,22 +103,57 @@ void sign_in(){
         //make_null_list_user();
         system("cls");
         free(user_fp);
+        close(user_fp);
         main_page();
     }
     else{
         printf("we don't have this user name!");
         Sleep(2000);
         free(user_fp);
+        close(user_fp);
         //make_null_list_user();
         Start_Page();
     }
 }
 void main_page(){
+    int option = 0;
     printf("1. Adding new building\n");
     printf("2. Deleting the buildings\n");
     printf("3. Reports\n");
     printf("4. settings\n");
     printf("5. sign out\n");
+    printf("Please choice your option");
+    scanf("%d" , &option);
+    getchar();
+    switch(option){
+        case 1:{
+            adding_building();
+            break;
+        }
+        case 2:{
+            delete_building();
+        }
+        case 3:{
+            if(strcmp(current_user->user_name , "admin") == 0){
+                reports_admin();
+                break;
+            }
+            else{
+                reports_normal();
+                break;
+            }
+        }
+        case 4:{
+            user_edit();
+            break;
+        }
+        case 5:{
+            free(current_user);
+            printf("Logging out");
+            Sleep(2000);
+            Start_Page();
+        }
+    }
 }
 void Start_Page(){
     system("cls");
@@ -147,7 +184,7 @@ void Start_Page(){
         }
     }
 }
-void adding_page(){
+void adding_building(){
     printf("1. For sale buildings\n");
     printf("2. For rent buildings\n");
     printf("3. back");
@@ -350,10 +387,10 @@ void report_user_activity(/*struc User*/){
     printf("Last login: \n");
     printf("Last logout: \n");
 }
-void Delete(){
+void delete_building(){
     //report All
 }
-void user_Edit(){
+void user_edit(){
     printf("Please enter your new name(if don't want to change leave it alone):");
     printf("Please enter your new last name(if don't want to change leave it alone):");
     printf("Please enter your new ID(if don't want to change leave it alone:");
@@ -364,18 +401,18 @@ void user_Edit(){
 }
 void make_list_user(FILE *user_fp){
     USER *temp;
-    temp = malloc(sizeof(USER));
     while(1){
         if(feof(user_fp)){
             break;
         }
+        temp = malloc(sizeof(USER));
         fgets(temp->user_name , 30 , user_fp);
         fgets(temp->password , 20 , user_fp);
         fgets(temp->name , 25 , user_fp);
         fgets(temp->last_name , 45 , user_fp);
         fgets(temp->phone , 12 , user_fp);
         fgets(temp->email , 35 , user_fp);
-        if(start_user==NULL)
+        if(start_user == NULL)
         {
             start_user = temp;
             start_user->link = NULL;
