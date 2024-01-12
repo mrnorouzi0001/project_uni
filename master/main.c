@@ -81,13 +81,14 @@ void sign_up(){
         close(user_fp);
         Sleep(2000);
         Start_Page();
+        //atexit(Start_Page);
     }
     else{
         free(user);
         free(user_fp);
         close(user_fp);
         system("cls");
-        Start_Page();
+        atexit(Start_Page);
     }
 }
 void sign_in(){
