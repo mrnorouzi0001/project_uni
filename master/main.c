@@ -78,17 +78,15 @@ void sign_up(){
         printf("the user has added to the application successfully!");
         free(user);
         free(user_fp);
-        close(user_fp);
+        fclose(user_fp);
         Sleep(2000);
         Start_Page();
-        //atexit(Start_Page);
     }
     else{
         free(user);
         free(user_fp);
-        close(user_fp);
         system("cls");
-        atexit(Start_Page);
+        Start_Page();
     }
 }
 void sign_in(){
@@ -98,6 +96,7 @@ void sign_in(){
     if(user_fp == NULL){
         printf("There is a problem with user file. the program will restart itself");
         free(user_fp);
+        fclose(user_fp);
         exit(0);
     }
     char user_name[30] , password[25];
@@ -123,15 +122,13 @@ void sign_in(){
         Sleep(2000);
         //make_null_list_user();
         system("cls");
-        free(user_fp);
-        close(user_fp);
+        fclose(user_fp);
         main_page();
     }
     else{
         printf("we don't have this user name!");
         Sleep(2000);
-        free(user_fp);
-        close(user_fp);
+        fclose(user_fp);
         //make_null_list_user();
         Start_Page();
     }
@@ -349,8 +346,8 @@ void adding_sale_buildings_Residential(){
         fputs(building->isactive , file_sale_res);
         fputs("\n" , file_sale_res);
         free(building);
-        close(file_ID);
-        close(file_sale_res);
+        fclose(file_ID);
+        fclose(file_sale_res);
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
@@ -358,8 +355,8 @@ void adding_sale_buildings_Residential(){
     }
     else{
         free(building);
-        close(file_ID);
-        close(file_sale_res);
+        fclose(file_ID);
+        fclose(file_sale_res);
         sale_buildings();
     }
 
