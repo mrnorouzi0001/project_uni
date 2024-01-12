@@ -339,7 +339,7 @@ void adding_sale_buildings_Residential(){
         fputs(building->price , file_sale_res);
         fputs("\n" , file_sale_res);
         fputs(building->user , file_sale_res);
-        fputs("\n" , file_sale_res);
+        //fputs("\n" , file_sale_res);
         itoa(building->time , temp , 10);
         fputs(temp , file_sale_res);
         fputs("\n" , file_sale_res);
