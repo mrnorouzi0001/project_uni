@@ -152,7 +152,6 @@ void sign_in(){
         printf("we don't have this user name!");
         Sleep(2000);
         fclose(user_fp);
-        make_null_list_user();
         Start_Page();
     }
 }
@@ -1002,7 +1001,7 @@ void menu_delete_building(){
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            menu_adding_building();
+            menu_delete_building();
         }
     }
 }
@@ -1018,26 +1017,26 @@ void delete_menu_sale_buildings(){
     getchar();
     switch(checker){
         case 1 :{
-            delete_sale_buildings_Residential();
+          //  delete_sale_buildings_Residential();
             break;
         }
         case 2 :{
-            delete_sale_buildings_commercial();
+          //  delete_sale_buildings_commercial();
             break;
         }
         case 3 :{
-            delete_sale_buildings_filed();
+            //delete_sale_buildings_filed();
             break;
         }
         case 4:{
-            menu_adding_building();
+            menu_delete_building();
             break;
         }
         default: {
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            menu_sale_buildings();
+            delete_menu_sale_buildings();
         }
     }
 }
@@ -1053,26 +1052,26 @@ void delete_menu_rent_buildings(){
     getchar();
     switch(checker){
         case 1 :{
-            delete_rent_buildings_Residential();
+           // delete_rent_buildings_Residential();
             break;
         }
         case 2 :{
-            delete_rent_buildings_commercial();
+           // delete_rent_buildings_commercial();
             break;
         }
         case 3 :{
-            delete_rent_buildings_filed();
+           // delete_rent_buildings_filed();
             break;
         }
         case 4:{
-            menu_adding_building();
+            menu_delete_building();
             break;
         }
         default: {
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            menu_sale_buildings();
+            delete_menu_rent_buildings();
         }
     }
 }
@@ -1135,7 +1134,7 @@ int search_password_list_user(char user_name[30] , char password[20]){
     }
     return 0;
 }
-make_null_list_user(){
+void make_null_list_user(){
            struct user *temp;
     do{
         temp = malloc(sizeof(USER));
@@ -1150,6 +1149,7 @@ make_null_list_user(){
 }
 void make_list_building_sale(FILE *building_sale_fp){
     BUILDING_SALE *temp;
+    char TEMP[21];
     while(1){
         if(feof(building_sale_fp)){
             break;
@@ -1169,6 +1169,8 @@ void make_list_building_sale(FILE *building_sale_fp){
         fgets(temp->time , 25 , building_sale_fp);
         fgets(temp->isactive , 2 , building_sale_fp);
         fgets(temp->id , 7 , building_sale_fp);
+        fgets(TEMP , 20 , building_sale_fp);
+        temp->time_delete = atoi(TEMP);
         if(start_building_sale == NULL)
         {
             start_building_sale = temp;
@@ -1182,7 +1184,62 @@ void make_list_building_sale(FILE *building_sale_fp){
         }
     }
 }
+void make_null_list_building_sale()){
+    struct BUILDING_SALE *temp;
+    do{
+        temp = malloc(sizeof(BUILDING_SALE));
+        temp = start_building_sale;
+        start_building_sale = start_building_sale->link;
+        free(temp);
+    }while(start_building_sale != NULL);
+}
+void make_list_building_rent(FILE *building_rent_fp){
+    BUILDING_SALE *temp;
+    char TEMP[21];
+    while(1){
+        if(feof(building_rent_fp)){
+            break;
+        }
+        temp = malloc(sizeof(USER));
+        fgets(temp->municipalitys_area , 3 , building_rent_fp);
+        fgets(temp->address_of_building , 100 , building_rent_fp);
+        fgets(temp->model , 20 , building_rent_fp);
+        fgets(temp->age_of_building , 5 , building_rent_fp);
+        fgets(temp->size_of_the_infrastructure , 10 , building_rent_fp);
+        fgets(temp->amount_of_floors , 4 , building_rent_fp);
+        fgets(temp->size_of_the_main_land , 10 , building_rent_fp);
+        fgets(temp->phone_number_of_owner , 12 , building_rent_fp);
+        fgets(temp->amount_of_rooms , 3 , building_rent_fp);
+        fgets(temp->prepayment , 13 , building_rent_fp);
+        fgets(temp->rent_per_month , 13 , building_rent_fp);
+        fgets(temp->user , 30 , building_rent_fp);
+        fgets(temp->time , 25 , building_rent_fp);
+        fgets(temp->isactive , 2 , building_rent_fp);
+        fgets(temp->id , 7 , building_rent_fp);
+        fgets(TEMP , 20 , building_rent_fp);
+        temp->time_delete = atoi(TEMP);
+        if(start_building_rent == NULL)
+        {
+            start_building_rent = temp;
+            start_building_rent->link = NULL;
+            last_building_rent = start_building_rent;
+        }else
+        {
+            last_building_rent->link = temp;
+            last_building_rent = temp;
+            last_building_rent->link = NULL;
+        }
+    }
+}
+void make_null_list_building_rent(){
+    struct BUILDING_RENT *temp;
+    do{
+        temp = malloc(sizeof(BUILDING_SALE));
+        temp = start_building_rent;
+        start_building_rent = start_building_rent->link;
+        free(temp);
+    }while(start_building_rent != NULL);
+}
 void main(){
-
     Start_Page();
 }
