@@ -20,6 +20,7 @@ struct building_sale{
     unsigned long int time;
     char isactive[2];
     char id[7];
+    unsigned long int time_delete;
     struct user *link;
 }*start_building_sale , *last_building_sale;
 struct building_rent{
@@ -38,6 +39,7 @@ struct building_rent{
     unsigned long int time;
     char isactive[2];
     char id[7];
+    unsigned long int time_delete;
     struct user *link;
 }*start_building_rent, *last_building_rent;
 struct user{
@@ -367,6 +369,8 @@ void adding_sale_buildings_Residential(){
         fputs("\n" , file_sale_res);
         fputs(building->id , file_sale_res);
         fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
+        fputs("\n" , file_sale_res);
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
@@ -455,6 +459,8 @@ void adding_sale_buildings_commercial(){
         fputs("\n" , file_sale_res);
         fputs(building->id , file_sale_res);
         fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
+        fputs("\n" , file_sale_res);
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
@@ -525,6 +531,8 @@ void adding_sale_buildings_filed(){
         fputs(building->isactive , file_sale_res);
         fputs("\n" , file_sale_res);
         fputs(building->id , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
         fputs("\n" , file_sale_res);
         free(building);
         fclose(file_ID);
@@ -652,6 +660,8 @@ void adding_rent_buildings_Residential(){
         fputs("\n" , file_rent_res);
         fputs(building->id , file_rent_res);
         fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
+        fputs("\n" , file_rent_res);
         free(building);
         fclose(file_ID);
         fclose(file_rent_res);
@@ -743,6 +753,8 @@ void adding_rent_buildings_commercial(){
         fputs("\n" , file_rent_res);
         fputs(building->id , file_rent_res);
         fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
+        fputs("\n" , file_rent_res);
         free(building);
         fclose(file_ID);
         fclose(file_rent_res);
@@ -817,6 +829,10 @@ void adding_rent_buildings_filed(){
         fputs(building->isactive , file_rent_res);
         fputs("\n" , file_rent_res);
         fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
         fputs("\n" , file_rent_res);
         free(building);
         fclose(file_ID);
