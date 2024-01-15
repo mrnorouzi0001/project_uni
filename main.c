@@ -54,7 +54,7 @@ struct user{
 
 typedef struct building_sale BUILDING_SALE;
 typedef struct user USER;
-typedef struct building_rent BULLDING_RENT;
+typedef struct building_rent BUILDING_RENT;
 
 USER *current_user;
 void sign_up(){
@@ -590,8 +590,8 @@ void adding_rent_buildings_Residential(){
     FILE *file_rent_res , *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Residential.txt" , "a+");
     file_ID = fopen("Files\\building\\ID.txt" , "r+");
-    BULLDING_RENT *building;
-    building = malloc(sizeof(BULLDING_RENT));
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
     printf("Please enter the municipality's area: ");
     gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
@@ -683,8 +683,8 @@ void adding_rent_buildings_commercial(){
     FILE *file_rent_res , *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Commercial.txt" , "a+");
     file_ID = fopen("Files\\building\\ID.txt" , "r+");
-    BULLDING_RENT *building;
-    building = malloc(sizeof(BULLDING_RENT));
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
     printf("Please enter the municipality's area: ");
     gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
@@ -776,8 +776,8 @@ void adding_rent_buildings_filed(){
     FILE *file_rent_res , *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\filed.txt" , "a+");
     file_ID = fopen("Files\\building\\ID.txt" , "r+");
-    BULLDING_RENT *building;
-    building = malloc(sizeof(BULLDING_RENT));
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
     printf("Please enter the municipality's area: ");
     gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
@@ -893,7 +893,7 @@ void report_sale_(BUILDING_SALE *buidling){
     }
 
 }
-void report_rent(BUILDING_RENT){
+void report_rent( /* BUILDING_RENT */){
     if(start_building_rent == NULL){
         printf("There is no building to delete!");
 
@@ -1154,7 +1154,7 @@ void make_list_building_sale(FILE *building_sale_fp){
         if(feof(building_sale_fp)){
             break;
         }
-        temp = malloc(sizeof(USER));
+        temp = malloc(sizeof(BUILDING_SALE));
         fgets(temp->municipalitys_area , 3 , building_sale_fp);
         fgets(temp->address_of_building , 100 , building_sale_fp);
         fgets(temp->model , 20 , building_sale_fp);
@@ -1184,7 +1184,7 @@ void make_list_building_sale(FILE *building_sale_fp){
         }
     }
 }
-void make_null_list_building_sale()){
+void make_null_list_building_sale(){
     struct BUILDING_SALE *temp;
     do{
         temp = malloc(sizeof(BUILDING_SALE));
@@ -1194,13 +1194,13 @@ void make_null_list_building_sale()){
     }while(start_building_sale != NULL);
 }
 void make_list_building_rent(FILE *building_rent_fp){
-    BUILDING_SALE *temp;
+    BUILDING_RENT *temp;
     char TEMP[21];
     while(1){
         if(feof(building_rent_fp)){
             break;
         }
-        temp = malloc(sizeof(USER));
+        temp = malloc(sizeof(BUILDING_RENT));
         fgets(temp->municipalitys_area , 3 , building_rent_fp);
         fgets(temp->address_of_building , 100 , building_rent_fp);
         fgets(temp->model , 20 , building_rent_fp);
@@ -1232,9 +1232,9 @@ void make_list_building_rent(FILE *building_rent_fp){
     }
 }
 void make_null_list_building_rent(){
-    struct BUILDING_RENT *temp;
+    BUILDING_RENT *temp;
     do{
-        temp = malloc(sizeof(BUILDING_SALE));
+        temp = malloc(sizeof(BUILDING_RENT));
         temp = start_building_rent;
         start_building_rent = start_building_rent->link;
         free(temp);
