@@ -875,7 +875,7 @@ void report_model_building_model(int mode){
     printf("3. Normal filed\n");
     printf("4. back\n");
 }
-void report_sale_(BUILDING_SALE *buidling){
+void report_sale(BUILDING_SALE *buidling){
     BUILDING_SALE *temp;
     temp = start_building_sale;
     while(temp != NULL){
@@ -1017,7 +1017,7 @@ void delete_menu_sale_buildings(){
     getchar();
     switch(checker){
         case 1 :{
-          //  delete_sale_buildings_Residential();
+          delete_sale_buildings_Residential();
             break;
         }
         case 2 :{
@@ -1039,6 +1039,78 @@ void delete_menu_sale_buildings(){
             delete_menu_sale_buildings();
         }
     }
+}
+void delete_sale_buildings_Residential(){
+    char id[7] , TEMP[21];
+    BUILDING_SALE *temp;
+    temp = malloc(sizeof(BUILDING_SALE));
+    temp = start_building_sale;
+    FILE *fp;
+    fp = fopen("Files\\buildings\\for_sale\\Residentail.txt" , "r+");
+    while(temp != NULL){
+        printf("ID: %s \n" , temp->id);
+        printf("Municipality's area: %s \n" , temp->municipalitys_area);
+        printf("Address of building: %s \n" , temp->address_of_building);
+        printf("Model of building: %s \n" , temp->model);
+        printf("Age of building: %s\n" , temp->age_of_building);
+        printf("The size of the infrastructure: \n" , temp->size_of_the_infrastructure);
+        printf("Amount of floors: %s\n" , temp->amount_of_floors);
+        printf("The size of the main land: %s\n" , temp->size_of_the_main_land);
+        printf("Phone number of owner: %s\n" , temp->phone_number_of_owner);
+        printf("Amount of rooms: \n" , temp->amount_of_floors);
+        printf("Price: %s\n" , temp->price);
+        printf("\n");
+        temp = temp->link;
+    }
+    printf("For deleting the building please enter its id:");
+    gets(id);
+    temp = start_building_sale;
+    while(temp != NULL){
+        if(strcmp(id , temp->id)){
+            strcpy(temp->isactive , "1");
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    fp = fopen("Files\\buildings\\for_sale\\Residentail.txt" , "w+");
+    temp = start_building_sale;
+    while(temp != NULL){
+        fputs(temp->municipalitys_area , fp);
+        fputs("\n" , fp);
+        fputs(temp->address_of_building , fp);
+        fputs("\n" , fp);
+        fputs(temp->model , fp);
+        fputs("\n" , fp);
+        fputs(temp->age_of_building , fp);
+        fputs("\n" , fp);
+        fputs(temp->size_of_the_infrastructure , fp);
+        fputs("\n" , fp);
+        fputs(temp->amount_of_floors , fp);
+        fputs("\n" , fp);
+        fputs(temp->size_of_the_main_land , fp);
+        fputs("\n" , fp);
+        fputs(temp->phone_number_of_owner , fp);
+        fputs("\n" , fp);
+        fputs(temp->amount_of_rooms , fp);
+        fputs("\n" , fp);
+        fputs(temp->price , fp);
+        fputs("\n" , fp);
+        fputs(temp->user , fp);
+        itoa(temp->time , TEMP , 10);
+        fputs(TEMP , fp);
+        fputs("\n" , fp);
+        fputs(temp->isactive , fp);
+        fputs("\n" , fp);
+        fputs(temp->id , fp);
+        fputs("\n" , fp);
+        itoa(time(NULL) , TEMP , 10);
+        fputs(TEMP , fp);
+        fputs("\n" , fp);
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    delete_menu_sale_buildings();
 }
 void delete_menu_rent_buildings(){
     system("cls");
@@ -1243,3 +1315,15 @@ void make_null_list_building_rent(){
 void main(){
     Start_Page();
 }
+/*
+            strcpy(temp->municipalitys_area);
+            strcpy(temp->address_of_building);
+            strcpy(temp->model);
+            strcpy(temp->age_of_building);
+            strcpy(temp->size_of_the_infrastructure);
+            strcpy(temp->amount_of_floors);
+            strcpy(temp->size_of_the_main_land);
+            strcpy(temp->phone_number_of_owner);
+            strcpy(temp->temp->amount_of_floors);
+            strcpy(temp->price)
+*/
