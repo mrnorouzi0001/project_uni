@@ -1,5 +1,8 @@
 #include<stdio.h>
 #include<windows.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
 void Start_Page();
 void make_list_user(FILE *user_fp);
 struct building_sale{
@@ -14,12 +17,31 @@ struct building_sale{
     char amount_of_rooms[3];
     char price[13];
     char user[30];
-    char id[7];
-    char isactive[2];
     unsigned long int time;
+    char isactive[2];
+    char id[7];
+    unsigned long int time_delete;
     struct user *link;
-}*start_user , *last_user;
-
+}*start_building_sale , *last_building_sale;
+struct building_rent{
+    char municipalitys_area[3];
+    char address_of_building[100];
+    char model[20];
+    char age_of_building[5];
+    char size_of_the_infrastructure[10];
+    char amount_of_floors[4];
+    char size_of_the_main_land[10];
+    char phone_number_of_owner[12];
+    char amount_of_rooms[3];
+    char prepayment[13];
+    char rent_per_month[13];
+    char user[30];
+    unsigned long int time;
+    char isactive[2];
+    char id[7];
+    unsigned long int time_delete;
+    struct user *link;
+}*start_building_rent, *last_building_rent;
 struct user{
     char user_name[30];
     char password[20];
@@ -28,10 +50,11 @@ struct user{
     char phone[12];
     char email[35];
     struct user *link;
-}*start_building_sale , *last_building_sale;
+}*start_user , *last_user;
 
 typedef struct building_sale BUILDING_SALE;
 typedef struct user USER;
+typedef struct building_rent BUILDING_RENT;
 
 USER *current_user;
 void sign_up(){
@@ -120,7 +143,7 @@ void sign_in(){
         }
         printf("logging in. please wait!");
         Sleep(2000);
-        //make_null_list_user();
+        make_null_list_user();
         system("cls");
         fclose(user_fp);
         main_page();
@@ -129,7 +152,6 @@ void sign_in(){
         printf("we don't have this user name!");
         Sleep(2000);
         fclose(user_fp);
-        //make_null_list_user();
         Start_Page();
     }
 }
@@ -146,11 +168,11 @@ void main_page(){
     getchar();
     switch(option){
         case 1:{
-            adding_building();
+            menu_adding_building();
             break;
         }
         case 2:{
-            delete_building();
+            menu_delete_building();
         }
         case 3:{
             if(strcmp(current_user->user_name , "admin") == 0){
@@ -209,7 +231,7 @@ void Start_Page(){
         }
     }
 }
-void adding_building(){
+void menu_adding_building(){
     int checker = 0;
     system("cls");
     printf("1. For sale buildings\n");
@@ -220,11 +242,11 @@ void adding_building(){
     getchar();
     switch(checker){
         case 1 :{
-            sale_buildings();
+            menu_sale_buildings();
             break;
         }
         case 2 :{
-            rent_buildings();
+            menu_rent_buildings();
             break;
         }
         case 3 :{
@@ -235,11 +257,11 @@ void adding_building(){
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            adding_building();
+            menu_adding_building();
         }
     }
 }
-void sale_buildings(){
+void menu_sale_buildings(){
     system("cls");
     int checker = 0;
     printf("1. Residential buildings\n");
@@ -263,14 +285,14 @@ void sale_buildings(){
             break;
         }
         case 4:{
-            adding_building();
+            menu_adding_building();
             break;
         }
         default: {
             system("cls");
             printf("Please enter a valid option");
             Sleep(1000);
-            sale_buildings();
+            menu_sale_buildings();
         }
     }
 }
@@ -280,7 +302,7 @@ void adding_sale_buildings_Residential(){
     system("cls");
     FILE *file_sale_res , *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt" , "a+");
-    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "r+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
     BUILDING_SALE *building;
     building = malloc(sizeof(BUILDING_SALE));
     printf("Please enter the municipality's area: ");
@@ -310,8 +332,8 @@ void adding_sale_buildings_Residential(){
     id = atoi(building->id);
     id++;
     itoa(id ,char_id ,10);
-    free(file_ID);
-    file_ID = fopen("Files\\building\\for_sale\\ID.txt" , "w+");
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
     fputs(char_id , file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
     if(getchar() == 'Y'){
@@ -339,11 +361,14 @@ void adding_sale_buildings_Residential(){
         fputs(building->price , file_sale_res);
         fputs("\n" , file_sale_res);
         fputs(building->user , file_sale_res);
-        //fputs("\n" , file_sale_res);
         itoa(building->time , temp , 10);
         fputs(temp , file_sale_res);
         fputs("\n" , file_sale_res);
         fputs(building->isactive , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->id , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
         fputs("\n" , file_sale_res);
         free(building);
         fclose(file_ID);
@@ -351,76 +376,477 @@ void adding_sale_buildings_Residential(){
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        sale_buildings();
+        menu_sale_buildings();
     }
     else{
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
-        sale_buildings();
+        menu_sale_buildings();
     }
 
 }
 void adding_sale_buildings_commercial(){
-    printf("PLease enter the municipality's area: ");
+    int id = 0;
+    char char_id[7] , temp[25];
+    system("cls");
+    FILE *file_sale_res , *file_ID;
+    file_sale_res = fopen("Files\\building\\for_sale\\Commercial.txt" , "a+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
+    BUILDING_SALE *building;
+    building = malloc(sizeof(BUILDING_SALE));
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
-    printf("PLease enter model of building: ");
-    printf("PLease enter age of building: ");
+    gets(building->address_of_building);
+    printf("Please enter model of building: ");
+    gets(building->model);
+    printf("Please enter age of building: ");
+    gets(building->age_of_building);
     printf("Please enter The size of the infrastructure: ");
-    printf("PLease enter amount of floors: ");
-    printf("PLease enter The size of the main land: ");
+    gets(building->size_of_the_infrastructure);
+    printf("Please enter amount of floors: ");
+    gets(building->amount_of_floors);
+    printf("Please enter The size of the main land: ");
+    gets(building->size_of_the_main_land);
     printf("Please enter phone number of owner: ");
-    printf("PLease enter amount of rooms: ");
-    printf("PLease enter price: ");
+    gets(building->phone_number_of_owner);
+    printf("Please enter amount of rooms: ");
+    gets(building->amount_of_rooms);
+    printf("Please enter price: ");
+    gets(building->price);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->address_of_building , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->model , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->age_of_building , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->size_of_the_infrastructure , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->amount_of_floors , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->size_of_the_main_land , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->phone_number_of_owner , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->amount_of_rooms , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->price , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->user , file_sale_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->isactive , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->id , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
+        fputs("\n" , file_sale_res);
+        free(building);
+        fclose(file_ID);
+        fclose(file_sale_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        menu_sale_buildings();
+    }
+    else{
+        free(building);
+        fclose(file_ID);
+        fclose(file_sale_res);
+        menu_sale_buildings();
+    }
 }
 void adding_sale_buildings_filed(){
-    printf("PLease enter the municipality's area: ");
-    printf("Please enter the address of building: ");
-    printf("PLease enter model of building(farm or in-city): ");
+    int id = 0;
+    char char_id[7] , temp[25];
+    system("cls");
+    FILE *file_sale_res , *file_ID;
+    file_sale_res = fopen("Files\\building\\for_sale\\Filed.txt" , "a+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
+    BUILDING_SALE *building;
+    building = malloc(sizeof(BUILDING_SALE));
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
+    printf("Please enter the address of filed: ");
+    gets(building->address_of_building);
+    printf("Please enter model of filed(farm or in-city): ");
+    gets(building->model);
     printf("Please enter The size of the infrastructure: ");
+    gets(building->size_of_the_infrastructure);
     printf("Please enter phone number of owner: ");
-    printf("PLease enter price: ");
+    gets(building->phone_number_of_owner);
+    printf("Please enter price: ");
+    gets(building->price);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->address_of_building , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->model , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->size_of_the_infrastructure , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->phone_number_of_owner , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->price , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->user , file_sale_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->isactive , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs(building->id , file_sale_res);
+        fputs("\n" , file_sale_res);
+        fputs("0" , file_sale_res);
+        fputs("\n" , file_sale_res);
+        free(building);
+        fclose(file_ID);
+        fclose(file_sale_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        menu_sale_buildings();
+    }
+    else{
+        free(building);
+        fclose(file_ID);
+        fclose(file_sale_res);
+        menu_sale_buildings();
+    }
 }
-void rent_buildings(){
+void menu_rent_buildings(){
+        system("cls");
+    int checker = 0;
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
     printf("4. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+            adding_rent_buildings_Residential();
+            break;
+        }
+        case 2 :{
+            adding_rent_buildings_commercial();
+            break;
+        }
+        case 3 :{
+            adding_rent_buildings_filed();
+            break;
+        }
+        case 4:{
+            menu_adding_building();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            menu_rent_buildings();
+        }
+    }
 }
 void adding_rent_buildings_Residential(){
-    printf("PLease enter the municipality's area: ");
+    int id = 0;
+    char char_id[7] , temp[25];
+    system("cls");
+    FILE *file_rent_res , *file_ID;
+    file_rent_res = fopen("Files\\building\\for_rent\\Residential.txt" , "a+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
-    printf("PLease enter model of building(apartment or Villa): ");
-    printf("PLease enter age of building: ");
+    gets(building->address_of_building);
+    printf("Please enter model of building(apartment or villa): ");
+    gets(building->model);
+    printf("Please enter age of building: ");
+    gets(building->age_of_building);
     printf("Please enter The size of the infrastructure: ");
-    printf("PLease enter amount of floors: ");
-    printf("PLease enter The size of the main land: ");
+    gets(building->size_of_the_infrastructure);
+    printf("Please enter amount of floors: ");
+    gets(building->amount_of_floors);
+    printf("Please enter The size of the main land: ");
+    gets(building->size_of_the_main_land);
     printf("Please enter phone number of owner: ");
-    printf("PLease enter amount of rooms: ");
-    printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
+    gets(building->phone_number_of_owner);
+    printf("Please enter amount of rooms: ");
+    gets(building->amount_of_rooms);
+    printf("Please enter prepayment: ");
+    gets(building->prepayment);
+    printf("Please enter pay per month(for mortgage only enter 0): ");
+    gets(building->rent_per_month);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->address_of_building , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->model , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->age_of_building , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->size_of_the_infrastructure , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->amount_of_floors , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->size_of_the_main_land , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->phone_number_of_owner , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->amount_of_rooms , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->prepayment , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->rent_per_month , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->user , file_rent_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->isactive , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
+        fputs("\n" , file_rent_res);
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        menu_rent_buildings();
+    }
+    else{
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        menu_rent_buildings();
+    }
 }
 void adding_rent_buildings_commercial(){
-    printf("PLease enter the municipality's area: ");
+    int id = 0;
+    char char_id[7] , temp[25];
+    system("cls");
+    FILE *file_rent_res , *file_ID;
+    file_rent_res = fopen("Files\\building\\for_rent\\Commercial.txt" , "a+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
-    printf("PLease enter model of building: ");
-    printf("PLease enter age of building: ");
+    gets(building->address_of_building);
+    printf("Please enter model of building: ");
+    gets(building->model);
+    printf("Please enter age of building: ");
+    gets(building->age_of_building);
     printf("Please enter The size of the infrastructure: ");
-    printf("PLease enter amount of floors: ");
-    printf("PLease enter The size of the main land: ");
+    gets(building->size_of_the_infrastructure);
+    printf("Please enter amount of floors: ");
+    gets(building->amount_of_floors);
+    printf("Please enter The size of the main land: ");
+    gets(building->size_of_the_main_land);
     printf("Please enter phone number of owner: ");
-    printf("PLease enter amount of rooms: ");
-    printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
+    gets(building->phone_number_of_owner);
+    printf("Please enter amount of rooms: ");
+    gets(building->amount_of_rooms);
+    printf("Please enter prepayment: ");
+    gets(building->prepayment);
+    printf("Please enter pay per month(for mortgage only enter 0): ");
+    gets(building->rent_per_month);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->address_of_building , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->model , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->age_of_building , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->size_of_the_infrastructure , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->amount_of_floors , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->size_of_the_main_land , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->phone_number_of_owner , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->amount_of_rooms , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->prepayment , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->rent_per_month , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->user , file_rent_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->isactive , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
+        fputs("\n" , file_rent_res);
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        menu_rent_buildings();
+    }
+    else{
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        menu_rent_buildings();
+    }
 }
 void adding_rent_buildings_filed(){
-    printf("PLease enter the municipality's area: ");
+    int id = 0;
+    char char_id[7] , temp[25];
+    system("cls");
+    FILE *file_rent_res , *file_ID;
+    file_rent_res = fopen("Files\\building\\for_rent\\filed.txt" , "a+");
+    file_ID = fopen("Files\\building\\ID.txt" , "r+");
+    BUILDING_RENT *building;
+    building = malloc(sizeof(BUILDING_RENT));
+    printf("Please enter the municipality's area: ");
+    gets(building->municipalitys_area);
     printf("Please enter the address of building: ");
-    printf("PLease enter model of building(farm or in-city): ");
+    gets(building->address_of_building);
+    printf("Please enter model of building(farm or in-city): ");
+    gets(building->model);
     printf("Please enter The size of the infrastructure: ");
+    gets(building->size_of_the_infrastructure);
     printf("Please enter phone number of owner: ");
-    printf("PLease enter price of prepayment: ");
-    printf("PLease enter price of rent(per month(for only mortgage enter 0)): ");
+    gets(building->phone_number_of_owner);
+    printf("Please enter prepayment: ");
+    gets(building->prepayment);
+    printf("Please enter pay per month(for mortgage only enter 0): ");
+    gets(building->rent_per_month);
+    strcpy(building->user , current_user->user_name);
+    building->time = time(NULL);
+    strcpy(building->isactive , "1");
+    fgets(building->id , 7 , file_ID);
+    id = atoi(building->id);
+    id++;
+    itoa(id ,char_id ,10);
+    fclose(file_ID);
+    file_ID = fopen("Files\\building\\ID.txt" , "w+");
+    fputs(char_id , file_ID);
+    printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
+    if(getchar() == 'Y'){
+        system("cls");
+        printf("processing");
+        Sleep(2000);
+        fputs(building->municipalitys_area , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->address_of_building , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->model , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->size_of_the_infrastructure , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->phone_number_of_owner , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->prepayment , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->rent_per_month , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->user , file_rent_res);
+        itoa(building->time , temp , 10);
+        fputs(temp , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->isactive , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs(building->id , file_rent_res);
+        fputs("\n" , file_rent_res);
+        fputs("0" , file_rent_res);
+        fputs("\n" , file_rent_res);
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        system("cls");
+        printf("building has added successfully");
+        Sleep(2000);
+        menu_rent_buildings();
+    }
+    else{
+        free(building);
+        fclose(file_ID);
+        fclose(file_rent_res);
+        menu_rent_buildings();
+    }
 }
 void reports_admin(){
     printf("1. Specific model of buildings\n");
@@ -440,7 +866,7 @@ void reports_admin(){
 }
 void report_model_main(){
     printf("1. Sale\n");
-    printf("2. rent\n");
+    printf("2. Rent\n");
     printf("3. back\n");
 }
 void report_model_building_model(int mode){
@@ -449,22 +875,30 @@ void report_model_building_model(int mode){
     printf("3. Normal filed\n");
     printf("4. back\n");
 }
-void report_sale(int mode_main , int mode_building/*struc Building*/){
-    printf("ID: \n");
-    printf("Municipality's area: \n");
-    printf("Address of building: \n");
-    printf("Model of building: \n");
-    printf("Age of building: \n");
-    printf("The size of the infrastructure: \n");
-    printf("Amount of floors: \n");
-    printf("The size of the main land: \n");
-    printf("Phone number of owner: \n");
-    printf("Amount of rooms: \n");
-    printf("Price: \n");
-    printf("Press B for getting back to the report page.");
+void report_sale(BUILDING_SALE *buidling){
+    BUILDING_SALE *temp;
+    temp = start_building_sale;
+    while(temp != NULL){
+        printf("ID: \n");
+        printf("Municipality's area: \n");
+        printf("Address of building: \n");
+        printf("Model of building: \n");
+        printf("Age of building: \n");
+        printf("The size of the infrastructure: \n");
+        printf("Amount of floors: \n");
+        printf("The size of the main land: \n");
+        printf("Phone number of owner: \n");
+        printf("Amount of rooms: \n");
+        printf("Price: \n");
+    }
+
 }
-void report_rent(int mode_main , int mode_building/*struc Building*/){
-    printf("ID: \n");
+void report_rent( /* BUILDING_RENT */){
+    if(start_building_rent == NULL){
+        printf("There is no building to delete!");
+
+    }
+    printf("ID: %s\n");
     printf("Municipality's area: \n");
     printf("Address of building: \n");
     printf("Model of building: \n");
@@ -541,8 +975,177 @@ void report_user_activity(/*struc User*/){
     printf("Last login: \n");
     printf("Last logout: \n");
 }
-void delete_building(){
-    //report All
+void menu_delete_building(){
+    int checker = 0;
+    system("cls");
+    printf("1. For sale buildings\n");
+    printf("2. For rent buildings\n");
+    printf("3. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+            delete_menu_sale_buildings();
+            break;
+        }
+        case 2 :{
+            delete_menu_rent_buildings();
+            break;
+        }
+        case 3 :{
+            main_page();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            menu_delete_building();
+        }
+    }
+}
+void delete_menu_sale_buildings(){
+    system("cls");
+    int checker = 0;
+    printf("1. Residential buildings\n");
+    printf("2. Commercial\n");
+    printf("3. Normal filed\n");
+    printf("4. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+          delete_sale_buildings_Residential();
+            break;
+        }
+        case 2 :{
+          //  delete_sale_buildings_commercial();
+            break;
+        }
+        case 3 :{
+            //delete_sale_buildings_filed();
+            break;
+        }
+        case 4:{
+            menu_delete_building();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            delete_menu_sale_buildings();
+        }
+    }
+}
+void delete_sale_buildings_Residential(){
+    char id[7] , TEMP[21];
+    BUILDING_SALE *temp;
+    temp = malloc(sizeof(BUILDING_SALE));
+    temp = start_building_sale;
+    FILE *fp;
+    fp = fopen("Files\\buildings\\for_sale\\Residentail.txt" , "r+");
+    while(temp != NULL){
+        printf("ID: %s \n" , temp->id);
+        printf("Municipality's area: %s \n" , temp->municipalitys_area);
+        printf("Address of building: %s \n" , temp->address_of_building);
+        printf("Model of building: %s \n" , temp->model);
+        printf("Age of building: %s\n" , temp->age_of_building);
+        printf("The size of the infrastructure: \n" , temp->size_of_the_infrastructure);
+        printf("Amount of floors: %s\n" , temp->amount_of_floors);
+        printf("The size of the main land: %s\n" , temp->size_of_the_main_land);
+        printf("Phone number of owner: %s\n" , temp->phone_number_of_owner);
+        printf("Amount of rooms: \n" , temp->amount_of_floors);
+        printf("Price: %s\n" , temp->price);
+        printf("\n");
+        temp = temp->link;
+    }
+    printf("For deleting the building please enter its id:");
+    gets(id);
+    temp = start_building_sale;
+    while(temp != NULL){
+        if(strcmp(id , temp->id)){
+            strcpy(temp->isactive , "1");
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    fp = fopen("Files\\buildings\\for_sale\\Residentail.txt" , "w+");
+    temp = start_building_sale;
+    while(temp != NULL){
+        fputs(temp->municipalitys_area , fp);
+        fputs("\n" , fp);
+        fputs(temp->address_of_building , fp);
+        fputs("\n" , fp);
+        fputs(temp->model , fp);
+        fputs("\n" , fp);
+        fputs(temp->age_of_building , fp);
+        fputs("\n" , fp);
+        fputs(temp->size_of_the_infrastructure , fp);
+        fputs("\n" , fp);
+        fputs(temp->amount_of_floors , fp);
+        fputs("\n" , fp);
+        fputs(temp->size_of_the_main_land , fp);
+        fputs("\n" , fp);
+        fputs(temp->phone_number_of_owner , fp);
+        fputs("\n" , fp);
+        fputs(temp->amount_of_rooms , fp);
+        fputs("\n" , fp);
+        fputs(temp->price , fp);
+        fputs("\n" , fp);
+        fputs(temp->user , fp);
+        itoa(temp->time , TEMP , 10);
+        fputs(TEMP , fp);
+        fputs("\n" , fp);
+        fputs(temp->isactive , fp);
+        fputs("\n" , fp);
+        fputs(temp->id , fp);
+        fputs("\n" , fp);
+        itoa(time(NULL) , TEMP , 10);
+        fputs(TEMP , fp);
+        fputs("\n" , fp);
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    delete_menu_sale_buildings();
+}
+void delete_menu_rent_buildings(){
+    system("cls");
+    int checker = 0;
+    printf("1. Residential buildings\n");
+    printf("2. Commercial\n");
+    printf("3. Normal filed\n");
+    printf("4. back\n");
+    printf("Please choice your option: ");
+    scanf("%d" , &checker);
+    getchar();
+    switch(checker){
+        case 1 :{
+           // delete_rent_buildings_Residential();
+            break;
+        }
+        case 2 :{
+           // delete_rent_buildings_commercial();
+            break;
+        }
+        case 3 :{
+           // delete_rent_buildings_filed();
+            break;
+        }
+        case 4:{
+            menu_delete_building();
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            delete_menu_rent_buildings();
+        }
+    }
 }
 void user_edit(){
     printf("Please enter your new name(if don't want to change leave it alone):");
@@ -593,6 +1196,7 @@ int search_username_list_user(char user_name[30]){
 int search_password_list_user(char user_name[30] , char password[20]){
     USER *temp;
     temp = start_user;
+    current_user = malloc(sizeof(USER));
     while(temp != NULL){
         if(strcmp(temp->user_name , user_name) == 0 && strcmp(temp->password , password) == 0){
             current_user = temp;
@@ -602,7 +1206,124 @@ int search_password_list_user(char user_name[30] , char password[20]){
     }
     return 0;
 }
+void make_null_list_user(){
+           struct user *temp;
+    do{
+        temp = malloc(sizeof(USER));
+        temp = start_user;
+        if(strcmp(temp->user_name , current_user->user_name)==0){
+            start_user = start_user->link;
+            continue;
+        }
+        start_user = start_user->link;
+        free(temp);
+    }while(start_user != NULL);
+}
+void make_list_building_sale(FILE *building_sale_fp){
+    BUILDING_SALE *temp;
+    char TEMP[21];
+    while(1){
+        if(feof(building_sale_fp)){
+            break;
+        }
+        temp = malloc(sizeof(BUILDING_SALE));
+        fgets(temp->municipalitys_area , 3 , building_sale_fp);
+        fgets(temp->address_of_building , 100 , building_sale_fp);
+        fgets(temp->model , 20 , building_sale_fp);
+        fgets(temp->age_of_building , 5 , building_sale_fp);
+        fgets(temp->size_of_the_infrastructure , 10 , building_sale_fp);
+        fgets(temp->amount_of_floors , 4 , building_sale_fp);
+        fgets(temp->size_of_the_main_land , 10 , building_sale_fp);
+        fgets(temp->phone_number_of_owner , 12 , building_sale_fp);
+        fgets(temp->amount_of_rooms , 3 , building_sale_fp);
+        fgets(temp->price , 13 , building_sale_fp);
+        fgets(temp->user , 30 , building_sale_fp);
+        fgets(temp->time , 25 , building_sale_fp);
+        fgets(temp->isactive , 2 , building_sale_fp);
+        fgets(temp->id , 7 , building_sale_fp);
+        fgets(TEMP , 20 , building_sale_fp);
+        temp->time_delete = atoi(TEMP);
+        if(start_building_sale == NULL)
+        {
+            start_building_sale = temp;
+            start_building_sale->link = NULL;
+            last_building_sale = start_building_sale;
+        }else
+        {
+            last_building_sale->link = temp;
+            last_building_sale = temp;
+            last_building_sale->link = NULL;
+        }
+    }
+}
+void make_null_list_building_sale(){
+    struct BUILDING_SALE *temp;
+    do{
+        temp = malloc(sizeof(BUILDING_SALE));
+        temp = start_building_sale;
+        start_building_sale = start_building_sale->link;
+        free(temp);
+    }while(start_building_sale != NULL);
+}
+void make_list_building_rent(FILE *building_rent_fp){
+    BUILDING_RENT *temp;
+    char TEMP[21];
+    while(1){
+        if(feof(building_rent_fp)){
+            break;
+        }
+        temp = malloc(sizeof(BUILDING_RENT));
+        fgets(temp->municipalitys_area , 3 , building_rent_fp);
+        fgets(temp->address_of_building , 100 , building_rent_fp);
+        fgets(temp->model , 20 , building_rent_fp);
+        fgets(temp->age_of_building , 5 , building_rent_fp);
+        fgets(temp->size_of_the_infrastructure , 10 , building_rent_fp);
+        fgets(temp->amount_of_floors , 4 , building_rent_fp);
+        fgets(temp->size_of_the_main_land , 10 , building_rent_fp);
+        fgets(temp->phone_number_of_owner , 12 , building_rent_fp);
+        fgets(temp->amount_of_rooms , 3 , building_rent_fp);
+        fgets(temp->prepayment , 13 , building_rent_fp);
+        fgets(temp->rent_per_month , 13 , building_rent_fp);
+        fgets(temp->user , 30 , building_rent_fp);
+        fgets(temp->time , 25 , building_rent_fp);
+        fgets(temp->isactive , 2 , building_rent_fp);
+        fgets(temp->id , 7 , building_rent_fp);
+        fgets(TEMP , 20 , building_rent_fp);
+        temp->time_delete = atoi(TEMP);
+        if(start_building_rent == NULL)
+        {
+            start_building_rent = temp;
+            start_building_rent->link = NULL;
+            last_building_rent = start_building_rent;
+        }else
+        {
+            last_building_rent->link = temp;
+            last_building_rent = temp;
+            last_building_rent->link = NULL;
+        }
+    }
+}
+void make_null_list_building_rent(){
+    BUILDING_RENT *temp;
+    do{
+        temp = malloc(sizeof(BUILDING_RENT));
+        temp = start_building_rent;
+        start_building_rent = start_building_rent->link;
+        free(temp);
+    }while(start_building_rent != NULL);
+}
 void main(){
-
     Start_Page();
 }
+/*
+            strcpy(temp->municipalitys_area);
+            strcpy(temp->address_of_building);
+            strcpy(temp->model);
+            strcpy(temp->age_of_building);
+            strcpy(temp->size_of_the_infrastructure);
+            strcpy(temp->amount_of_floors);
+            strcpy(temp->size_of_the_main_land);
+            strcpy(temp->phone_number_of_owner);
+            strcpy(temp->temp->amount_of_floors);
+            strcpy(temp->price)
+*/
