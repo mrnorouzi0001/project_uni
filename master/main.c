@@ -52,6 +52,9 @@ struct user
     char last_name[45];
     char phone[12];
     char email[35];
+    unsigned long int time_login;
+    unsigned long int time_logout;
+    int registered_builiding;
     struct user *link;
 }*start_user, *last_user;
 
@@ -62,6 +65,7 @@ typedef struct building_rent BUILDING_RENT;
 USER *current_user;
 void sign_up()
 {
+    char temp_time[31];
     system("cls");
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "a+");
@@ -102,6 +106,11 @@ void sign_up()
         fputs("\n", user_fp);
         fputs(user->email, user_fp);
         fputs("\n", user_fp);
+        itoa(time(NULL) , temp_time , 10);
+        fputs(temp_time , user_fp);
+        fputs("\n" , user_fp);
+        fputs("0" , user_fp);
+        fputs("\n" , user_fp);
         system("cls");
         Sleep(2000);
         printf("the user has added to the application successfully!");
@@ -122,7 +131,9 @@ void sign_up()
 void sign_in()
 {
     system("cls");
+    char time_tmep[30];
     FILE *user_fp;
+    USER *temp;
     user_fp = fopen("Files\\users\\user.txt", "r");
     if(user_fp == NULL)
     {
@@ -155,10 +166,33 @@ void sign_in()
             }
         }
         printf("logging in. please wait!");
+        fclose(user_fp);
+        user_fp = fopen("Files\\users\\user.txt" , "w+");
+        temp = start_user;
+        while(temp != NULL){
+        fputs(temp->user_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->password, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->last_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->phone, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->email, user_fp);
+        fputs("\n", user_fp);
+        itoa(temp->time_login , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+        itoa(temp->time_login , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+        }
         Sleep(2000);
+        fclose(user_fp);
         make_null_list_user();
         system("cls");
-        fclose(user_fp);
         main_page();
     }
     else
@@ -196,12 +230,17 @@ void main_page()
     {
         if(strcmp(current_user->user_name, "admin") == 0)
         {
-            reports_admin();
+            page_admin_report();
             break;
         }
         else
         {
-            reports_normal();
+            if(strcmp(current_user->user_name , "admin\n") == 0){
+                page_admin_report();
+            }
+            else{
+                page_reports_normal();
+            }
             break;
         }
     }
@@ -212,6 +251,7 @@ void main_page()
     }
     case 5:
     {
+        logout_time();
         free(current_user);
         printf("Logging out");
         Sleep(2000);
@@ -225,6 +265,41 @@ void main_page()
         main_page();
     }
     }
+}
+void logout_time(){
+    char time_tmep[30];
+    current_user->time_logout = time(NULL);
+    FILE *user_fp;
+    USER *temp;
+    user_fp = fopen("Files\\user\\user.txt" , "r+");
+    make_list_user(user_fp);
+    fclose(user_fp);
+    user_fp = fopen("Files\\user\\user.txt" , "w+");
+    temp = start_user;
+    while(temp != NULL){
+        fputs(temp->user_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->password, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->last_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->phone, user_fp);
+        fputs("\n", user_fp);
+        fputs(temp->email, user_fp);
+        fputs("\n", user_fp);
+        itoa(temp->time_login , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+        itoa(temp->time_login , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+        itoa(time(NULL) , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+    }
+    fclose(user_fp);
 }
 void Start_Page()
 {
@@ -916,7 +991,7 @@ void adding_rent_buildings_filed()
         menu_rent_buildings();
     }
 }
-void reports_admin()
+void page_admin_report()
 {
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
@@ -966,7 +1041,7 @@ void report_sale(BUILDING_SALE *buidling)
     }
 
 }
-void report_rent( /* BUILDING_RENT */)
+void page_report_rent( /* BUILDING_RENT */)
 {
     if(start_building_rent == NULL)
     {
@@ -987,7 +1062,7 @@ void report_rent( /* BUILDING_RENT */)
     printf("Rent Price: \n");
     printf("Press B for getting back to the report page.");
 }
-void reports_normal()
+void page_reports_normal()
 {
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
@@ -1783,6 +1858,7 @@ void user_edit()
 }
 void make_list_user(FILE *user_fp)
 {
+    char temp_time[31];
     USER *temp;
     while(1)
     {
@@ -1797,6 +1873,10 @@ void make_list_user(FILE *user_fp)
         fgets(temp->last_name, 45, user_fp);
         fgets(temp->phone, 12, user_fp);
         fgets(temp->email, 35, user_fp);
+        fgets(temp_time , 31 , user_fp);
+        temp->time_login = atol(temp_time);
+        fgets(temp_time , 31 , user_fp);
+        temp->time_logout = atol(temp_time);
         if(start_user == NULL)
         {
             start_user = temp;
@@ -1835,6 +1915,7 @@ int search_password_list_user(char user_name[30], char password[20])
         if(strcmp(temp->user_name, user_name) == 0 && strcmp(temp->password, password) == 0)
         {
             current_user = temp;
+            temp->time_login = time(NULL);
             return 1;
         }
         temp = temp->link;
@@ -2047,6 +2128,7 @@ void make_null_list_building_rent()
 void main()
 {
     delete_rent_buildings_filed();
+    atexit(logout_time);
 }
 /*
             strcpy(temp->municipalitys_area);
