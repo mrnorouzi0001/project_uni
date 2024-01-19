@@ -1073,9 +1073,9 @@ void page_admin_report()
         case 6:{
             inner_flag = 0;
             char floor_start[6] , floor_finish[6];
-            printf("Please the start of price range: ");
+            printf("Please the start of room range: ");
             gets(floor_start);
-            printf("Please the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
+            printf("Please the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
             gets(floor_finish);
             system("cls");
             report_rent_residential_room(floor_start , floor_finish);
@@ -1110,7 +1110,7 @@ void page_admin_report()
         case 11:{
         inner_flag = 0;
         char chose[12];
-        printf("Please enter a municipalitys area: ");
+        printf("Please enter an amount for room-*: ");
         gets(chose);
         strcat(chose , "\n");
         system("cls");
