@@ -1070,7 +1070,178 @@ void page_admin_report()
             report_sale_commercial_price(price_start , price_finish);
             report_sale_filed_price(price_start , price_finish);
         }
+        case 6:{
+            inner_flag = 0;
+            char floor_start[6] , floor_finish[6];
+            printf("Please the start of price range: ");
+            gets(floor_start);
+            printf("Please the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(floor_finish);
+            system("cls");
+            report_rent_residential_floor(floor_start , floor_finish);
+            report_rent_commercial_floor(floor_start , floor_finish);
+            report_sale_residential_floor(floor_start , floor_finish);
+            report_sale_commercial_floor(floor_start , floor_finish);
+        }
     }
+}
+void report_rent_residential_room(char start_age[6] , char end_age[6]){
+    int age_start , age_end ,  age_file;
+    age_start = atoi(start_age);
+    age_end = atoi(end_age);
+    char id[7], TEMP[21];
+    BUILDING_RENT *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_rent\\Residential.txt", "r+");
+    make_list_building_rent(fp);
+    temp = start_building_rent;
+    while(temp != NULL)
+    {
+        age_file = atoi(temp->amount_of_rooms);
+        if(strcmp(temp->isactive, "1\n") == 0)
+        {
+            if(age_file >= age_start && age_file <= age_end){
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Prepayment: %s", temp->prepayment);
+            printf("Rent per month: %s" , temp->rent_per_month);
+            printf("\n");
+            inner_flag++;
+            }
+
+        }
+        temp = temp->link;
+    }
+    make_null_list_building_rent();
+}
+void report_rent_commercial_room(char start_age[6] , char end_age[6]){
+    int age_start , age_end ,  age_file;
+    age_start = atoi(start_age);
+    age_end = atoi(end_age);
+    char id[7], TEMP[21];
+    BUILDING_RENT *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt", "r+");
+    make_list_building_rent(fp);
+    temp = start_building_rent;
+    while(temp != NULL)
+    {
+        age_file = atoi(temp->amount_of_rooms);
+
+        if(strcmp(temp->isactive, "1\n") == 0)
+        {
+            if(age_file >= age_start && age_file <= age_end){
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Prepayment: %s", temp->prepayment);
+            printf("Rent per month: %s" , temp->rent_per_month);
+            printf("\n");
+            inner_flag++;
+            }
+
+        }
+        temp = temp->link;
+    }
+    make_null_list_building_rent();
+}
+void report_sale_residential_room(char start_age[6] , char end_age[6]){
+    int age_start , age_end ,  age_file;
+    age_start = atoi(start_age);
+    age_end = atoi(end_age);
+    char id[7], TEMP[21];
+    BUILDING_SALE *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL)
+    {
+        age_file = atoi(temp->amount_of_rooms);
+        if(strcmp(temp->isactive, "1\n") == 0)
+        {
+            if(age_file >= age_start && age_file <= age_end){
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Price: %s", temp->price);
+            printf("\n");
+            inner_flag++;
+            }
+
+        }
+        temp = temp->link;
+    }
+        make_null_list_building_sale();
+}
+void report_sale_commercial_floor(char start_age[6] , char end_age[6]){
+    int age_start , age_end ,  age_file;
+    age_start = atoi(start_age);
+    age_end = atoi(end_age);
+    char id[7], TEMP[21];
+    BUILDING_SALE *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL)
+    {
+        age_file = atoi(temp->amount_of_rooms);
+        if(strcmp(temp->isactive, "1\n") == 0)
+        {
+            if(age_file >= age_start && age_file <= age_end){
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amo, price_finishunt of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Price: %s", temp->price);
+            printf("\n");
+            inner_flag++;
+            }
+        }
+        temp = temp->link;
+    }
+        make_null_list_building_sale();
+        if(inner_flag == 0){
+        printf("There is no item to show!\n");
+
+        }
+        printf("For getting back press any key.....");
+        getchar();
+        if(strcmp(current_user->user_name , "admin\n")==0){
+                page_admin_report();
+        }
+        else{
+            page_reports_normal();
+        }
 }
 void report_rent_residential_age(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
