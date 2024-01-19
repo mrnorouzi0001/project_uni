@@ -1149,7 +1149,9 @@ void report_rent_commercial_age(char start_age[6] , char end_age[6]){
     }
     make_null_list_building_rent();
     if(inner_flag == 0){
-        printf("There is no item to show!");
+        printf("There is no item to show!\n");
+
+    }
         printf("For getting back press any key.....");
         getchar();
         if(strcmp("admin\n" , current_user->user_name) == 0){
@@ -1158,7 +1160,7 @@ void report_rent_commercial_age(char start_age[6] , char end_age[6]){
         else{
             page_reports_normal();
         }
-    }
+
 }
 void report_rent_residential_size(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1369,7 +1371,8 @@ void report_sale_filed_size(char start_age[6] , char end_age[6]){
     }
     make_null_list_building_sale();
     if(inner_flag == 0){
-        printf("There is no item to show!");
+        printf("There is no item to show!\n");
+    }
         printf("For getting back press any key.....");
         getchar();
         if(strcmp(current_user->user_name , "admin\n")==0){
@@ -1378,7 +1381,7 @@ void report_sale_filed_size(char start_age[6] , char end_age[6]){
         else{
             page_reports_normal();
         }
-    }
+
 }
 void report_sale_residential_age(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1517,17 +1520,18 @@ void report_sale_filed_price(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     if(inner_flag == 0){
-        printf("There is no item to show!");
+        printf("There is no item to show!\n");
+    }
         make_null_list_building_sale();
         printf("For getting back press any key.....");
         getchar();
-        if(strcmp(current_user->user_name , "admin\n")==0){
+        if(strcmp(current_user->user_name , "admin\n")== 0){
                 page_admin_report();
         }
         else{
             page_reports_normal();
         }
-    }
+
 }
 void report_sale_commercial_age(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1736,8 +1740,8 @@ void report_sale_filed_area(char chose[30]){
     }
      make_null_list_building_sale();
     if(inner_flag == 0){
-        printf("There is no item to show!");
-
+        printf("There is no item to show!\n");
+    }
         printf("For getting back press any key.....");
         getchar();
         if(strcmp("admin\n" , current_user->user_name) == 0){
@@ -1746,7 +1750,7 @@ void report_sale_filed_area(char chose[30]){
         else{
             page_reports_normal();
         }
-    }
+
 }
 void report_model_main(){
     int option;
