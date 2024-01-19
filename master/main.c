@@ -66,7 +66,7 @@ USER *current_user;
 int inner_flag = 0;
 void sign_up()
 {
-    char temp_time[31];
+    char temp_time[31] , option;
     system("cls");
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "a+");
@@ -93,8 +93,10 @@ void sign_up()
     printf("\nPlease enter Your email:  ");
     gets(user->email);
     printf("Are you sure you want to add this user to the application?(Y/N)");
-    if(getchar() == 'Y')
-    {
+    while(1){
+         option = getchar();
+        if(option == 'Y' || option == 'y')
+        {
         fputs(user->user_name, user_fp);
         fputs("\n", user_fp);
         fputs(user->password, user_fp);
@@ -121,13 +123,18 @@ void sign_up()
         Sleep(2000);
         Start_Page();
     }
-    else
+    if(option == 'N' || option == 'n')
     {
         free(user);
         free(user_fp);
         system("cls");
         Start_Page();
     }
+    else{
+        printf("Please enter a valid character");
+    }
+    }
+
 }
 void sign_in()
 {
