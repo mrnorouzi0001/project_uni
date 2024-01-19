@@ -1010,6 +1010,7 @@ void page_admin_report()
     printf("13. Users activity\n");
     printf("Please choice your report: ");
     scanf("%d" , &option);
+    getchar();
     switch(option){
         case 1:{
             report_model_main();
@@ -1135,6 +1136,12 @@ void page_admin_report()
             report_rent_commercial_floor(chose);
             report_sale_commercial_floor(chose);
             break;
+        }
+        default:{
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(2500);
+            page_admin_report();
         }
     }
 }
@@ -3536,7 +3543,7 @@ void make_list_user(FILE *user_fp)
         fgets(temp->phone, 12, user_fp);
         fgets(temp->email, 35, user_fp);
         fgets(temp_time , 31 , user_fp);
-        temp->time_login = atol(temp_time);
+        temp->, rent_end = atol(temp_time);
         fgets(temp_time , 31 , user_fp);
         temp->time_logout = atol(temp_time);
         if(start_user == NULL)
