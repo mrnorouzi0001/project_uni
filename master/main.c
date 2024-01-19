@@ -1078,12 +1078,226 @@ void page_admin_report()
             printf("Please the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
             gets(floor_finish);
             system("cls");
-            report_rent_residential_floor(floor_start , floor_finish);
-            report_rent_commercial_floor(floor_start , floor_finish);
-            report_sale_residential_floor(floor_start , floor_finish);
-            report_sale_commercial_floor(floor_start , floor_finish);
+            report_rent_residential_room(floor_start , floor_finish);
+            report_rent_commercial_room(floor_start , floor_finish);
+            report_sale_residential_room(floor_start , floor_finish);
+            report_sale_commercial_room(floor_start , floor_finish);
+        }
+        case 7:{
+            if(report_price_total() == 0){
+                printf("There is no price to show!\n");
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                if(strcmp(current_user->user_name , "admin\n")== 0){
+                    page_admin_report();
+                }
+                else{
+                    page_reports_normal();
+                }
+            }
+            else{
+                printf("The total worth of salable buildings and fileds are equal to: %lld" , report_price_total());
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                if(strcmp(current_user->user_name , "admin\n")== 0){
+                    page_admin_report();
+                }
+                else{
+                    page_reports_normal();
+                }
+            }
+        }
+        case 11:{
+        inner_flag = 0;
+        char chose[12];
+        printf("Please enter a municipalitys area: ");
+        gets(chose);
+        strcat(chose , "\n");
+        system("cls");
+        report_sale_residential_floor(chose);
+        report_rent_residential_floor(chose);
+        report_rent_commercial_floor(chose);
+        report_sale_commercial_floor(chose);
+        break;
         }
     }
+}
+void report_rent_residential_floor(char chose[30]){
+    char id[7], TEMP[21];
+    BUILDING_RENT *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_rent\\Residential.txt", "r+");
+    make_list_building_rent(fp);
+    temp = start_building_rent;
+    while(temp != NULL)
+    {
+        if(strcmp(temp->isactive, "1\n") == 0 && strcmp(temp->amount_of_floors , chose) == 0)
+        {
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Prepayment: %s", temp->prepayment);
+            printf("Rent per month: %s" , temp->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+}
+void report_rent_commercial_floor(char chose[30]){
+    char id[7], TEMP[21];
+    BUILDING_RENT *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt", "r+");
+    make_list_building_rent(fp);
+    temp = start_building_rent;
+    while(temp != NULL)
+    {
+
+        if(strcmp(temp->isactive, "1\n") == 0 && strcmp(temp->amount_of_floors , chose) == 0)
+        {
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Prepayment: %s", temp->prepayment);
+            printf("Rent per month: %s" , temp->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+        make_null_list_building_rent();
+
+}
+void report_sale_residential_area(char chose[30]){
+    char id[7], TEMP[21];
+    BUILDING_SALE *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL)
+    {
+        if(strcmp(temp->isactive, "1\n") == 0 && strcmp(temp->amount_of_floors , chose) == 0)
+        {
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Price: %s", temp->price);
+            printf("\n");
+            inner_flag++;
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+        make_null_list_building_sale();
+}
+void report_sale_commercial_floor(char chose[30]){
+    char id[7], TEMP[21];
+    BUILDING_SALE *temp;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL)
+    {
+        if(strcmp(temp->isactive, "1\n") == 0 && strcmp(temp->amount_of_floors , chose) == 0)
+        {
+            printf("ID: %s", temp->id);
+            printf("Municipality's area: %s", temp->municipalitys_area);
+            printf("Address of building: %s", temp->address_of_building);
+            printf("Model of building: %s", temp->model);
+            printf("Age of building: %s", temp->age_of_building);
+            printf("The size of the infrastructure: %s", temp->size_of_the_infrastructure);
+            printf("Amount of floors: %s", temp->amount_of_floors);
+            printf("The size of the main land: %s", temp->size_of_the_main_land);
+            printf("Phone number of owner: %s", temp->phone_number_of_owner);
+            printf("Amount of rooms: %s", temp->amount_of_floors);
+            printf("Price: %s", temp->price);
+            printf("\n");
+            inner_flag++;
+        }
+        temp = temp->link;
+    }
+        fclose(fp);
+        make_null_list_building_sale();
+        if(inner_flag == 0){
+        printf("There is no item to show!\n");
+        }
+        printf("For getting back press any key.....");
+        getchar();
+        if(strcmp("admin\n" , current_user->user_name) == 0){
+            page_admin_report();
+        }
+        else{
+            page_reports_normal();
+        }
+}
+int report_price_total(){
+    BUILDING_SALE *temp;
+    unsigned long long Total_worth = 0;
+    FILE *fp;
+    fp = fopen("Files\\building\\for_sale\\Filed.txt", "r+");
+    make_list_building_sale_filed(fp);
+    temp = start_building_sale;
+    while(temp != NULL){
+        if(strcmp(temp->isactive , "1\n") == 0)
+        {
+           Total_worth += atoll(temp->price);
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL){
+        if(strcmp(temp->isactive , "1\n") == 0)
+        {
+           Total_worth += atoll(temp->price);
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt", "r+");
+    make_list_building_sale(fp);
+    temp = start_building_sale;
+    while(temp != NULL){
+        if(strcmp(temp->isactive , "1\n") == 0)
+        {
+           Total_worth += atoll(temp->price);
+        }
+        temp = temp->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    return Total_worth;
 }
 void report_rent_residential_room(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1120,6 +1334,7 @@ void report_rent_residential_room(char start_age[6] , char end_age[6]){
         }
         temp = temp->link;
     }
+    fclose(fp);
     make_null_list_building_rent();
 }
 void report_rent_commercial_room(char start_age[6] , char end_age[6]){
@@ -1159,6 +1374,7 @@ void report_rent_commercial_room(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     make_null_list_building_rent();
+    fclose(fp);
 }
 void report_sale_residential_room(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1195,8 +1411,9 @@ void report_sale_residential_room(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
-void report_sale_commercial_floor(char start_age[6] , char end_age[6]){
+void report_sale_commercial_room(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
@@ -1230,6 +1447,7 @@ void report_sale_commercial_floor(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
         if(inner_flag == 0){
         printf("There is no item to show!\n");
 
@@ -1279,6 +1497,7 @@ void report_rent_residential_age(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     make_null_list_building_rent();
+    fclose(fp);
 }
 void report_rent_commercial_age(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1315,10 +1534,9 @@ void report_rent_commercial_age(char start_age[6] , char end_age[6]){
 
         }
         temp = temp->link;
-
-
     }
     make_null_list_building_rent();
+    fclose(fp);
     if(inner_flag == 0){
         printf("There is no item to show!\n");
 
@@ -1369,6 +1587,7 @@ void report_rent_residential_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     make_null_list_building_rent();
+    fclose(fp);
 }
 void report_rent_commercial_size(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1407,6 +1626,7 @@ void report_rent_commercial_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     make_null_list_building_rent();
+    fclose(fp);
 }
 void report_rent_filed_size(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1439,6 +1659,7 @@ void report_rent_filed_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_rent();
+        fclose(fp);
 
 }
 void report_sale_residential_size(char start_age[6] , char end_age[6]){
@@ -1475,6 +1696,7 @@ void report_sale_residential_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_commercial_size(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1510,6 +1732,7 @@ void report_sale_commercial_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_filed_size(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1541,6 +1764,7 @@ void report_sale_filed_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
     make_null_list_building_sale();
+    fclose(fp);
     if(inner_flag == 0){
         printf("There is no item to show!\n");
     }
@@ -1589,6 +1813,7 @@ void report_sale_residential_age(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_residential_price(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1625,6 +1850,7 @@ void report_sale_residential_price(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_commercial_price(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1660,6 +1886,7 @@ void report_sale_commercial_price(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_filed_price(char start_age[6] , char end_age[6]){
     int age_start , age_end ,  age_file;
@@ -1693,6 +1920,7 @@ void report_sale_filed_price(char start_age[6] , char end_age[6]){
     if(inner_flag == 0){
         printf("There is no item to show!\n");
     }
+        fclose(fp);
         make_null_list_building_sale();
         printf("For getting back press any key.....");
         getchar();
@@ -1738,6 +1966,7 @@ void report_sale_commercial_age(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_rent_residential_area(char chose[30]){
     char id[7], TEMP[21];
@@ -1768,6 +1997,7 @@ void report_rent_residential_area(char chose[30]){
         temp = temp->link;
     }
     make_null_list_building_rent();
+    fclose(fp);
 }
 void report_rent_commercial_area(char chose[30]){
     char id[7], TEMP[21];
@@ -1799,6 +2029,7 @@ void report_rent_commercial_area(char chose[30]){
         temp = temp->link;
     }
         make_null_list_building_rent();
+        fclose(fp);
 
 }
 void report_rent_filed_area(char chose [30]){
@@ -1826,6 +2057,7 @@ void report_rent_filed_area(char chose [30]){
         temp = temp->link;
     }
         make_null_list_building_rent();
+        fclose(fp);
 
 }
 void report_sale_residential_area(char chose[30]){
@@ -1856,6 +2088,7 @@ void report_sale_residential_area(char chose[30]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_commercial_area(char chose[30]){
     char id[7], TEMP[21];
@@ -1885,6 +2118,7 @@ void report_sale_commercial_area(char chose[30]){
         temp = temp->link;
     }
         make_null_list_building_sale();
+        fclose(fp);
 }
 void report_sale_filed_area(char chose[30]){
     char id[7], TEMP[21];
@@ -1910,6 +2144,7 @@ void report_sale_filed_area(char chose[30]){
         temp = temp->link;
     }
      make_null_list_building_sale();
+     fclose(fp);
     if(inner_flag == 0){
         printf("There is no item to show!\n");
     }
@@ -2058,6 +2293,7 @@ void report_rent_residential(){
         temp = temp->link;
     }
         make_null_list_building_rent();
+        fclose(fp);
 
     if(flag == 0){
         printf("There is no item to show!");
@@ -2105,7 +2341,8 @@ void report_rent_commercial(){
         }
         temp = temp->link;
     }
-            make_null_list_building_rent();
+    make_null_list_building_rent();
+    fclose(fp);
     if(flag == 0){
         printf("There is no item to show!");
         Sleep(2500);
@@ -2149,7 +2386,7 @@ void report_rent_filed(){
         temp = temp->link;
     }
         make_null_list_building_rent();
-
+        fclose(fp);
     if(flag == 0){
         printf("There is no item to show!");
         Sleep(2500);
@@ -2196,6 +2433,7 @@ void report_sale_residential(){
         temp = temp->link;
     }
     make_null_list_building_sale();
+    fclose(fp);
     if(flag == 0){
         printf("There is no item to show!");
 
@@ -2242,6 +2480,7 @@ void report_sale_commercial(){
         }
         temp = temp->link;
     }
+    fclose(fp);
     make_null_list_building_sale();
     if(flag == 0){
         printf("There is no item to show!");
@@ -2285,6 +2524,7 @@ void report_sale_filed(){
         temp = temp->link;
     }
     make_null_list_building_sale();
+    fclose(fp);
     if(flag == 0){
         printf("There is no item to show!");
         Sleep(2500);
@@ -2517,7 +2757,7 @@ void delete_sale_buildings_Residential()
             temp = temp->link;
         }
         if(flag != 0){
-            fclose(fp);
+        fclose(fp);
         fp = fopen("Files\\building\\for_sale\\Residential.txt", "w+");
         temp = start_building_sale;
         while(temp != NULL)
@@ -2553,7 +2793,7 @@ void delete_sale_buildings_Residential()
         delete_menu_sale_buildings();
         }
         else{
-          fclose(fp);
+        fclose(fp);
         make_null_list_building_sale();
         printf("Please enter a valid ID");
         Sleep(3000);
@@ -2618,7 +2858,7 @@ void delete_sale_buildings_commercial()
             temp = temp->link;
         }
         if(flag != 0){
-            fclose(fp);
+        fclose(fp);
         fp = fopen("Files\\building\\for_sale\\Commercial.txt", "w+");
         temp = start_building_sale;
         while(temp != NULL)
@@ -2840,6 +3080,7 @@ void delete_rent_buildings_Residential(){
     }
     if(flag != 0)
     {
+
         flag = 0;
         printf("For deleting the building please enter its id:");
         gets(id);
