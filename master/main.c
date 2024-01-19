@@ -1053,8 +1053,10 @@ void page_admin_report()
             system("cls");
             report_sale_residential_size(size_start , size_finish);
             report_sale_commercial_size(size_start , size_finish);
+            report_rent_filed_size(size_start , size_finish);
             report_rent_residential_size(size_start , size_finish);
             report_rent_commercial_size(size_start , size_finish);
+            report_sale_filed_size(size_start , size_finish);
         }
         case 5:{
 
@@ -1255,17 +1257,6 @@ void report_rent_filed_size(char start_age[6] , char end_age[6]){
         temp = temp->link;
     }
         make_null_list_building_rent();
-        if(inner_flag == 0){
-        printf("There is no item to show!");
-        printf("For getting back press any key.....");
-        getchar();
-        if(strcmp("admin\n" , current_user->user_name) == 0){
-            page_admin_report();
-        }
-        else{
-            page_reports_normal();
-        }
-    }
 
 }
 void report_sale_residential_size(char start_age[6] , char end_age[6]){
@@ -1352,8 +1343,9 @@ void report_sale_filed_size(char chose[30]){
     while(temp != NULL)
     {
         age_file = atoi(temp->size_of_the_infrastructure);
-        if(strcmp(temp->isactive, "1\n") == 0 && strcmp(temp->municipalitys_area , chose) == 0)
+        if(strcmp(temp->isactive, "1\n") == 0)
         {
+            if(age_file >= age_start && age_file <= age_end){
             printf("ID: %s", temp->id);
             printf("Municipality's area: %s", temp->municipalitys_area);
             printf("Address of building: %s", temp->address_of_building);
@@ -1363,14 +1355,21 @@ void report_sale_filed_size(char chose[30]){
             printf("Price: %s", temp->price);
             printf("\n");
             inner_flag++;
+            }
         }
         temp = temp->link;
     }
+    make_null_list_building_sale();
     if(inner_flag == 0){
         printf("There is no item to show!");
-        make_null_list_building_sale();
         printf("For getting back press any key.....");
         getchar();
+        if(strcmp(current_user->user_name , "admin\n")==0){
+            page_admin_report();
+        }
+        else{
+            page_reports_normal();
+        }
     }
 }
 void report_sale_residential_age(char start_age[6] , char end_age[6]){
@@ -1828,7 +1827,7 @@ void report_rent_commercial(){
     }
 }
 void report_rent_filed(){
-        system("cls");
+    system("cls");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
