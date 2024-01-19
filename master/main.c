@@ -1029,6 +1029,10 @@ void page_admin_report()
         report_rent_commercial_area(chose);
         report_rent_filed_area(chose);
         report_sale_filed_area(chose);
+        break;
+        }
+        case 3:{
+
         }
     }
 }
@@ -1182,7 +1186,7 @@ void report_sale_filed_area(char chose[30]){
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
-    fp = fopen("Files\\building\\for_sale\\Commercial.txt", "r+");
+    fp = fopen("Files\\building\\for_sale\\Filed.txt", "r+");
     make_list_building_sale_filed(fp);
     temp = start_building_sale;
     while(temp != NULL)
