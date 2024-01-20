@@ -55,6 +55,7 @@ struct user
     unsigned long int time_login;
     unsigned long int time_logout;
     int registered_builiding;
+    char ID[20];
     struct user *link;
 }*start_user, *last_user;
 
@@ -261,6 +262,106 @@ void main_page()
         main_page();
     }
     }
+}
+void user_edit(){
+    char tempstr[34] , temp_pass_valid[25] , temp_user[25] , temp_time[15];
+    FILE *user_fp;
+    user_fp = fopen("Files\\users\\user.txt" , "r");
+    make_list_user(user_fp);
+    USER *temp;
+    printf("        if you don't want to change a filed , leave it blank\n\n");
+    strcpy(temp_user , current_user->user_name);
+    printf("Please enter your new name: ");
+    gets(tempstr);
+    if(strcmp(tempstr , "") != 0){
+        strcpy(current_user->name , tempstr);
+    }
+    printf("Please enter your new last name: ");
+    gets(tempstr);
+    if(strcmp(tempstr , "") != 0){
+        strcpy(current_user->last_name , tempstr);
+    }
+    printf("Please enter your new ID: ");
+    gets(tempstr);
+    if(strcmp(tempstr , "") != 0){
+        strcpy(current_user->ID , tempstr);
+    }
+    printf("Please enter your new Phone: ");
+    gets(tempstr);
+    if(strcmp(tempstr , "") != 0){
+        strcpy(current_user->phone , tempstr);
+    }
+    printf("Please enter your new Email:");
+    gets(tempstr);
+    if(strcmp(tempstr , "") != 0){
+        strcpy(current_user->email , tempstr);
+    }
+    printf("Please enter your new password: ");
+    gets(tempstr);
+    printf("Please enter your new password again: ");
+    gets(temp_pass_valid);
+    if(strcmp(tempstr , "") != 0){
+        while(1){
+            if(strcmp(tempstr , temp_pass_valid) == 0){
+            strcpy(current_user->password , tempstr);
+            break;
+            }
+        else{
+            printf("your password isn't matched!");
+            printf("Please enter your new password: ");
+            gets(tempstr);
+            printf("Please enter your new password again: ");
+            gets(temp_pass_valid);
+            }
+        }
+    }
+    fclose(user_fp);
+    user_fp = fopen("Files\\users\\user.txt" , "w+");
+    temp = start_user;
+    while(temp != NULL){
+        if(strcmp(temp->user_name , temp_user) != 0 ){
+        fputs(temp->user_name, user_fp);
+        fputs(temp->password, user_fp);
+        fputs(temp->name, user_fp);
+        fputs(temp->last_name, user_fp);
+        fputs(temp->phone, user_fp);
+        fputs(temp->email, user_fp);
+        itoa(temp->time_login , temp_time , 10);
+        fputs(temp_time , user_fp);
+        fputs("\n" , user_fp);
+        itoa(temp->time_logout , temp_time , 10);
+        fputs(temp_time , user_fp);
+        fputs("\n" , user_fp);
+        }
+        else{
+          fputs(current_user->user_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(current_user->password, user_fp);
+        fputs("\n", user_fp);
+        fputs(current_user->name, user_fp);
+        fputs("\n", user_fp);
+        fputs(current_user->last_name, user_fp);
+        fputs("\n", user_fp);
+        fputs(current_user->phone, user_fp);
+        fputs("\n", user_fp);
+        fputs(current_user->email, user_fp);
+        fputs("\n", user_fp);
+        itoa(current_user->time_login , temp_time , 10);
+        fputs(temp_time , user_fp);
+        fputs("\n" , user_fp);
+        itoa(current_user->time_logout , temp_time , 10);
+        fputs(temp_time , user_fp);
+        fputs("\n" , user_fp);
+        }
+        temp = temp->link;
+    }
+    make_null_list_user();
+    fclose(user_fp);
+    system("cls");
+    printf("The user was edited Successfully!");
+    Sleep(2500);
+    main_page();
+
 }
 void logout_time(){
     char time_tmep[30];
@@ -990,7 +1091,6 @@ void adding_rent_buildings_filed()
 void page_admin_report()
 {
     int option;
-
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
     printf("3. Buildings with Specific age\n");
@@ -1002,7 +1102,7 @@ void page_admin_report()
     printf("9. Users Financial turnover\n");
     printf("10. Date of registered buildings\n");
     printf("11. Buildings with Specific floors\n");
-    printf("12. Deleted buildings\n");
+    printf("12. Date of deleted buildings\n");
     printf("13. Users activity\n");
     printf("Please choice your report: ");
     scanf("%d" , &option);
@@ -1120,6 +1220,16 @@ void page_admin_report()
             report_rent_commercial_rent_mortgage(prepayment_start , prepayment_end , rent_start , rent_end);
             report_rent_filed_rent_mortgage(prepayment_start , prepayment_end , rent_start , rent_end);
         }
+        case 9:{
+            report_user_trunover();
+            printf("For getting back to the report menu , press any key.....");
+            getchar();
+            page_admin_report();
+        }
+        case 10:{
+            report_date_main_registered_buildings();
+            break;
+        }
         case 11:{
             inner_flag = 0;
             char chose[12];
@@ -1133,6 +1243,14 @@ void page_admin_report()
             report_sale_commercial_floor(chose);
             break;
         }
+        case 12:{
+            report_date_main_deleted_buildings();
+        }
+        case 13:{
+            time_user();
+            printf("Press any key to get back to the menu");
+            getchar();
+        }
         default:{
             system("cls");
             printf("Please enter a valid option!");
@@ -1140,6 +1258,1097 @@ void page_admin_report()
             page_admin_report();
         }
     }
+}
+void report_date_main_deleted_buildings()
+{
+    int option;
+    printf("1. past week");
+    printf("2. past month");
+    printf("3. past 3 month");
+    printf("4. back");
+    printf("Please enter a option: ");
+    scanf("%d" , &option);
+    getchar();
+    switch(option){
+        case 1:{
+            inner_flag = 0;
+            report_date_main_deleted_building_week();
+            break;
+        }
+        case 2:{
+            inner_flag = 0;
+            report_date_main_deleted_building_three_month();
+            break;
+        }
+        case 3:{
+            inner_flag = 0;
+            report_date_main_deleted_building_month();
+            break;
+        }
+        case 4:{
+            if(strcmp(current_user->user_name , "admin\n") == 0){
+                page_admin_report();
+            }
+            else{
+                page_reports_normal();
+            }
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(1500);
+            report_date_main_registered_buildings();
+        }
+    }
+}
+void report_date_main_deleted_building_month(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+     sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_date_main_deleted_building_three_month(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= ( 3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_date_main_deleted_building_week(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time_delete;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "0\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time_delete;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_date_main_registered_buildings()
+{
+    int option;
+    printf("1. past week");
+    printf("2. past month");
+    printf("3. past 3 month");
+    printf("4. back");
+    printf("Please enter a option: ");
+    scanf("%d" , &option);
+    getchar();
+    switch(option){
+        case 1:{
+            inner_flag = 0;
+            report_date_main_registered_building_week();
+            break;
+        }
+        case 2:{
+            inner_flag = 0;
+            report_date_main_registered_building_month();
+            break;
+        }
+        case 3:{
+            inner_flag = 0;
+            report_date_main_registered_building_month();
+            break;
+        }
+        case 4:{
+            if(strcmp(current_user->user_name , "admin\n") == 0){
+                page_admin_report();
+            }
+            else{
+                page_reports_normal();
+            }
+            break;
+        }
+        default: {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(1500);
+            report_date_main_registered_buildings();
+        }
+    }
+}
+void report_date_main_registered_building_month(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+     sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((current_time - file_time) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_date_main_registered_building_three_month(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((current_time - file_time) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_date_main_registered_building_week(){
+    FILE *fp;
+    BUILDING_RENT *rent;
+    BUILDING_SALE *sale;
+    unsigned long current_time , file_time;
+    current_time = time(NULL);
+    fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("Age of building: %s", sale->age_of_building);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Amount of floors: %s", sale->amount_of_floors);
+            printf("The size of the main land: %s", sale->size_of_the_main_land);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Amount of rooms: %s", sale->amount_of_floors);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
+    make_list_building_sale(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    fp = fopen("Files\\building\\for_rent\\Residential.txt" , "r+");
+    make_list_building_rent(fp);
+    rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Commercial.txt" , "r+");
+    make_list_building_rent(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("Age of building: %s", rent->age_of_building);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Amount of floors: %s", rent->amount_of_floors);
+            printf("The size of the main land: %s", rent->size_of_the_main_land);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Amount of rooms: %s", rent->amount_of_floors);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_rent\\Filed.txt" , "r+");
+    make_list_building_rent_filed(fp);
+     rent = start_building_rent;
+    while(rent->link != NULL){
+        file_time = rent->time;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+            printf("ID: %s", rent->id);
+            printf("Municipality's area: %s", rent->municipalitys_area);
+            printf("Address of building: %s", rent->address_of_building);
+            printf("Model of building: %s", rent->model);
+            printf("The size of the infrastructure: %s", rent->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", rent->phone_number_of_owner);
+            printf("Prepayment: %s", rent->prepayment);
+            printf("Rent per month: %s" , rent->rent_per_month);
+            printf("\n");
+            inner_flag++;
+        }
+        rent = rent->link;
+    }
+    fclose(fp);
+    make_null_list_building_rent();
+    fp = fopen("Files\\building\\for_sale\\Filed.txt" , "r+");
+    make_list_building_sale_filed(fp);
+    sale = start_building_sale;
+    while(sale->link != NULL){
+        file_time = sale->time;
+        if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+            printf("ID: %s", sale->id);
+            printf("Municipality's area: %s", sale->municipalitys_area);
+            printf("Address of building: %s", sale->address_of_building);
+            printf("Model of building: %s", sale->model);
+            printf("The size of the infrastructure: %s", sale->size_of_the_infrastructure);
+            printf("Phone number of owner: %s", sale->phone_number_of_owner);
+            printf("Price: %s", sale->price);
+            printf("\n");
+            inner_flag++;
+        }
+        sale = sale->link;
+    }
+    fclose(fp);
+    make_null_list_building_sale();
+    if(inner_flag == 0){
+        printf("There is no item to show!");
+        Sleep(1500);
+        report_date_main_registered_buildings();
+    }
+    else{
+        printf("For getting back press any key.....");
+        getchar();
+        report_date_main_registered_buildings();
+    }
+}
+void report_user_trunover(){
+    FILE *fp_user , *fp_building;
+    USER *temp;
+    BUILDING_RENT *build_rent;
+    BUILDING_SALE *build_sale;
+    fp_user = fopen("Files\\users\\user.txt" , "r");
+    make_list_user(fp_user);
+    temp = start_user;
+    while(temp != NULL){
+        temp->registered_builiding = 0;
+        fp_building = fopen("Files\\building\\for_sale\\Residential.txt" , "r");
+        make_list_building_sale(fp_building);
+        build_sale = start_building_sale;
+        while(build_sale != NULL){
+            if(strcmp(build_sale->user , temp->user_name) == 0){
+                temp->registered_builiding++;
+            }
+            build_sale = build_sale->link;
+        }
+        make_null_list_building_sale();
+        fclose(fp_building);
+        fp_building = fopen("Files\\building\\for_sale\\Commercial.txt" , "r");
+
+        make_list_building_sale(fp_building);
+        build_sale = start_building_sale;
+        while(build_sale != NULL){
+            if(strcmp(build_sale->user , temp->user_name) == 0){\
+                temp->registered_builiding++;
+            }
+            build_sale = build_sale->link;
+        }
+        make_null_list_building_sale();
+        fclose(fp_building);
+        fp_building = fopen("Files\\building\\for_sale\\Filed.txt" , "r");
+        make_list_building_sale_filed(fp_building);
+        build_sale = start_building_sale;
+        while(build_sale != NULL){
+            if(strcmp(build_sale->user , temp->user_name) == 0){
+                temp->registered_builiding++;
+            }
+            build_sale = build_sale->link;
+        }
+        make_null_list_building_sale();
+        fclose(fp_building);
+        fp_building = fopen("Files\\building\\for_rent\\Residential.txt" , "r");
+        make_list_building_rent(fp_building);
+        build_rent = start_building_rent;
+        while(build_rent != NULL){
+            if(strcmp(build_rent->user , temp->user_name) == 0){
+                temp->registered_builiding++;
+            }
+            build_rent = build_rent->link;
+        }
+        make_null_list_building_rent();
+        fclose(fp_building);
+        fp_building = fopen("Files\\building\\for_rent\\Commercial.txt" , "r");
+        make_list_building_rent(fp_building);
+        build_rent = start_building_rent;
+        while(build_rent != NULL){
+            if(strcmp(build_rent->user , temp->user_name) == 0){
+                temp->registered_builiding++;
+            }
+            build_rent = build_rent->link;
+        }
+        make_null_list_building_rent();
+        fclose(fp_building);
+        fp_building = fopen("Files\\building\\for_rent\\Filed.txt" , "r");
+        make_list_building_rent_filed(fp_building);
+        build_rent = start_building_rent;
+        while(build_rent != NULL){
+            if(strcmp(build_rent->user , temp->user_name) == 0){
+                temp->registered_builiding++;
+            }
+            build_rent = build_rent->link;
+        }
+        make_null_list_building_rent();
+        fclose(fp_building);
+        temp = temp->link;
+    }
+    sortLinkedList(&start_user);
+    temp = start_user;
+    while(temp != NULL){
+        temp->user_name[strlen(temp->user_name) - 1] = '\0';
+        if(strcmp(temp->user_name , "") != 0){
+        printf("the user: %s\n" , temp->user_name);
+        printf("The amount of buildings that registered by %s: %d\n\n" ,temp->user_name, temp->registered_builiding);
+
+        }
+        temp = temp->link;
+    }
+make_null_list_user();
+fclose(fp_user);
 }
 void report_rent_residential_rent_mortgage(char start_perpay[20] , char end_prepay[20] , char start_rent[20] , char end_rent[20]){
     long int age_start , age_end , rent_start ,rent_end , rent_file , pre_file;
@@ -2706,27 +3915,6 @@ void report_sale_filed(){
     }
     }
 }
-void page_report_rent( /* BUILDING_RENT */)
-{
-    if(start_building_rent == NULL)
-    {
-        printf("There is no building to delete!");
-
-    }
-    printf("ID: %s\n");
-    printf("Municipality's area: \n");
-    printf("Address of building: \n");
-    printf("Model of building: \n");
-    printf("Age of building: \n");
-    printf("The size of the infrastructure: \n");
-    printf("Amount of floors: \n");
-    printf("The size of the main land: \n");
-    printf("Phone number of owner: \n");
-    printf("Amount of rooms: \n");
-    printf("prepayment Price: \n");
-    printf("Rent Price: \n");
-    printf("Press B for getting back to the report page.");
-}
 void page_reports_normal()
 {
     printf("1. Specific model of buildings\n");
@@ -2742,61 +3930,7 @@ void page_reports_normal()
     printf("11. Back");
     printf("Please choice your report: ");
 }
-void report_All(/*struc Building*/)
-{
-    printf("ID: \n");
-    printf("for rent or for sale: \n");
-    printf("Model: \n");
-    printf("Municipality's area: \n");
-    printf("Address of building: \n");
-    printf("Model of building: \n");
-    printf("Age of building: \n");
-    printf("The size of the infrastructure: \n");
-    printf("Amount of floors: \n");
-    printf("The size of the main land: \n");
-    printf("Phone number of owner: \n");
-    printf("Amount of rooms: \n");
-    printf("Price: \n");
-    printf("Press B for getting back to the report page.");
-}
-void report_time(/*struc Building*/)
-{
-    printf("for rent or for sale: \n");
-    printf("Model: \n");
-    printf("Municipality's area: \n");
-    printf("Address of building: \n");
-    printf("Model of building: \n");
-    printf("Age of building: \n");
-    printf("The size of the infrastructure: \n");
-    printf("Amount of floors: \n");
-    printf("The size of the main land: \n");
-    printf("Phone number of owner: \n");
-    printf("Amount of rooms: \n");
-    printf("Price: \n");
-    printf("Press B for getting back to the report page.");
-}
-void report_total_price()
-{
-    printf("The total price of buildings in application is: ");
-    printf("Press B for getting back to the report page.");
-}
-void report_user_financial(/*struc User*/)
-{
-    printf("User name: \n");
-}
-void report_date_main()
-{
-    printf("1. past week");
-    printf("2. past month");
-    printf("3. past 3 month");
-    printf("4. back");
-}
-void report_user_activity(/*struc User*/)
-{
-    printf("User name: \n");
-    printf("Last login: \n");
-    printf("Last logout: \n");
-}
+
 void menu_delete_building()
 {
     int checker = 0;
@@ -3512,15 +4646,33 @@ void delete_rent_buildings_filed(){
         delete_menu_rent_buildings();
     }
 }
-void user_edit()
-{
-    printf("Please enter your new name(if don't want to change leave it alone):");
-    printf("Please enter delete_rent_buildings_commercialyour new last name(if don't want to change leave it alone):");
-    printf("Please enter your new ID(if don't want to change leave it alone:");
-    printf("Please enter your new Phone(if don't want to change leave it alone:");
-    printf("Please enter your new Email(if don't want to change leave it alone:");
-    printf("Please enter your new password(if don't want to change leave it alone):");
-    printf("Please enter your new password again: ");
+
+void time_user(){
+    unsigned long int time;
+    FILE *fp;
+    char time_str[80];
+    struct tm *info;
+    USER *temp;
+    fp = fopen("Files\\users\\user.txt" , "r");
+    if(fp == NULL){
+        printf("as");
+    }
+    make_list_user(fp);
+    temp = start_user;
+    while(temp->link != NULL){
+        temp->user_name[strlen(temp->user_name) - 1] = '\0';
+        time = start_user->time_login;
+        info = localtime(&time);
+        strftime (time_str,80,"20%y/%m/%d",info);
+        printf("last time of %s user login is:%s\n" ,temp->user_name ,time_str);
+        time = start_user->time_logout;
+        info = localtime(&time);
+        strftime (time_str,80,"20%y/%m/%d",info);
+        printf("last time of %s user logout is:%s\n" ,temp->user_name , time_str);
+        printf("\n");
+        temp = temp->link;
+    }
+    make_null_list_user();
 }
 void make_list_user(FILE *user_fp)
 {
@@ -3791,20 +4943,36 @@ void make_null_list_building_rent()
     }
     while(start_building_rent != NULL);
 }
+void sortListHelper(USER **head, USER *newNode) {
+   USER temp;
+   USER *current = &temp;
+   temp.link = *head;
+   while (current->link != NULL && current->link->registered_builiding > newNode->registered_builiding) {
+      current = current->link;
+   }
+
+   newNode->link = current->link;
+   current->link = newNode;
+   *head = temp.link;
+}
+void sortLinkedList(USER **head) {
+   USER *answerList = NULL;
+
+
+   USER *current = *head;
+   USER *nextNode;
+
+   while (current != NULL) {
+
+      nextNode = current->link;
+      sortListHelper(&answerList, current);
+      current = nextNode;
+   }
+   *head = answerList;
+}
+
 void main()
 {
     Start_Page();
     atexit(logout_time);
 }
-/*
-            strcpy(temp->municipalitys_area);
-            strcpy(temp->address_of_building);
-            strcpy(temp->model);
-            strcpy(temp->age_of_building);
-            strcpy(temp->size_of_the_infrastructure);
-            strcpy(temp->amount_of_floors);
-            strcpy(temp->size_of_the_main_land);
-            strcpy(temp->phone_number_of_owner);
-            strcpy(temp->temp->amount_of_floors);
-            strcpy(temp->price)
-*/
