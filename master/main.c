@@ -93,6 +93,8 @@ void sign_up()
     gets(user->phone);
     printf("\nPlease enter Your email:  ");
     gets(user->email);
+    printf("\nPlease enter Your ID:  ");
+    gets(user->ID);
     printf("Are you sure you want to add this user to the application?(Y/N)");
     while(1){
          option = getchar();
@@ -115,6 +117,8 @@ void sign_up()
         fputs("\n" , user_fp);
         fputs("0" , user_fp);
         fputs("\n" , user_fp);
+        fputs(user->ID , user_fp);
+        fputs("\n" , user_fp)
         system("cls");
         Sleep(2000);
         printf("the user has added to the application successfully!");
@@ -191,6 +195,7 @@ void sign_in()
         itoa(temp->time_login , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
+        fputs(temp->ID , user_fp);
         temp = temp->link;
         }
         Sleep(2000);
@@ -4695,6 +4700,7 @@ void make_list_user(FILE *user_fp)
         temp->time_login = atol(temp_time);
         fgets(temp_time , 31 , user_fp);
         temp->time_logout = atol(temp_time);
+        fgets(temp->ID , 31 , user_fp);
         if(start_user == NULL)
         {
             start_user = temp;
