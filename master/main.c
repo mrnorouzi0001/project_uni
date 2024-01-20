@@ -177,25 +177,20 @@ void sign_in()
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt" , "w+");
         temp = start_user;
-        while(temp != NULL){
+        while(temp != last_user){
         fputs(temp->user_name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->password, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->last_name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->phone, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->email, user_fp);
-        fputs("\n", user_fp);
         itoa(temp->time_login , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
         itoa(temp->time_login , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
+        temp = temp->link;
         }
         Sleep(2000);
         fclose(user_fp);
@@ -205,6 +200,7 @@ void sign_in()
     }
     else
     {
+        make_null_list_user();
         printf("we don't have this user name!");
         Sleep(2000);
         fclose(user_fp);
@@ -271,35 +267,35 @@ void logout_time(){
     current_user->time_logout = time(NULL);
     FILE *user_fp;
     USER *temp;
-    user_fp = fopen("Files\\user\\user.txt" , "r+");
+    user_fp = fopen("Files\\users\\user.txt" , "r+");
     make_list_user(user_fp);
     fclose(user_fp);
-    user_fp = fopen("Files\\user\\user.txt" , "w+");
+    user_fp = fopen("Files\\users\\user.txt" , "w+");
     temp = start_user;
-    while(temp != NULL){
+    while(temp != last_user){
         fputs(temp->user_name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->password, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->last_name, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->phone, user_fp);
-        fputs("\n", user_fp);
         fputs(temp->email, user_fp);
-        fputs("\n", user_fp);
         itoa(temp->time_login , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
-        itoa(temp->time_login , time_tmep , 10);
-        fputs(time_tmep , user_fp);
-        fputs("\n" , user_fp);
+        if(strcmp(temp->user_name , current_user->user_name) == 0){
         itoa(time(NULL) , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
+        }
+        else{
+        itoa(temp->time_logout , time_tmep , 10);
+        fputs(time_tmep , user_fp);
+        fputs("\n" , user_fp);
+        }
+        temp = temp->link;
     }
     fclose(user_fp);
+    make_null_list_user();
 }
 void Start_Page()
 {
@@ -1249,12 +1245,13 @@ void report_rent_filed_rent_mortgage(char start_perpay[20] , char end_prepay[20]
     temp = start_building_rent;
     while(temp != NULL)
     {
-        age_file = atol(temp->amount_of_rooms);
+        pre_file = atol(temp->prepayment);
+        rent_file= atol(temp->rent_per_month);
 
         if(strcmp(temp->isactive, "1\n") == 0)
         {
             if(pre_file >= age_start && pre_file <= age_end){
-                    if(rent_file >= rent_start && rent_file <= rent_end){
+            if(rent_file >= rent_start && rent_file <= rent_end){
             printf("ID: %s", temp->id);
             printf("Municipality's area: %s", temp->municipalitys_area);
             printf("Address of building: %s", temp->address_of_building);
@@ -1354,7 +1351,7 @@ void report_rent_commercial_floor(char chose[30]){
         make_null_list_building_rent();
 
 }
-void report_sale_residential_area(char chose[30]){
+void report_sale_residential_floor(char chose[30]){
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -2020,7 +2017,7 @@ void report_sale_residential_price(char start_age[20] , char end_age[20]){
         make_null_list_building_sale();
         fclose(fp);
 }
-void report_sale_commercial_price(char start_age[20] , char end_age20]){
+void report_sale_commercial_price(char start_age[20] , char end_age[20]){
     long int age_start , age_end ,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
@@ -3543,7 +3540,7 @@ void make_list_user(FILE *user_fp)
         fgets(temp->phone, 12, user_fp);
         fgets(temp->email, 35, user_fp);
         fgets(temp_time , 31 , user_fp);
-        temp->, rent_end = atol(temp_time);
+        temp->time_login = atol(temp_time);
         fgets(temp_time , 31 , user_fp);
         temp->time_logout = atol(temp_time);
         if(start_user == NULL)
@@ -3631,11 +3628,11 @@ void make_list_building_sale(FILE *building_sale_fp)
         fgets(temp->price, 15, building_sale_fp);
         fgets(temp->user, 30, building_sale_fp);
         fgets(TEMP, 20, building_sale_fp);
-        temp->time = atoi(TEMP);
+        temp->time = atol(TEMP);
         fgets(temp->isactive, 3, building_sale_fp);
         fgets(temp->id, 7, building_sale_fp);
         fgets(TEMP, 20, building_sale_fp);
-        temp->time_delete = atoi(TEMP);
+        temp->time_delete = atol(TEMP);
         if(start_building_sale == NULL)
         {
             start_building_sale = temp;
@@ -3669,11 +3666,11 @@ void make_list_building_sale_filed(FILE *building_sale_fp)
         fgets(temp->price, 15, building_sale_fp);
         fgets(temp->user, 30, building_sale_fp);
         fgets(TEMP, 20, building_sale_fp);
-        temp->time = atoi(TEMP);
+        temp->time = atol(TEMP);
         fgets(temp->isactive, 3, building_sale_fp);
         fgets(temp->id, 7, building_sale_fp);
         fgets(TEMP, 20, building_sale_fp);
-        temp->time_delete = atoi(TEMP);
+        temp->time_delete = atol(TEMP);
         if(start_building_sale == NULL)
         {
             start_building_sale = temp;
@@ -3724,11 +3721,11 @@ void make_list_building_rent(FILE *building_rent_fp)
         fgets(temp->rent_per_month, 15, building_rent_fp);
         fgets(temp->user, 30, building_rent_fp);
         fgets(TEMP, 25, building_rent_fp);
-        temp->time = atoi(TEMP);
+        temp->time = atol(TEMP);
         fgets(temp->isactive, 3, building_rent_fp);
         fgets(temp->id, 7, building_rent_fp);
         fgets(TEMP, 20, building_rent_fp);
-        temp->time_delete = atoi(TEMP);
+        temp->time_delete = atol(TEMP);
         if(start_building_rent == NULL)
         {
             start_building_rent = temp;
@@ -3763,11 +3760,11 @@ void make_list_building_rent_filed(FILE *building_rent_fp)
         fgets(temp->rent_per_month, 15, building_rent_fp);
         fgets(temp->user, 30, building_rent_fp);
         fgets(TEMP, 25, building_rent_fp);
-        temp->time = atoi(TEMP);
+        temp->time = atol(TEMP);
         fgets(temp->isactive, 3, building_rent_fp);
         fgets(temp->id, 7, building_rent_fp);
         fgets(TEMP, 20, building_rent_fp);
-        temp->time_delete = atoi(TEMP);
+        temp->time_delete = atol(TEMP);
         if(start_building_rent == NULL)
         {
             start_building_rent = temp;
@@ -3796,7 +3793,7 @@ void make_null_list_building_rent()
 }
 void main()
 {
-    delete_rent_buildings_filed();
+    Start_Page();
     atexit(logout_time);
 }
 /*
