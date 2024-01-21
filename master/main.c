@@ -148,7 +148,7 @@ void sign_in()
     char time_tmep[30];
     FILE *user_fp;
     USER *temp;
-    user_fp = fopen("Files\\users\\user.txt", "r");
+    user_fp = fopen("Files\\users\\user.txt", "r+");
     if(user_fp == NULL)
     {
         printf("There is a problem with user file. the program will restart itself");
@@ -183,7 +183,7 @@ void sign_in()
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt" , "w+");
         temp = start_user;
-        while(temp != NULL){
+        while(temp != last_user){
         fputs(temp->user_name, user_fp);
         fputs(temp->password, user_fp);
         fputs(temp->name, user_fp);
@@ -366,20 +366,8 @@ void user_edit()
         checker = getchar();
         if(checker == 'Y' || checker == 'y')
         {
-                fputs(current_user->user_name, user_fp);
-                fputs(temp_current->password, user_fp);
-                fputs(temp_current->name, user_fp);
-                fputs(temp_current->last_name, user_fp);
-                fputs(temp_current->phone, user_fp);
-                fputs(temp_current->email, user_fp);
-                itoa(current_user->time_login, temp_time, 10);
-                fputs(temp_time, user_fp);
-                fputs("\n", user_fp);
-                itoa(current_user->time_logout, temp_time, 10);
-                fputs(temp_time, user_fp);
-                fputs("\n", user_fp);
-                fputs(temp_current->ID, user_fp);
-            while(temp != NULL)
+
+            while(temp != last_user)
             {
                 if(strcmp(temp->user_name, temp_user) != 0 )
                 {
@@ -396,6 +384,21 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp->ID, user_fp);
+                }
+                else{
+            fputs(current_user->user_name, user_fp);
+            fputs(temp_current->password, user_fp);
+            fputs(temp_current->name, user_fp);
+            fputs(temp_current->last_name, user_fp);
+            fputs(temp_current->phone, user_fp);
+            fputs(temp_current->email, user_fp);
+            itoa(current_user->time_login, temp_time, 10);
+            fputs(temp_time, user_fp);
+            fputs("\n", user_fp);
+            itoa(current_user->time_logout, temp_time, 10);
+            fputs(temp_time, user_fp);
+            fputs("\n", user_fp);
+            fputs(temp_current->ID, user_fp);
                 }
                 temp = temp->link;
             }
@@ -433,7 +436,7 @@ void logout_time(){
     fclose(user_fp);
     user_fp = fopen("Files\\users\\user.txt" , "w+");
     temp = start_user;
-    while(temp != NULL){
+    while(temp != last_user){
         fputs(temp->user_name, user_fp);
         fputs(temp->password, user_fp);
         fputs(temp->name, user_fp);
@@ -1308,7 +1311,7 @@ void page_admin_report()
             report_date_main_deleted_buildings();
         }
         case 13:{
-            time_user();
+            report_time_user();
             printf("Press any key to get back to the menu");
             getchar();
         }
@@ -4708,7 +4711,7 @@ void delete_rent_buildings_filed(){
     }
 }
 
-void time_user(){
+void report_time_user(){
     unsigned long int time;
     FILE *fp;
     char time_str[80];
@@ -4720,7 +4723,7 @@ void time_user(){
     }
     make_list_user(fp);
     temp = start_user;
-    while(temp->link != NULL){
+    while(temp != last_user){
         temp->user_name[strlen(temp->user_name) - 1] = '\0';
         time = start_user->time_login;
         info = localtime(&time);
@@ -4739,12 +4742,8 @@ void make_list_user(FILE *user_fp)
 {
     char temp_time[31];
     USER *temp;
-    while(1)
+    while(!feof(user_fp))
     {
-        if(feof(user_fp))
-        {
-            break;
-        }
         temp = malloc(sizeof(USER));
         fgets(temp->user_name, 30, user_fp);
         fgets(temp->password, 20, user_fp);
@@ -4769,6 +4768,7 @@ void make_list_user(FILE *user_fp)
             last_user = temp;
             last_user->link = NULL;
         }
+
     }
 }
 int search_username_list_user(char user_name[30])
