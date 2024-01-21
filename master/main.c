@@ -118,7 +118,7 @@ void sign_up()
         fputs("0" , user_fp);
         fputs("\n" , user_fp);
         fputs(user->ID , user_fp);
-        fputs("\n" , user_fp)
+        fputs("\n" , user_fp);
         system("cls");
         Sleep(2000);
         printf("the user has added to the application successfully!");
@@ -268,105 +268,159 @@ void main_page()
     }
     }
 }
-void user_edit(){
-    char tempstr[34] , temp_pass_valid[25] , temp_user[25] , temp_time[15];
+void user_edit()
+{
+    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15] , checker;
     FILE *user_fp;
-    user_fp = fopen("Files\\users\\user.txt" , "r");
+    user_fp = fopen("Files\\users\\user.txt", "r");
     make_list_user(user_fp);
-    USER *temp;
+    USER *temp, *temp_current;
+    temp_current = malloc(sizeof(USER));
     printf("        if you don't want to change a filed , leave it blank\n\n");
-    strcpy(temp_user , current_user->user_name);
+    strcpy(temp_user, current_user->user_name);
     printf("Please enter your new name: ");
     gets(tempstr);
-    if(strcmp(tempstr , "") != 0){
-        strcpy(current_user->name , tempstr);
+    if(strcmp(tempstr, "") != 0)
+    {
+        strcat(tempstr, "\n");
+        strcpy(temp_current->name,  tempstr);
+    }
+    else{
+        strcpy(temp_current->name, current_user->name);
     }
     printf("Please enter your new last name: ");
     gets(tempstr);
-    if(strcmp(tempstr , "") != 0){
-        strcpy(current_user->last_name , tempstr);
+    if(strcmp(tempstr, "") != 0)
+    {
+        strcat(tempstr, "\n");
+        strcpy(temp_current->last_name, tempstr);
+    }
+    else{
+        strcpy(temp_current->last_name, current_user->last_name);
     }
     printf("Please enter your new ID: ");
     gets(tempstr);
-    if(strcmp(tempstr , "") != 0){
-        strcpy(current_user->ID , tempstr);
+    if(strcmp(tempstr, "") != 0)
+    {
+        strcat(tempstr, "\n");
+        strcpy(temp_current->ID, tempstr);
+    }
+    else{
+        strcpy(temp_current->ID, current_user->ID);
     }
     printf("Please enter your new Phone: ");
     gets(tempstr);
-    if(strcmp(tempstr , "") != 0){
-        strcpy(current_user->phone , tempstr);
+    if(strcmp(tempstr, "") != 0)
+    {
+        strcat(tempstr, "\n");
+        strcpy(temp_current->phone, tempstr);
+    }
+    else{
+        strcpy(temp_current->phone, current_user->phone);
     }
     printf("Please enter your new Email:");
     gets(tempstr);
-    if(strcmp(tempstr , "") != 0){
-        strcpy(current_user->email , tempstr);
+    if(strcmp(tempstr, "") != 0)
+    {
+        strcat(tempstr, "\n");
+        strcpy(temp_current->email, tempstr);
+    }
+    else{
+        strcpy(temp_current->email, current_user->email);
     }
     printf("Please enter your new password: ");
     gets(tempstr);
     printf("Please enter your new password again: ");
     gets(temp_pass_valid);
-    if(strcmp(tempstr , "") != 0){
-        while(1){
-            if(strcmp(tempstr , temp_pass_valid) == 0){
-            strcpy(current_user->password , tempstr);
-            break;
+    if(strcmp(tempstr, "") != 0)
+    {
+        while(1)
+        {
+            if(strcmp(tempstr, temp_pass_valid) == 0)
+            {
+                strcat(tempstr, "\n");
+                strcpy(temp_current->password, tempstr);
+                break;
             }
-        else{
-            printf("your password isn't matched!");
-            printf("Please enter your new password: ");
-            gets(tempstr);
-            printf("Please enter your new password again: ");
-            gets(temp_pass_valid);
+            else
+            {
+                printf("your password isn't matched!");
+                printf("Please enter your new password: ");
+                gets(tempstr);
+                printf("Please enter your new password again: ");
+                gets(temp_pass_valid);
             }
         }
     }
+    else{
+         strcpy(temp_current->password , current_user->password);
+    }
     fclose(user_fp);
-    user_fp = fopen("Files\\users\\user.txt" , "w+");
+    user_fp = fopen("Files\\users\\user.txt", "w+");
     temp = start_user;
-    while(temp != NULL){
-        if(strcmp(temp->user_name , temp_user) != 0 ){
-        fputs(temp->user_name, user_fp);
-        fputs(temp->password, user_fp);
-        fputs(temp->name, user_fp);
-        fputs(temp->last_name, user_fp);
-        fputs(temp->phone, user_fp);
-        fputs(temp->email, user_fp);
-        itoa(temp->time_login , temp_time , 10);
-        fputs(temp_time , user_fp);
-        fputs("\n" , user_fp);
-        itoa(temp->time_logout , temp_time , 10);
-        fputs(temp_time , user_fp);
-        fputs("\n" , user_fp);
+    while(1)
+    {
+        char checker;
+        printf("For Saving Please press Y. for canceling please press N.....");
+        checker = getchar();
+        if(checker == 'Y' || checker == 'y')
+        {
+                fputs(current_user->user_name, user_fp);
+                fputs(temp_current->password, user_fp);
+                fputs(temp_current->name, user_fp);
+                fputs(temp_current->last_name, user_fp);
+                fputs(temp_current->phone, user_fp);
+                fputs(temp_current->email, user_fp);
+                itoa(current_user->time_login, temp_time, 10);
+                fputs(temp_time, user_fp);
+                fputs("\n", user_fp);
+                itoa(current_user->time_logout, temp_time, 10);
+                fputs(temp_time, user_fp);
+                fputs("\n", user_fp);
+                fputs(temp_current->ID, user_fp);
+            while(temp->link != NULL)
+            {
+                if(strcmp(temp->user_name, temp_user) != 0 )
+                {
+                    fputs(temp->user_name, user_fp);
+                    fputs(temp->password, user_fp);
+                    fputs(temp->name, user_fp);
+                    fputs(temp->last_name, user_fp);
+                    fputs(temp->phone, user_fp);
+                    fputs(temp->email, user_fp);
+                    itoa(temp->time_login, temp_time, 10);
+                    fputs(temp_time, user_fp);
+                    fputs("\n", user_fp);
+                    itoa(temp->time_logout, temp_time, 10);
+                    fputs(temp_time, user_fp);
+                    fputs("\n", user_fp);
+                    fputs(temp->ID, user_fp);
+                }
+                temp = temp->link;
+            }
+            current_user = temp_current;
+            make_null_list_user();
+            fclose(user_fp);
+            system("cls");
+            printf("The user was edited Successfully!");
+            Sleep(2000);
+            break;
+            main_page();
         }
-        else{
-          fputs(current_user->user_name, user_fp);
-        fputs("\n", user_fp);
-        fputs(current_user->password, user_fp);
-        fputs("\n", user_fp);
-        fputs(current_user->name, user_fp);
-        fputs("\n", user_fp);
-        fputs(current_user->last_name, user_fp);
-        fputs("\n", user_fp);
-        fputs(current_user->phone, user_fp);
-        fputs("\n", user_fp);
-        fputs(current_user->email, user_fp);
-        fputs("\n", user_fp);
-        itoa(current_user->time_login , temp_time , 10);
-        fputs(temp_time , user_fp);
-        fputs("\n" , user_fp);
-        itoa(current_user->time_logout , temp_time , 10);
-        fputs(temp_time , user_fp);
-        fputs("\n" , user_fp);
+        else if(checker == 'N' || checker == 'n')
+        {
+            make_null_list_user();
+            fclose(user_fp);
+            system("cls");
+            free(temp_current);
+            break;
+            main_page();
         }
-        temp = temp->link;
+        else
+        {
+            printf("Please enter a valid character!\n");
+        }
     }
-    make_null_list_user();
-    fclose(user_fp);
-    system("cls");
-    printf("The user was edited Successfully!");
-    Sleep(2500);
-    main_page();
-
 }
 void logout_time(){
     char time_tmep[30];
