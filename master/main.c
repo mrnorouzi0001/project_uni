@@ -385,7 +385,7 @@ void user_edit()
                     fputs("\n", user_fp);
                     fputs(temp->ID, user_fp);
                 }
-                else{
+            else{
             fputs(current_user->user_name, user_fp);
             fputs(temp_current->password, user_fp);
             fputs(temp_current->name, user_fp);
