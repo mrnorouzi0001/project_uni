@@ -100,6 +100,7 @@ void sign_up()
          option = getchar();
         if(option == 'Y' || option == 'y')
         {
+
         fputs(user->user_name, user_fp);
         fputs("\n", user_fp);
         fputs(user->password, user_fp);
@@ -131,7 +132,7 @@ void sign_up()
     if(option == 'N' || option == 'n')
     {
         free(user);
-        free(user_fp);
+        fclose(user_fp);
         system("cls");
         Start_Page();
     }
@@ -404,8 +405,8 @@ void user_edit()
             system("cls");
             printf("The user was edited Successfully!");
             Sleep(2000);
-            break;
             main_page();
+            break;
         }
         else if(checker == 'N' || checker == 'n')
         {
@@ -432,7 +433,7 @@ void logout_time(){
     fclose(user_fp);
     user_fp = fopen("Files\\users\\user.txt" , "w+");
     temp = start_user;
-    while(temp != last_user){
+    while(temp != NULL){
         fputs(temp->user_name, user_fp);
         fputs(temp->password, user_fp);
         fputs(temp->name, user_fp);
@@ -452,6 +453,7 @@ void logout_time(){
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
         }
+        fputs(temp->ID , user_fp);
         temp = temp->link;
     }
     fclose(user_fp);
