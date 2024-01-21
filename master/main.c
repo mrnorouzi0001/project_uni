@@ -1154,6 +1154,7 @@ void adding_rent_buildings_filed()
 }
 void page_admin_report()
 {
+    system("cls");
     int option;
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
@@ -4768,7 +4769,6 @@ void make_list_user(FILE *user_fp)
             last_user = temp;
             last_user->link = NULL;
         }
-
     }
 }
 int search_username_list_user(char user_name[30])
