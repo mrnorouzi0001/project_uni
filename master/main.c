@@ -57,7 +57,7 @@ struct user
     int registered_builiding;
     char ID[20];
     struct user *link;
-}*start_user, *last_user;
+}*start_user = NULL, *last_user = NULL;
 
 typedef struct building_sale BUILDING_SALE;
 typedef struct user USER;
@@ -206,11 +206,10 @@ void sign_in()
     }
     else
     {
-
-       // make_null_list_user();
         printf("we don't have this user name!");
         Sleep(2000);
         fclose(user_fp);
+        make_null_list_user();
         Start_Page();
     }
 }
@@ -4804,19 +4803,21 @@ int search_password_list_user(char user_name[30], char password[20])
 void make_null_list_user()
 {
     struct user *temp;
-    do
-    {
+        do
+        {
         temp = malloc(sizeof(USER));
         temp = start_user;
-        if(strcmp(temp->user_name, current_user->user_name)==0)
+        if(current_user != NULL){
+        if(strcmp(temp->user_name, current_user->user_name)== 0)
         {
             start_user = start_user->link;
             continue;
         }
+        }
         start_user = start_user->link;
         free(temp);
-    }
-    while(start_user != NULL);
+        }
+        while(start_user != NULL);
 }
 void make_list_building_sale(FILE *building_sale_fp)
 {
