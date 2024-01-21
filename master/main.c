@@ -112,7 +112,7 @@ void sign_up()
         fputs("\n", user_fp);
         fputs(user->email, user_fp);
         fputs("\n", user_fp);
-        itoa(time(NULL) , temp_time , 10);
+        itoa(0 , temp_time , 10);
         fputs(temp_time , user_fp);
         fputs("\n" , user_fp);
         fputs("0" , user_fp);
@@ -182,7 +182,7 @@ void sign_in()
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt" , "w+");
         temp = start_user;
-        while(temp != last_user){
+        while(temp != NULL){
         fputs(temp->user_name, user_fp);
         fputs(temp->password, user_fp);
         fputs(temp->name, user_fp);
@@ -192,7 +192,7 @@ void sign_in()
         itoa(temp->time_login , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
-        itoa(temp->time_login , time_tmep , 10);
+        itoa(temp->time_logout , time_tmep , 10);
         fputs(time_tmep , user_fp);
         fputs("\n" , user_fp);
         fputs(temp->ID , user_fp);
@@ -206,7 +206,8 @@ void sign_in()
     }
     else
     {
-        make_null_list_user();
+
+       // make_null_list_user();
         printf("we don't have this user name!");
         Sleep(2000);
         fclose(user_fp);
@@ -378,7 +379,7 @@ void user_edit()
                 fputs(temp_time, user_fp);
                 fputs("\n", user_fp);
                 fputs(temp_current->ID, user_fp);
-            while(temp->link != NULL)
+            while(temp != NULL)
             {
                 if(strcmp(temp->user_name, temp_user) != 0 )
                 {
