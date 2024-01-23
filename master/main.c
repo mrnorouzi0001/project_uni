@@ -5,6 +5,7 @@
 #include<ctype.h>
 void Start_Page();
 void make_list_user(FILE *user_fp);
+long long unsigned report_price_total();
 struct building_sale
 {
     char municipalitys_area[6];
@@ -80,8 +81,20 @@ void sign_up()
     USER *user;
     user = malloc(sizeof(USER));
     printf("        you will use this information for using the application\n");
-    printf("\nPlease enter a user name: ");
-    gets(user->user_name);
+    make_list_user(user_fp);
+    while(1){
+        printf("\nPlease enter a user name: ");
+        gets(user->user_name);
+        strcat(user->user_name , "\n");
+        if(search_username_list_user(user->user_name)== 1){
+            printf("This user name has already taken.");
+        }
+        else{
+             user->user_name[strlen(user->user_name) - 1] = '\0';
+            break;
+        }
+    }
+    make_null_list_user();
     printf("\nPleas enter a password: ");
     gets(user->password);
     printf("\n            personal information\n");
@@ -1197,7 +1210,7 @@ void page_admin_report()
             char age_start[6] , age_finish[6];
             printf("Please enter the start of age range: ");
             gets(age_start);
-            printf("Please enter the end of age range:(if you wish to only look for a specific age enter 0 for this filed)");
+            printf("Please enter the end of age range:(if you wish to only look for a specific age enter 0 for this filed): ");
             gets(age_finish);
             system("cls");
             report_sale_residential_age(age_start , age_finish);
@@ -1246,6 +1259,7 @@ void page_admin_report()
             report_sale_commercial_room(floor_start , floor_finish);
         }
         case 7:{
+            system("cls");
             if(report_price_total() == 0){
                 printf("There is no price to show!\n");
                 printf("For getting back to report menu , press any key....");
@@ -1258,7 +1272,7 @@ void page_admin_report()
                 }
             }
             else{
-                printf("The total worth of salable buildings and fileds are equal to: %lld" , report_price_total());
+                printf("The total worth of salable buildings and fileds are equal to: %lld\n" , report_price_total());
                 printf("For getting back to report menu , press any key....");
                 getchar();
                 if(strcmp(current_user->user_name , "admin\n")== 0){
@@ -2696,7 +2710,7 @@ void report_sale_commercial_floor(char chose[30]){
             page_reports_normal();
         }
 }
-int report_price_total(){
+long long unsigned report_price_total(){
     BUILDING_SALE *temp;
     unsigned long long Total_worth = 0;
     FILE *fp;
@@ -3742,8 +3756,9 @@ void report_rent_residential(){
     while(1){
     printf("Please enter B for getting back to report menu: ");
     if(getchar() == 'b' || getchar() == 'B'){
-        break;
-        report_model_building_model_rent();
+
+       report_model_building_model_rent();
+         break;
     }
     else{
         printf("Please enter a valid character!");
@@ -3790,8 +3805,9 @@ void report_rent_commercial(){
     while(1){
     printf("Please enter B for getting back to report menu: ");
     if(getchar() == 'b' || getchar() == 'B'){
-        break;
+
         report_model_building_model_rent();
+         break;
     }
     else{
         printf("Please enter a valid character!");
@@ -3834,17 +3850,18 @@ void report_rent_filed(){
     while(1){
     printf("Please enter B for getting back to report menu: ");
     if(getchar() == 'b' || getchar() == 'B'){
-        break;
+
         report_model_building_model_rent();
+         break;
     }
     else{
-        printf("Please enter a valid character!");
+        printf("\nPlease enter a valid character!");
     }
     }
 }
 void report_sale_residential(){
     system("cls");
-    char id[7], TEMP[21];
+    char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_SALE *temp;
     FILE *fp;
@@ -3875,24 +3892,24 @@ void report_sale_residential(){
     fclose(fp);
     if(flag == 0){
         printf("There is no item to show!");
-
         Sleep(2500);
         report_model_building_model_sale();
     }
     while(1){
     printf("Please enter B for getting back to report menu: ");
-    if(getchar() == 'b' || getchar() == 'B'){
-        break;
+    checker = getchar();
+    if(checker == 'b' || checker == 'B'){
         report_model_building_model_sale();
+        break;
     }
     else{
-        printf("Please enter a valid character!");
+        printf("\nPlease enter a valid character!");
     }
     }
 }
 void report_sale_commercial(){
     system("cls");
-    char id[7], TEMP[21];
+    char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_SALE *temp;
     FILE *fp;
@@ -3927,10 +3944,11 @@ void report_sale_commercial(){
         report_model_building_model_sale();
     }
      while(1){
-    printf("Please enter B for getting back to report menu: ");
-    if(getchar() == 'b' || getchar() == 'B'){
-        break;
+    printf("\nPlease enter B for getting back to report menu: ");
+    checker = getchar();
+    if( checker == 'b' || checker == 'B'){
         report_model_building_model_sale();
+        break;
     }
     else{
         printf("Please enter a valid character!");
@@ -3972,8 +3990,8 @@ void report_sale_filed(){
      while(1){
     printf("Please enter B for getting back to report menu: ");
     if(getchar() == 'b' || getchar() == 'B'){
-        break;
         report_model_building_model_sale();
+        break;
     }
     else{
         printf("Please enter a valid character!");
