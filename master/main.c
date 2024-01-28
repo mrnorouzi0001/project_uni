@@ -301,6 +301,10 @@ void user_edit()
     temp_current = malloc(sizeof(USER));
     printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        main_page();
+    }
     strcpy(temp_user, current_user->user_name);
     printf("Please enter your new name: ");
     gets(tempstr);
@@ -615,6 +619,12 @@ void adding_sale_buildings_Residential()
     char char_id[7], temp[25];
     system("cls");
     printf("Adding building\\for sale\\residential\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_sale_buildings();
+    }
+    system("cls");
+    printf("Adding building\\for sale\\residential\n");
     FILE *file_sale_res, *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -709,6 +719,12 @@ void adding_sale_buildings_commercial()
     char char_id[7], temp[25];
     system("cls");
     printf("Adding building\\for sale\\commercial\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_sale_buildings();
+    }
+    system("cls");
+    printf("Adding building\\for sale\\commercial\n");
     FILE *file_sale_res, *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Commercial.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -800,6 +816,12 @@ void adding_sale_buildings_filed()
 {
     int id = 0;
     char char_id[7], temp[25];
+    system("cls");
+    printf("Adding building\\for sale\\filed\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_sale_buildings();
+    }
     system("cls");
     printf("Adding building\\for sale\\filed\n");
     FILE *file_sale_res, *file_ID;
@@ -922,6 +944,12 @@ void adding_rent_buildings_Residential()
     char char_id[7], temp[25];
     system("cls");
     printf("Adding building\\for rent\\residential\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_rent_buildings();
+    }
+    system("cls");
+    printf("Adding building\\for rent\\residential\n");
     FILE *file_rent_res, *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Residential.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -1017,6 +1045,12 @@ void adding_rent_buildings_commercial()
 {
     int id = 0;
     char char_id[7], temp[25];
+    system("cls");
+    printf("Adding building\\for rent\\commercial\n");
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_rent_buildings();
+    }
     system("cls");
     printf("Adding building\\for rent\\commercial\n");
     FILE *file_rent_res, *file_ID;
@@ -1117,6 +1151,12 @@ void adding_rent_buildings_filed()
     system("cls");
     printf("Adding building\\for rent\\filed\n");
     FILE *file_rent_res, *file_ID;
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b'){
+        menu_rent_buildings();
+    }
+    system("cls");
+    printf("Adding building\\for rent\\filed\n");
     file_rent_res = fopen("Files\\building\\for_rent\\Filed.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
     BUILDING_RENT *building;
@@ -1219,11 +1259,13 @@ void page_admin_report()
     {
     case 1:
     {
+        system("cls");
         report_model_main();
         break;
     }
     case 2:
     {
+         system("cls");
         inner_flag = 0;
         char chose[12];
         printf("Please enter a municipalitys area: ");
@@ -1240,6 +1282,7 @@ void page_admin_report()
     }
     case 3:
     {
+         system("cls");
         inner_flag = 0;
         char age_start[6], age_finish[6];
         printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1254,6 +1297,7 @@ void page_admin_report()
     }
     case 4:
     {
+         system("cls");
         inner_flag = 0;
         char size_start[6], size_finish[6];
         printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1270,6 +1314,7 @@ void page_admin_report()
     }
     case 5:
     {
+         system("cls");
         inner_flag = 0;
         char price_start[20], price_finish[20];
         printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1283,6 +1328,7 @@ void page_admin_report()
     }
     case 6:
     {
+         system("cls");
         inner_flag = 0;
         char floor_start[6], floor_finish[6];
         printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1329,6 +1375,7 @@ void page_admin_report()
     }
     case 8:
     {
+         system("cls");
         inner_flag = 0;
         char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
         printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1346,18 +1393,21 @@ void page_admin_report()
     }
     case 9:
     {
+         system("cls");
         report_user_trunover();
-        printf("For getting back to the report menu , press any key.....");
+        printf("\nFor getting back to the report menu , press any key.....");
         getchar();
         page_admin_report();
     }
     case 10:
     {
+         system("cls");
         report_date_main_registered_buildings();
         break;
     }
     case 11:
     {
+         system("cls");
         inner_flag = 0;
         char chose[12];
         printf("Please enter an amount for floor: ");
@@ -1372,16 +1422,19 @@ void page_admin_report()
     }
     case 12:
     {
+         system("cls");
         report_date_main_deleted_buildings();
     }
     case 13:
     {
+         system("cls");
         report_time_user();
         printf("Press any key to get back to the menu");
         getchar();
     }
     case 14:
     {
+         system("cls");
         main_page();
     }
     default:
