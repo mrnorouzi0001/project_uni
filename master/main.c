@@ -68,7 +68,8 @@ USER *current_user;
 int inner_flag = 0;
 void sign_up()
 {
-    char temp_time[31], option;
+    int index = 0, stars = 0;
+    char temp_time[31], option, character, password[30];
     system("cls");
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "a+");
@@ -98,8 +99,40 @@ void sign_up()
         }
     }
     make_null_list_user();
-    printf("\nPleas enter a password: ");
-    gets(user->password);
+    printf("Please enter your password: ");
+    index = 0;
+    stars = 0;
+    while(1)
+    {
+        character = getch();
+        if(character == 13)
+        {
+            break;
+        }
+        if(character == 8)
+        {
+
+            printf("\33[2K\r");
+            printf("Please enter your password: ");
+            for(int i = 0 ; i < stars - 1 ; i++)
+            {
+                printf("%c", '*');
+            }
+            stars--;
+            user->password[index - 1] = '\0';
+            index--;
+        }
+        else
+        {
+
+            printf("%c", '*');
+            user->password[index] = character;
+            user->password[index + 1] = '\0';
+            index++;
+            stars++;
+        }
+    }
+    printf("\n");
     printf("\n            personal information\n");
     printf("\nPlease enter your name: ");
     gets(user->name);
@@ -163,6 +196,8 @@ void sign_up()
 void sign_in()
 {
     system("cls");
+    int index = 0, stars = 0;
+    char character;
     char time_tmep[30];
     FILE *user_fp;
     USER *temp;
@@ -185,7 +220,39 @@ void sign_in()
         while(1)
         {
             printf("Please enter your password: ");
-            gets(password);
+            index = 0;
+            stars = 0;
+            while(1)
+            {
+                character = getch();
+                if(character == 13)
+                {
+                    break;
+                }
+                if(character == 8)
+                {
+
+                    printf("\33[2K\r");
+                    printf("Please enter your password: ");
+                    for(int i = 0 ; i < stars - 1 ; i++)
+                    {
+                        printf("%c", '*');
+                    }
+                    stars--;
+                    password[index - 1] = '\0';
+                    index--;
+                }
+                else
+                {
+
+                    printf("%c", '*');
+                    password[index] = character;
+                    password[index + 1] = '\0';
+                    index++;
+                    stars++;
+                }
+            }
+            printf("\n");
             strcat(password, "\n");
             if(search_password_list_user(user_name,password) == 1)
             {
@@ -292,19 +359,24 @@ void main_page()
 }
 void user_edit()
 {
+    int index = 0, stars = 0;
     system("cls");
-    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker;
+    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker , character;
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "r");
     make_list_user(user_fp);
-    USER *temp, *temp_current;
+    USER *temp, *temp_current = NULL;
+    if(temp_current == NULL){
     temp_current = malloc(sizeof(USER));
+    }
     printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         main_page();
     }
+    printf("\33[2K\r");
     strcpy(temp_user, current_user->user_name);
     printf("Please enter your new name: ");
     gets(tempstr);
@@ -361,10 +433,74 @@ void user_edit()
     {
         strcpy(temp_current->email, current_user->email);
     }
-    printf("Please enter your new password: ");
-    gets(tempstr);
+    make_str_null(tempstr);
+    printf("Please enter your password: ");
+    while(1)
+    {
+        character = getch();
+        if(character == 13)
+        {
+            break;
+        }
+        if(character == 8)
+        {
+
+            printf("\33[2K\r");
+            printf("Please enter your password: ");
+            for(int i = 0 ; i < stars - 1 ; i++)
+            {
+                printf("%c", '*');
+            }
+            stars--;
+            tempstr[index - 1] = '\0';
+            index--;
+        }
+        else
+        {
+
+            printf("%c", '*');
+            tempstr[index] = character;
+            tempstr[index + 1] = '\0';
+            index++;
+            stars++;
+        }
+    }
+    printf("\n");
     printf("Please enter your new password again: ");
-    gets(temp_pass_valid);
+    make_str_null(temp_pass_valid);
+    index = 0;
+    stars = 0;
+    while(1)
+    {
+        character = getch();
+        if(character == 13)
+        {
+            break;
+        }
+        if(character == 8)
+        {
+
+            printf("\33[2K\r");
+            printf("Please enter your password again: ");
+            for(int i = 0 ; i < stars - 1 ; i++)
+            {
+                printf("%c", '*');
+            }
+            stars--;
+            temp_pass_valid[index - 1] = '\0';
+            index--;
+        }
+        else
+        {
+
+            printf("%c", '*');
+            temp_pass_valid[index] = character;
+            temp_pass_valid[index + 1] = '\0';
+            index++;
+            stars++;
+        }
+    }
+    printf("\n");
     if(strcmp(tempstr, "") != 0)
     {
         while(1)
@@ -377,11 +513,76 @@ void user_edit()
             }
             else
             {
-                printf("your password isn't matched!");
+                index = 0;
+                stars = 0;
+                printf("your password isn't matched!\n");
+                make_str_null(tempstr);
                 printf("Please enter your new password: ");
-                gets(tempstr);
+                while(1)
+                {
+                    character = getch();
+                    if(character == 13)
+                    {
+                        break;
+                    }
+                    if(character == 8)
+                    {
+
+                        printf("\33[2K\r");
+                        printf("Please enter your password: ");
+                        for(int i = 0 ; i < stars - 1 ; i++)
+                        {
+                            printf("%c", '*');
+                        }
+                        stars--;
+                        tempstr[index - 1] = '\0';
+                        index--;
+                    }
+                    else
+                    {
+
+                        printf("%c", '*');
+                        tempstr[index] = character;
+                        tempstr[index + 1] = '\0';
+                        index++;
+                        stars++;
+                    }
+                }
+                printf("\n");
                 printf("Please enter your new password again: ");
-                gets(temp_pass_valid);
+                make_str_null(temp_pass_valid);
+                index = 0;
+                stars = 0;
+                while(1)
+                {
+                    character = getch();
+                    if(character == 13)
+                    {
+                        break;
+                    }
+                    if(character == 8)
+                    {
+
+                        printf("\33[2K\r");
+                        printf("Please enter your password again: ");
+                        for(int i = 0 ; i < stars - 1 ; i++)
+                        {
+                            printf("%c", '*');
+                        }
+                        stars--;
+                        temp_pass_valid[index - 1] = '\0';
+                        index--;
+                    }
+                    else
+                    {
+
+                        printf("%c", '*');
+                        temp_pass_valid[index] = character;
+                        temp_pass_valid[index + 1] = '\0';
+                        index++;
+                        stars++;
+                    }
+                }
             }
         }
     }
@@ -390,7 +591,7 @@ void user_edit()
         strcpy(temp_current->password, current_user->password);
     }
     fclose(user_fp);
-    user_fp = fopen("Files\\users\\user.txt", "w+");
+
     temp = start_user;
     while(1)
     {
@@ -399,7 +600,7 @@ void user_edit()
         checker = getche();
         if(checker == 'Y' || checker == 'y')
         {
-
+            user_fp = fopen("Files\\users\\user.txt", "w+");
             while(temp != last_user)
             {
                 if(strcmp(temp->user_name, temp_user) != 0 )
@@ -533,6 +734,13 @@ void Start_Page()
     }
     }
 }
+void make_str_null(char string[])
+{
+    for(int index = 0; index < strlen(string) ; index++)
+    {
+        string[index] = '\0';
+    }
+}
 void menu_adding_building()
 {
     int checker = 0;
@@ -620,7 +828,8 @@ void adding_sale_buildings_Residential()
     system("cls");
     printf("Adding building\\for sale\\residential\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_sale_buildings();
     }
     system("cls");
@@ -720,7 +929,8 @@ void adding_sale_buildings_commercial()
     system("cls");
     printf("Adding building\\for sale\\commercial\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_sale_buildings();
     }
     system("cls");
@@ -819,7 +1029,8 @@ void adding_sale_buildings_filed()
     system("cls");
     printf("Adding building\\for sale\\filed\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_sale_buildings();
     }
     system("cls");
@@ -899,7 +1110,7 @@ void menu_rent_buildings()
 {
     system("cls");
     int checker = 0;
-     printf("Adding building\\for rent\n");
+    printf("Adding building\\for rent\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -945,7 +1156,8 @@ void adding_rent_buildings_Residential()
     system("cls");
     printf("Adding building\\for rent\\residential\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_rent_buildings();
     }
     system("cls");
@@ -1048,7 +1260,8 @@ void adding_rent_buildings_commercial()
     system("cls");
     printf("Adding building\\for rent\\commercial\n");
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_rent_buildings();
     }
     system("cls");
@@ -1152,7 +1365,8 @@ void adding_rent_buildings_filed()
     printf("Adding building\\for rent\\filed\n");
     FILE *file_rent_res, *file_ID;
     printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         menu_rent_buildings();
     }
     system("cls");
@@ -1265,7 +1479,7 @@ void page_admin_report()
     }
     case 2:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char chose[12];
         printf("Please enter a municipalitys area: ");
@@ -1282,7 +1496,7 @@ void page_admin_report()
     }
     case 3:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char age_start[6], age_finish[6];
         printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1297,7 +1511,7 @@ void page_admin_report()
     }
     case 4:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char size_start[6], size_finish[6];
         printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1314,7 +1528,7 @@ void page_admin_report()
     }
     case 5:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char price_start[20], price_finish[20];
         printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1328,7 +1542,7 @@ void page_admin_report()
     }
     case 6:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char floor_start[6], floor_finish[6];
         printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1375,7 +1589,7 @@ void page_admin_report()
     }
     case 8:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
         printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
@@ -1393,7 +1607,7 @@ void page_admin_report()
     }
     case 9:
     {
-         system("cls");
+        system("cls");
         report_user_trunover();
         printf("\nFor getting back to the report menu , press any key.....");
         getchar();
@@ -1401,13 +1615,13 @@ void page_admin_report()
     }
     case 10:
     {
-         system("cls");
+        system("cls");
         report_date_main_registered_buildings();
         break;
     }
     case 11:
     {
-         system("cls");
+        system("cls");
         inner_flag = 0;
         char chose[12];
         printf("Please enter an amount for floor: ");
@@ -1422,19 +1636,19 @@ void page_admin_report()
     }
     case 12:
     {
-         system("cls");
+        system("cls");
         report_date_main_deleted_buildings();
     }
     case 13:
     {
-         system("cls");
+        system("cls");
         report_time_user();
         printf("Press any key to get back to the menu");
         getchar();
     }
     case 14:
     {
-         system("cls");
+        system("cls");
         main_page();
     }
     default:
@@ -1684,7 +1898,7 @@ void report_date_main_deleted_building_three_month()
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
-     printf("Reports\\deleted buildings\\in a 3 month\n");
+    printf("Reports\\deleted buildings\\in a 3 month\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
@@ -4092,7 +4306,7 @@ void report_rent_residential()
 {
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\report_rent_residential\n");
-    char id[7], TEMP[21] , checker;
+    char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4148,7 +4362,7 @@ void report_rent_commercial()
 {
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\commercial\n");
-    char id[7], TEMP[21] , checker;
+    char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4204,7 +4418,7 @@ void report_rent_filed()
 {
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\filed\n");
-    char id[7], TEMP[21] , checker;
+    char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4364,7 +4578,7 @@ void report_sale_filed()
 {
     system("cls");
     printf("Reports\\specific model of buildings\\for sale\\field\n");
-    char id[7], TEMP[21] , checker;
+    char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_SALE *temp;
     FILE *fp;
@@ -4633,7 +4847,7 @@ void delete_menu_sale_buildings()
     system("cls");
 
     int checker = 0;
-     printf("Deleting buildings\\for sale\n");
+    printf("Deleting buildings\\for sale\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -5236,7 +5450,7 @@ void delete_rent_buildings_commercial()
 void delete_rent_buildings_filed()
 {
     system("cls");
-     printf("Deleting buildings\\for rent\\filed\n");
+    printf("Deleting buildings\\for rent\\filed\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -5366,8 +5580,12 @@ void make_list_user(FILE *user_fp)
 {
     char temp_time[31];
     USER *temp;
-    while(!feof(user_fp))
+    while(1)
     {
+        if(feof(user_fp))
+        {
+            break;
+        }
         temp = malloc(sizeof(USER));
         fgets(temp->user_name, 30, user_fp);
         fgets(temp->password, 20, user_fp);
@@ -5459,7 +5677,7 @@ void make_list_building_sale(FILE *building_sale_fp)
         fgets(temp->municipalitys_area, 6, building_sale_fp);
         fgets(temp->address_of_building, 100, building_sale_fp);
         fgets(temp->model, 20, building_sale_fp);
-        fgets(temp->age_of_building, 5, building_sale_fp);
+        fgets(temp->age_of_building, 6, building_sale_fp);
         fgets(temp->size_of_the_infrastructure, 10, building_sale_fp);
         fgets(temp->amount_of_floors, 4, building_sale_fp);
         fgets(temp->size_of_the_main_land, 10, building_sale_fp);
@@ -5662,10 +5880,23 @@ void sortLinkedList(USER **head)
     }
     *head = answerList;
 }
-
+void make_ansiescape_work(void)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if(hConsole != INVALID_HANDLE_VALUE)
+    {
+        DWORD mode = 0;
+        if(GetConsoleMode(hConsole, &mode))
+        {
+            mode |=0x0004;
+            SetConsoleMode(hConsole, mode);
+        }
+    }
+}
 void main()
 {
-    USER *user;
+    make_ansiescape_work();
+    /*USER *user;
     user = malloc(sizeof(USER));
     strcpy(user->email, "amir@fgm.com");
     strcpy(user->ID, "2");
@@ -5674,7 +5905,7 @@ void main()
     strcpy(user->password, "1324");
     strcpy(user->phone, "4587");
     strcpy(user->user_name, "admin\n");
-    current_user = user;
-    main_page();
+    current_user = user;*/
+    Start_Page();
     atexit(logout_time);
 }
