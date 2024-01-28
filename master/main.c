@@ -292,12 +292,14 @@ void main_page()
 }
 void user_edit()
 {
+    system("cls");
     char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker;
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "r");
     make_list_user(user_fp);
     USER *temp, *temp_current;
     temp_current = malloc(sizeof(USER));
+    printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
     strcpy(temp_user, current_user->user_name);
     printf("Please enter your new name: ");
@@ -389,8 +391,8 @@ void user_edit()
     while(1)
     {
         char checker;
-        printf("For Saving Please press Y. for canceling please press N.....");
-        checker = getchar();
+        printf("\nFor Saving Please press Y. for canceling please press N.....");
+        checker = getche();
         if(checker == 'Y' || checker == 'y')
         {
 
@@ -437,7 +439,6 @@ void user_edit()
             printf("The user was edited Successfully!");
             Sleep(2000);
             main_page();
-            break;
         }
         else if(checker == 'N' || checker == 'n')
         {
@@ -445,12 +446,11 @@ void user_edit()
             fclose(user_fp);
             system("cls");
             free(temp_current);
-            break;
             main_page();
         }
         else
         {
-            printf("Please enter a valid character!\n");
+            printf("\nPlease enter a valid character!");
         }
     }
 }
@@ -533,6 +533,7 @@ void menu_adding_building()
 {
     int checker = 0;
     system("cls");
+    printf("Adding building\n");
     printf("1. For sale buildings\n");
     printf("2. For rent buildings\n");
     printf("3. back\n");
@@ -569,6 +570,7 @@ void menu_sale_buildings()
 {
     system("cls");
     int checker = 0;
+    printf("Adding building\\for sale\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -612,6 +614,7 @@ void adding_sale_buildings_Residential()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for sale\\residential\n");
     FILE *file_sale_res, *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Residential.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -705,6 +708,7 @@ void adding_sale_buildings_commercial()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for sale\\commercial\n");
     FILE *file_sale_res, *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Commercial.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -797,6 +801,7 @@ void adding_sale_buildings_filed()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for sale\\filed\n");
     FILE *file_sale_res, *file_ID;
     file_sale_res = fopen("Files\\building\\for_sale\\Filed.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -872,6 +877,7 @@ void menu_rent_buildings()
 {
     system("cls");
     int checker = 0;
+     printf("Adding building\\for rent\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -915,6 +921,7 @@ void adding_rent_buildings_Residential()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for rent\\residential\n");
     FILE *file_rent_res, *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Residential.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -1011,6 +1018,7 @@ void adding_rent_buildings_commercial()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for rent\\commercial\n");
     FILE *file_rent_res, *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Commercial.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -1107,6 +1115,7 @@ void adding_rent_buildings_filed()
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
+    printf("Adding building\\for rent\\filed\n");
     FILE *file_rent_res, *file_ID;
     file_rent_res = fopen("Files\\building\\for_rent\\Filed.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
@@ -1187,6 +1196,7 @@ void adding_rent_buildings_filed()
 void page_admin_report()
 {
     system("cls");
+    printf("Reports\n");
     int option;
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
@@ -1201,6 +1211,7 @@ void page_admin_report()
     printf("11. Buildings with Specific floors\n");
     printf("12. Date of deleted buildings\n");
     printf("13. Users activity\n");
+    printf("14. Back\n");
     printf("Please choice your report: ");
     scanf("%d", &option);
     getchar();
@@ -1231,9 +1242,9 @@ void page_admin_report()
     {
         inner_flag = 0;
         char age_start[6], age_finish[6];
-        printf("Please enter the start of age range: ");
+        printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(age_start);
-        printf("Please enter the end of age range:(if you wish to only look for a specific age enter 0 for this filed): ");
+        printf("Please enter the end of age range: ");
         gets(age_finish);
         system("cls");
         report_sale_residential_age(age_start, age_finish);
@@ -1245,9 +1256,9 @@ void page_admin_report()
     {
         inner_flag = 0;
         char size_start[6], size_finish[6];
-        printf("Please enter the start of size range: ");
+        printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(size_start);
-        printf("Please enter the end of size range:(if you wish to only look for a specific age enter 0 for this filed)");
+        printf("Please enter the end of size range: ");
         gets(size_finish);
         system("cls");
         report_sale_residential_size(size_start, size_finish);
@@ -1261,9 +1272,9 @@ void page_admin_report()
     {
         inner_flag = 0;
         char price_start[20], price_finish[20];
-        printf("Please enter the start of price range: ");
+        printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(price_start);
-        printf("Please enter the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
+        printf("Please enter the end of price range: ");
         gets(price_finish);
         system("cls");
         report_sale_residential_price(price_start, price_finish);
@@ -1274,9 +1285,9 @@ void page_admin_report()
     {
         inner_flag = 0;
         char floor_start[6], floor_finish[6];
-        printf("Please enter the start of room range: ");
+        printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(floor_start);
-        printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
+        printf("Please enter the end of room range: ");
         gets(floor_finish);
         system("cls");
         report_rent_residential_room(floor_start, floor_finish);
@@ -1320,9 +1331,9 @@ void page_admin_report()
     {
         inner_flag = 0;
         char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-        printf("Please enter the start of prepayment range: ");
+        printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(prepayment_start);
-        printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
+        printf("Please enter the end of room range: ");
         gets(prepayment_end);
         printf("Please enter the start of rent range: ");
         gets(rent_start);
@@ -1369,6 +1380,10 @@ void page_admin_report()
         printf("Press any key to get back to the menu");
         getchar();
     }
+    case 14:
+    {
+        main_page();
+    }
     default:
     {
         system("cls");
@@ -1380,11 +1395,13 @@ void page_admin_report()
 }
 void report_date_main_deleted_buildings()
 {
+    system("cls");
     int option;
-    printf("1. past week");
-    printf("2. past month");
-    printf("3. past 3 month");
-    printf("4. back");
+    printf("Reports\\deleted buildings\n");
+    printf("1. past week\n");
+    printf("2. past month\n");
+    printf("3. past 3 month\n");
+    printf("4. back\n");
     printf("Please enter a option: ");
     scanf("%d", &option);
     getchar();
@@ -1431,10 +1448,12 @@ void report_date_main_deleted_buildings()
 }
 void report_date_main_deleted_building_month()
 {
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
+    printf("Reports\\deleted buildings\\in a month\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
@@ -1607,11 +1626,12 @@ void report_date_main_deleted_building_month()
 }
 void report_date_main_deleted_building_three_month()
 {
-
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
+     printf("Reports\\deleted buildings\\in a 3 month\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
@@ -1779,10 +1799,12 @@ void report_date_main_deleted_building_three_month()
 }
 void report_date_main_deleted_building_week()
 {
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
+    printf("Reports\\deleted buildings\\in a week\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
@@ -1951,6 +1973,7 @@ void report_date_main_registered_buildings()
 {
     system("cls");
     int option;
+    printf("Reports\\registered buildings\n");
     printf("1. past week\n");
     printf("2. past month\n");
     printf("3. past 3 month\n");
@@ -2001,10 +2024,12 @@ void report_date_main_registered_buildings()
 }
 void report_date_main_registered_building_month()
 {
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
+    printf("Reports\\registered buildings\\in a month\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
@@ -2173,6 +2198,7 @@ void report_date_main_registered_building_three_month()
     BUILDING_SALE *sale;
     unsigned long current_time, file_time;
     current_time = time(NULL);
+    printf("Reports\\registered buildings\\in 3 month\n");
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
     make_list_building_sale(fp);
     sale = start_building_sale;
@@ -2335,14 +2361,14 @@ void report_date_main_registered_building_three_month()
 }
 void report_date_main_registered_building_week()
 {
-
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
     unsigned long int current_time, file_time;
+    printf("Reports\\registered buildings\\in a week\n");
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt", "r+");
-
     make_list_building_sale(fp);
     sale = start_building_sale;
 
@@ -3880,8 +3906,10 @@ void report_sale_filed_area(char chose[30])
 }
 void report_model_main()
 {
+
     system("cls");
     int option;
+    printf("Reports\\specific model of buildings\n");
     printf("1. For sale\n");
     printf("2. For rent\n");
     printf("3. Back\n");
@@ -3925,6 +3953,7 @@ void report_model_building_model_sale()
 {
     system("cls");
     int option;
+    printf("Reports\\specific model of buildings\\for sale\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -3965,9 +3994,11 @@ void report_model_building_model_sale()
 }
 void report_model_building_model_rent()
 {
+    system("cls");
     int option;
+    printf("Reports\\specific model of buildings\\for rent\n");
     printf("1. Residential buildings\n");
-    printf("2. Commercia\nl");
+    printf("2. Commercial\n");
     printf("3. Normal filed\n");
     printf("4. back\n");
     printf("Please chose an option: ");
@@ -4007,6 +4038,7 @@ void report_model_building_model_rent()
 void report_rent_residential()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for rent\\report_rent_residential\n");
     char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_RENT *temp;
@@ -4046,7 +4078,7 @@ void report_rent_residential()
     }
     while(1)
     {
-        printf("Please enter B for getting back to report menu: ");
+        printf("\nPlease enter B for getting back to report menu: ");
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
@@ -4055,13 +4087,14 @@ void report_rent_residential()
         }
         else
         {
-            printf("Please enter a valid character!");
+            printf("\nPlease enter a valid character!");
         }
     }
 }
 void report_rent_commercial()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for rent\\commercial\n");
     char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_RENT *temp;
@@ -4100,7 +4133,7 @@ void report_rent_commercial()
     }
     while(1)
     {
-        printf("Please enter B for getting back to report menu: ");
+        printf("\nPlease enter B for getting back to report menu: ");
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
@@ -4110,13 +4143,14 @@ void report_rent_commercial()
         }
         else
         {
-            printf("Please enter a valid character!");
+            printf("\nPlease enter a valid character!");
         }
     }
 }
 void report_rent_filed()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for rent\\filed\n");
     char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_RENT *temp;
@@ -4151,7 +4185,7 @@ void report_rent_filed()
     }
     while(1)
     {
-        printf("Please enter B for getting back to report menu: ");
+        printf("\nPlease enter B for getting back to report menu: ");
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
@@ -4168,6 +4202,7 @@ void report_rent_filed()
 void report_sale_residential()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for sale\\residential\n");
     char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4221,6 +4256,7 @@ void report_sale_residential()
 void report_sale_commercial()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for sale\\commercial\n");
     char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4259,7 +4295,7 @@ void report_sale_commercial()
     while(1)
     {
         printf("\nPlease enter B for getting back to report menu: ");
-        checker = getchar();
+        checker = getche();
         if(checker == 'b' || checker == 'B')
         {
             report_model_building_model_sale();
@@ -4274,6 +4310,7 @@ void report_sale_commercial()
 void report_sale_filed()
 {
     system("cls");
+    printf("Reports\\specific model of buildings\\for sale\\field\n");
     char id[7], TEMP[21] , checker;
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4505,6 +4542,7 @@ void menu_delete_building()
 {
     int checker = 0;
     system("cls");
+    printf("Deleting buildings\n");
     printf("1. For sale buildings\n");
     printf("2. For rent buildings\n");
     printf("3. back\n");
@@ -4540,7 +4578,9 @@ void menu_delete_building()
 void delete_menu_sale_buildings()
 {
     system("cls");
+
     int checker = 0;
+     printf("Deleting buildings\\for sale\n");
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
     printf("3. Normal filed\n");
@@ -4582,6 +4622,7 @@ void delete_menu_sale_buildings()
 void delete_sale_buildings_Residential()
 {
     system("cls");
+    printf("Deleting buildings\\for sale\\residential\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4685,6 +4726,7 @@ void delete_sale_buildings_Residential()
 void delete_sale_buildings_commercial()
 {
     system("cls");
+    printf("Deleting buildings\\for sale\\commercial\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4788,6 +4830,7 @@ void delete_sale_buildings_commercial()
 void delete_sale_buildings_filed()
 {
     system("cls");
+    printf("Deleting buildings\\for sale\\field\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -4884,6 +4927,7 @@ void delete_sale_buildings_filed()
 void delete_menu_rent_buildings()
 {
     system("cls");
+    printf("Deleting buildings\\for rent\n");
     int checker = 0;
     printf("1. Residential buildings\n");
     printf("2. Commercial\n");
@@ -4926,6 +4970,7 @@ void delete_menu_rent_buildings()
 void delete_rent_buildings_Residential()
 {
     system("cls");
+    printf("Deleting buildings\\for rent\\residential\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -5032,6 +5077,7 @@ void delete_rent_buildings_Residential()
 void delete_rent_buildings_commercial()
 {
     system("cls");
+    printf("Deleting buildings\\for rent\\commercial\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -5137,6 +5183,7 @@ void delete_rent_buildings_commercial()
 void delete_rent_buildings_filed()
 {
     system("cls");
+     printf("Deleting buildings\\for rent\\filed\n");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
