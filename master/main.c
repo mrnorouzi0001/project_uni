@@ -1392,7 +1392,8 @@ void report_date_main_deleted_building_month(){
     sale = start_building_sale;
     while(sale->link != NULL){
         file_time = sale->time_delete;
-        if(((file_time -current_time ) <= (31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+        if((file_time -current_time ) <= (31 * 24 * 60 * 60)){
+                if(strcmp(sale->isactive , "0\n" == 0)){
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
             printf("Address of building: %s", sale->address_of_building);
@@ -1406,6 +1407,7 @@ void report_date_main_deleted_building_month(){
             printf("Price: %s", sale->price);
             printf("\n");
             inner_flag++;
+        }
         }
         sale = sale->link;
     }
@@ -1534,6 +1536,7 @@ void report_date_main_deleted_building_month(){
     }
 }
 void report_date_main_deleted_building_three_month(){
+
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
@@ -1544,7 +1547,8 @@ void report_date_main_deleted_building_three_month(){
     sale = start_building_sale;
     while(sale->link != NULL){
         file_time = sale->time_delete;
-        if(((file_time -current_time ) <= (3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+        if(strcmp(sale->isactive , "0\n" == 0)){
+            if(file_time -current_time ) <= (3* 31 * 24 * 60 * 60){
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
             printf("Address of building: %s", sale->address_of_building);
@@ -1558,6 +1562,7 @@ void report_date_main_deleted_building_three_month(){
             printf("Price: %s", sale->price);
             printf("\n");
             inner_flag++;
+        }
         }
         sale = sale->link;
     }
@@ -1696,7 +1701,8 @@ void report_date_main_deleted_building_week(){
     sale = start_building_sale;
     while(sale->link != NULL){
         file_time = sale->time_delete;
-        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "0\n" == 0)){
+        if((file_time -current_time ) <= (7 * 24 * 60 * 60)){
+            if(strcmp(sale->isactive , "0\n" == 0)){
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
             printf("Address of building: %s", sale->address_of_building);
@@ -1710,6 +1716,7 @@ void report_date_main_deleted_building_week(){
             printf("Price: %s", sale->price);
             printf("\n");
             inner_flag++;
+        }
         }
         sale = sale->link;
     }
@@ -1839,11 +1846,12 @@ void report_date_main_deleted_building_week(){
 }
 void report_date_main_registered_buildings()
 {
+    system("cls");
     int option;
-    printf("1. past week");
-    printf("2. past month");
-    printf("3. past 3 month");
-    printf("4. back");
+    printf("1. past week\n");
+    printf("2. past month\n");
+    printf("3. past 3 month\n");
+    printf("4. back\n");
     printf("Please enter a option: ");
     scanf("%d" , &option);
     getchar();
@@ -2185,17 +2193,22 @@ void report_date_main_registered_building_three_month(){
     }
 }
 void report_date_main_registered_building_week(){
+
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
-    unsigned long current_time , file_time;
+    unsigned long int current_time , file_time;
     current_time = time(NULL);
     fp = fopen("Files\\building\\for_sale\\Residential.txt" , "r+");
+
     make_list_building_sale(fp);
     sale = start_building_sale;
+
     while(sale->link != NULL){
         file_time = sale->time;
-        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
+        printf("case");
+        if(strcmp(sale->isactive , "1\n") == 0){
+            if((current_time -  file_time) <= (7 * 24 * 60 * 60)){
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
             printf("Address of building: %s", sale->address_of_building);
@@ -2210,15 +2223,18 @@ void report_date_main_registered_building_week(){
             printf("\n");
             inner_flag++;
         }
+        }
         sale = sale->link;
     }
     fclose(fp);
     make_null_list_building_sale();
     fp = fopen("Files\\building\\for_sale\\Commercial.txt" , "r+");
     make_list_building_sale(fp);
+
     sale = start_building_sale;
     while(sale->link != NULL){
         file_time = sale->time;
+        printf("AM");
         if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive , "1\n" == 0)){
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
@@ -2240,6 +2256,7 @@ void report_date_main_registered_building_week(){
     while(rent->link != NULL){
         file_time = rent->time;
         if(((current_time - file_time) <= (7 * 24 * 60 * 60)) && strcmp(rent->isactive , "1\n" == 0)){
+
             printf("ID: %s", rent->id);
             printf("Municipality's area: %s", rent->municipalitys_area);
             printf("Address of building: %s", rent->address_of_building);
@@ -2325,6 +2342,7 @@ void report_date_main_registered_building_week(){
     }
     fclose(fp);
     make_null_list_building_sale();
+
     if(inner_flag == 0){
         printf("There is no item to show!");
         Sleep(1500);
@@ -2519,7 +2537,7 @@ void report_rent_commercial_rent_mortgage(char start_perpay[20] , char end_prepa
     fclose(fp);
 }
 void report_rent_filed_rent_mortgage(char start_perpay[20] , char end_prepay[20] , char start_rent[20] , char end_rent[20]){
-       long int age_start , age_end , rent_start ,rent_end , rent_file , pre_file;
+    long int age_start , age_end , rent_start ,rent_end , rent_file , pre_file;
     age_start = atol(start_perpay);
     age_end = atol(end_prepay);
     rent_start = atol(start_rent);
@@ -2529,7 +2547,7 @@ void report_rent_filed_rent_mortgage(char start_perpay[20] , char end_prepay[20]
     BUILDING_RENT *temp;
     FILE *fp;
     fp = fopen("Files\\building\\for_rent\\Filed.txt", "r+");
-    make_list_building_rent(fp);
+    make_list_building_rent_filed(fp);
     temp = start_building_rent;
     while(temp != NULL)
     {
@@ -3089,7 +3107,7 @@ void report_rent_filed_size(char start_age[6] , char end_age[6]){
     BUILDING_RENT *temp;
     FILE *fp;
     fp = fopen("Files\\building\\for_rent\\Filed.txt", "r+");
-    make_list_building_rent(fp);
+    make_list_building_rent_filed(fp);
     temp = start_building_rent;
     while(temp != NULL)
     {
@@ -3490,7 +3508,7 @@ void report_rent_filed_area(char chose [30]){
     BUILDING_RENT *temp;
     FILE *fp;
     fp = fopen("Files\\building\\for_rent\\Filed.txt", "r+");
-    make_list_building_rent(fp);
+    make_list_building_rent_filed(fp);
     temp = start_building_rent;
     while(temp != NULL)
     {
@@ -3821,7 +3839,7 @@ void report_rent_filed(){
     BUILDING_RENT *temp;
     FILE *fp;
     fp = fopen("Files\\building\\for_rent\\Filed.txt", "r+");
-    make_list_building_rent(fp);
+    make_list_building_rent_filed(fp);
     temp = start_building_rent;
     while(temp != NULL)
     {
@@ -4000,6 +4018,8 @@ void report_sale_filed(){
 }
 void page_reports_normal()
 {
+    system("cls");
+    int option;
     printf("1. Specific model of buildings\n");
     printf("2. Buildings with Specific area\n");
     printf("3. Buildings with Specific age\n");
@@ -4011,7 +4031,151 @@ void page_reports_normal()
     printf("9. Date of registered buildings\n");
     printf("10. Buildings with Specific floors\n");
     printf("11. Back");
-    printf("Please choice your report: ");
+    printf("\nPlease choice your report: ");
+    scanf("%d" , &option);
+    getchar();
+    switch(option){
+        case 1:{
+            report_model_main();
+            break;
+        }
+        case 2:{
+        inner_flag = 0;
+        char chose[12];
+        printf("Please enter a municipalitys area: ");
+        gets(chose);
+        strcat(chose , "\n");
+        system("cls");
+        report_sale_residential_area(chose);
+        report_sale_commercial_area(chose);
+        report_rent_residential_area(chose);
+        report_rent_commercial_area(chose);
+        report_rent_filed_area(chose);
+        report_sale_filed_area(chose);
+        break;
+        }
+        case 3:{
+            inner_flag = 0;
+            char age_start[6] , age_finish[6];
+            printf("Please enter the start of age range: ");
+            gets(age_start);
+            printf("Please enter the end of age range:(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(age_finish);
+            system("cls");
+            report_sale_residential_age(age_start , age_finish);
+            report_sale_commercial_age(age_start , age_finish);
+            report_rent_residential_age(age_start , age_finish);
+            report_rent_commercial_age(age_start , age_finish);
+        }
+        case 4:{
+            inner_flag = 0;
+            char size_start[6] , size_finish[6];
+            printf("Please enter the start of size range: ");
+            gets(size_start);
+            printf("Please enter the end of size range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(size_finish);
+            system("cls");
+            report_sale_residential_size(size_start , size_finish);
+            report_sale_commercial_size(size_start , size_finish);
+            report_rent_filed_size(size_start , size_finish);
+            report_rent_residential_size(size_start , size_finish);
+            report_rent_commercial_size(size_start , size_finish);
+            report_sale_filed_size(size_start , size_finish);
+        }
+        case 5:{
+            inner_flag = 0;
+            char price_start[20] , price_finish[20];
+            printf("Please enter the start of price range: ");
+            gets(price_start);
+            printf("Please enter the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(price_finish);
+            system("cls");
+            report_sale_residential_price(price_start , price_finish);
+            report_sale_commercial_price(price_start , price_finish);
+            report_sale_filed_price(price_start , price_finish);
+        }
+        case 6:{
+            inner_flag = 0;
+            char floor_start[6] , floor_finish[6];
+            printf("Please enter the start of room range: ");
+            gets(floor_start);
+            printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(floor_finish);
+            system("cls");
+            report_rent_residential_room(floor_start , floor_finish);
+            report_rent_commercial_room(floor_start , floor_finish);
+            report_sale_residential_room(floor_start , floor_finish);
+            report_sale_commercial_room(floor_start , floor_finish);
+        }
+        case 7:{
+            system("cls");
+            if(report_price_total() == 0){
+                printf("There is no price to show!\n");
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                if(strcmp(current_user->user_name , "admin\n")== 0){
+                    page_admin_report();
+                }
+                else{
+                    page_reports_normal();
+                }
+            }
+            else{
+                printf("The total worth of salable buildings and fileds are equal to: %lld\n" , report_price_total());
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                if(strcmp(current_user->user_name , "admin\n")== 0){
+                    page_admin_report();
+                }
+                else{
+                    page_reports_normal();
+                }
+            }
+        }
+        case 8:{
+            inner_flag = 0;
+            char prepayment_start[20] , prepayment_end[20] , rent_start[20] , rent_end[20];
+            printf("Please enter the start of prepayment range: ");
+            gets(prepayment_start);
+            printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(prepayment_end);
+            printf("Please enter the start of rent range: ");
+            gets(rent_start);
+            printf("Please enter the end of rent range:(if you wish to only look for a specific age enter 0 for this filed)");
+            gets(rent_end);
+            system("cls");
+            report_rent_residential_rent_mortgage(prepayment_start , prepayment_end  , rent_start , rent_end);
+            report_rent_commercial_rent_mortgage(prepayment_start , prepayment_end , rent_start , rent_end);
+            report_rent_filed_rent_mortgage(prepayment_start , prepayment_end , rent_start , rent_end);
+        }
+
+        case 9:{
+            report_date_main_registered_buildings();
+            break;
+        }
+        case 10:{
+            inner_flag = 0;
+            char chose[12];
+            printf("Please enter an amount for floor: ");
+            gets(chose);
+            strcat(chose , "\n");
+            system("cls");
+            report_sale_residential_floor(chose);
+            report_rent_residential_floor(chose);
+            report_rent_commercial_floor(chose);
+            report_sale_commercial_floor(chose);
+            break;
+        }
+        case 11:{
+            page_reports_normal();
+        }
+        default:{
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(2500);
+            page_admin_report();
+        }
+    }
 }
 
 void menu_delete_building()
@@ -5055,6 +5219,16 @@ void sortLinkedList(USER **head) {
 
 void main()
 {
-    Start_Page();
+    USER *user;
+    user = malloc(sizeof(USER));
+    strcpy(user->email , "amir@fgm.com");
+    strcpy(user->ID , "2");
+    strcpy(user->last_name , "sca");
+    strcpy(user->name , "ewsa");
+    strcpy(user->password , "1324");
+    strcpy(user->phone , "4587");
+
+    current_user = user;
+    main_page();
     atexit(logout_time);
 }
