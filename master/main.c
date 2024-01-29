@@ -73,7 +73,8 @@ void sign_up()
     char temp_time[31], option, character, password[30];
     system("cls");
     printf("For getting back press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         Start_Page();
     }
     printf("\33[2K\r");
@@ -89,16 +90,20 @@ void sign_up()
     user = malloc(sizeof(USER));
     printf("        you will use this information for using the application\n");
     make_list_user(user_fp);
-    while(1){
-        while(1){
-                printf("\nPlease enter a user name: ");
-        gets(user->user_name);
-        if(strlen(user->user_name) <= 28){
-            break;
-        }
-        else{
-            printf("User name can not be more than 28 characters!");
-        }
+    while(1)
+    {
+        while(1)
+        {
+            printf("\nPlease enter a user name: ");
+            gets(user->user_name);
+            if(strlen(user->user_name) <= 28)
+            {
+                break;
+            }
+            else
+            {
+                printf("User name can not be more than 28 characters!");
+            }
         }
 
         strcat(user->user_name, "\n");
@@ -114,138 +119,162 @@ void sign_up()
     }
     make_null_list_user();
 
-    while(1){
-     printf("\nPlease enter your password: ");
-    index = 0;
-    stars = 0;
     while(1)
     {
-        character = getch();
-        if(character == 13)
+        printf("\nPlease enter your password: ");
+        index = 0;
+        stars = 0;
+        while(1)
+        {
+            character = getch();
+            if(character == 13)
+            {
+                break;
+            }
+            if(character == 8)
+            {
+
+                printf("\33[2K\r");
+                printf("\nPlease enter your password: ");
+                for(int i = 0 ; i < stars - 1 ; i++)
+                {
+                    printf("%c", '*');
+                }
+                stars--;
+                user->password[index - 1] = '\0';
+                index--;
+            }
+            else
+            {
+
+                printf("%c", '*');
+                user->password[index] = character;
+                user->password[index + 1] = '\0';
+                index++;
+                stars++;
+            }
+        }
+        if(strlen(user->password) > 18)
+        {
+            printf("your password can have 18 characters at maximum!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 4)
+        {
+            printf("You need to enter at least 8 characters for your password!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 0)
+        {
+            printf("You need to enter at least 1 number for your password!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 1)
+        {
+            printf("You need to enter at least a lower case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 2)
+        {
+            printf("You need to enter at least a upper case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 3)
+        {
+            printf("You need to enter at least a Special character(@,#,%) for your password!");
+            continue;
+        }
+        if(password_checker(user->password, strlen(user->password)) == 5)
         {
             break;
         }
-        if(character == 8)
-        {
-
-            printf("\33[2K\r");
-            printf("\nPlease enter your password: ");
-            for(int i = 0 ; i < stars - 1 ; i++)
-            {
-                printf("%c", '*');
-            }
-            stars--;
-            user->password[index - 1] = '\0';
-            index--;
-        }
-        else
-        {
-
-            printf("%c", '*');
-            user->password[index] = character;
-            user->password[index + 1] = '\0';
-            index++;
-            stars++;
-        }
-    }
-    if(strlen(user->password) > 18){
-        printf("your password can have 18 characters at maximum!");
-        continue;
-    }
-    if(password_checker(user->password , strlen(user->password)) == 4){
-        printf("You need to enter at least 8 characters for your password!");
-        continue;
-    }
-    if(password_checker(user->password , strlen(user->password)) == 0){
-        printf("You need to enter at least 1 number for your password!");
-        continue;
-    }
-    if(password_checker(user->password , strlen(user->password)) == 1){
-        printf("You need to enter at least a lower case alphabet for your password!");
-        continue;
-    }
-     if(password_checker(user->password , strlen(user->password)) == 2){
-        printf("You need to enter at least a upper case alphabet for your password!");
-        continue;
-    }
-    if(password_checker(user->password , strlen(user->password)) == 3){
-        printf("You need to enter at least a Special character(@,#,%) for your password!");
-        continue;
-    }
-     if(password_checker(user->password , strlen(user->password)) == 5){
-        break;
-    }
     }
     printf("\n");
     printf("\n            personal information\n");
-    while(1){
+    while(1)
+    {
         printf("\nPlease enter your name: ");
         gets(user->name);
-        if(23 > strlen(user->name)){
+        if(23 > strlen(user->name))
+        {
             printf("Your name can have 23 character at maximum!");
             continue;
         }
-        if(isallalpha(user->name , strlen(user->name)) == 0){
-                printf("Please enter a valid name!");
-                continue;
+        if(isallalpha(user->name, strlen(user->name)) == 0)
+        {
+            printf("Please enter a valid name!");
+            continue;
         }
         break;
     }
-    while(1){
+    while(1)
+    {
         printf("\nPlease enter your last name: ");
         gets(user->last_name);
-        if(43 > strlen(user->last_name)){
+        if(43 > strlen(user->last_name))
+        {
             printf("Your last name can have 43 character at maximum!");
             continue;
         }
-        if(isallalpha(user->last_name , strlen(user->last_name)) == 0){
-                printf("Please enter a valid last name!");
-                continue;
+        if(isallalpha(user->last_name, strlen(user->last_name)) == 0)
+        {
+            printf("Please enter a valid last name!");
+            continue;
         }
         break;
     }
-    while(1){
-    printf("\nPlease enter Your phone number: ");
-    gets(user->phone);
-        if(strlen(user->phone) != 10){
+    while(1)
+    {
+        printf("\nPlease enter Your phone number: ");
+        gets(user->phone);
+        if(strlen(user->phone) != 10)
+        {
             printf("Your phone number must have 10 digits!");
             continue;
         }
-        if(user->phone[0] != '0'){
+        if(user->phone[0] != '0')
+        {
             printf("Your phone number must starts with 0 digit!");
             continue;
         }
-        if(isalldigit(user->phone , strlen(user->phone)) == 0){
+        if(isalldigit(user->phone, strlen(user->phone)) == 0)
+        {
             printf("Please enter a valid phone number!");
             continue;
         }
         break;
     }
-    while(1){
-    printf("\nPlease enter Your email: ");
-    gets(user->email);
-    if(strlen(user->email) > 33){
-        printf("Your email can have 33 characters at maximum!");
-        continue;
+    while(1)
+    {
+        printf("\nPlease enter Your email: ");
+        gets(user->email);
+        if(strlen(user->email) > 33)
+        {
+            printf("Your email can have 33 characters at maximum!");
+            continue;
+        }
+        if(isemail(user->email, strlen(user->email)) == -1)
+        {
+            printf("Please enter a valid email!");
+            continue;
+        }
+        break;
     }
-    if(isemail(user->email , strlen(user->email)) == -1){
-        printf("Please enter a valid email!");
-        continue;
-    }
-    break;
-    }
-    while(1){
-    printf("\nPlease enter Your ID: ");
-    gets(user->ID);
-    if(strlen(user->ID) != 10){
-        printf("your ID must have 10 digits!");
-        continue;
-    }
-    if(isalldigit(user->ID , strlen(user->ID)) == 0){
-        printf("Please enter a valid ID!");
-        continue;
-    }
-    break;
+    while(1)
+    {
+        printf("\nPlease enter Your ID: ");
+        gets(user->ID);
+        if(strlen(user->ID) != 10)
+        {
+            printf("your ID must have 10 digits!");
+            continue;
+        }
+        if(isalldigit(user->ID, strlen(user->ID)) == 0)
+        {
+            printf("Please enter a valid ID!");
+            continue;
+        }
+        break;
     }
     printf("Are you sure you want to add this user to the application?(Y/N)");
     while(1)
@@ -300,7 +329,8 @@ void sign_in()
 {
     system("cls");
     printf("For getting back press b: ");
-    if(tolower(getche()) == 'b'){
+    if(tolower(getche()) == 'b')
+    {
         Start_Page();
     }
     printf("\33[2K\r");
@@ -469,13 +499,14 @@ void user_edit()
 {
     int index = 0, stars = 0;
     system("cls");
-    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker , character;
+    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker, character;
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "r");
     make_list_user(user_fp);
     USER *temp, *temp_current = NULL;
-    if(temp_current == NULL){
-    temp_current = malloc(sizeof(USER));
+    if(temp_current == NULL)
+    {
+        temp_current = malloc(sizeof(USER));
     }
     printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
@@ -486,18 +517,22 @@ void user_edit()
     }
     printf("\33[2K\r");
     strcpy(temp_user, current_user->user_name);
-    while(1){
+    while(1)
+    {
 
         printf("\nPlease enter your new name: ");
         gets(tempstr);
-        if(strcmp(tempstr, "") == 0){
+        if(strcmp(tempstr, "") == 0)
+        {
             break;
         }
-        if(isallalpha(tempstr , strlen(tempstr)) == 0){
+        if(isallalpha(tempstr, strlen(tempstr)) == 0)
+        {
             printf("Please enter a valid name!");
             continue;
         }
-        if(strlen(tempstr) > 23){
+        if(strlen(tempstr) > 23)
+        {
             printf("Your name can have 23 character at maximum!");
             continue;
         }
@@ -512,17 +547,21 @@ void user_edit()
     {
         strcpy(temp_current->name, current_user->name);
     }
-    while(1){
+    while(1)
+    {
         printf("\nPlease enter your last new name: ");
         gets(tempstr);
-        if(strcmp(tempstr, "") == 0){
+        if(strcmp(tempstr, "") == 0)
+        {
             break;
         }
-        if(isallalpha(tempstr , strlen(tempstr)) == 0){
+        if(isallalpha(tempstr, strlen(tempstr)) == 0)
+        {
             printf("Please enter a valid last name!");
             continue;
         }
-        if(strlen(tempstr) > 43){
+        if(strlen(tempstr) > 43)
+        {
             printf("Your last name can have 43 character at maximum!");
             continue;
         }
@@ -538,21 +577,25 @@ void user_edit()
     {
         strcpy(temp_current->last_name, current_user->last_name);
     }
-    while(1){
-    printf("\nPlease enter your new ID: ");
-    gets(tempstr);
-        if(strlen(tempstr) != 10){
+    while(1)
+    {
+        printf("\nPlease enter your new ID: ");
+        gets(tempstr);
+        if(strlen(tempstr) != 10)
+        {
             printf("your ID must have 10 digits!");
             continue;
         }
-        if(isallalpha(tempstr , strlen(tempstr)) == 0){
+        if(isallalpha(tempstr, strlen(tempstr)) == 0)
+        {
             printf("Please enter a valid ID!");
             continue;
         }
         break;
-        if(strcmp(tempstr , "") == 0){
-        break;
-    }
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
     }
     if(strcmp(tempstr, "") != 0)
     {
@@ -563,23 +606,28 @@ void user_edit()
     {
         strcpy(temp_current->ID, current_user->ID);
     }
-    while(1){
-    printf("\nPlease enter your new Phone: ");
-    gets(tempstr);
-     if(strlen(tempstr) != 10){
+    while(1)
+    {
+        printf("\nPlease enter your new Phone: ");
+        gets(tempstr);
+        if(strlen(tempstr) != 10)
+        {
             printf("Your phone number must have 10 digits!");
             continue;
         }
-        if(tempstr[0] != '0'){
+        if(tempstr[0] != '0')
+        {
             printf("Your phone number must starts with 0 digit!");
             continue;
         }
-        if(isalldigit(tempstr , strlen(tempstr)) == 0){
+        if(isalldigit(tempstr, strlen(tempstr)) == 0)
+        {
             printf("Please enter a valid phone number!");
             continue;
         }
-        if(strcmp(tempstr , "") == 0){
-        break;
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
         }
         break;
     }
@@ -592,21 +640,25 @@ void user_edit()
     {
         strcpy(temp_current->phone, current_user->phone);
     }
-    while(1){
-    printf("\nPlease enter your new Email:");
-    gets(tempstr);
-    if(strcmp(tempstr , "") == 0){
+    while(1)
+    {
+        printf("\nPlease enter your new Email:");
+        gets(tempstr);
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
+        if(strlen(tempstr) > 33)
+        {
+            printf("Your email can have 33 characters at maximum!");
+            continue;
+        }
+        if(isemail(tempstr, strlen(tempstr)) == -1)
+        {
+            printf("Please enter a valid email!");
+            continue;
+        }
         break;
-    }
-    if(strlen(tempstr) > 33){
-        printf("Your email can have 33 characters at maximum!");
-        continue;
-    }
-    if(isemail(tempstr , strlen(tempstr)) == -1){
-        printf("Please enter a valid email!");
-        continue;
-    }
-    break;
     }
     if(strcmp(tempstr, "") != 0)
     {
@@ -619,135 +671,153 @@ void user_edit()
     }
     make_str_null(tempstr);
     printf("Please enter your password: ");
-    while(1){
+    while(1)
+    {
         stars = 0;
         index = 0;
-    while(1)
-    {
-        character = getch();
-        if(character == 13)
+        while(1)
+        {
+            character = getch();
+            if(character == 13)
+            {
+                break;
+            }
+            if(character == 8)
+            {
+
+                printf("\33[2K\r");
+                printf("\nPlease enter your password: ");
+                for(int i = 0 ; i < stars - 1 ; i++)
+                {
+                    printf("%c", '*');
+                }
+                stars--;
+                tempstr[index - 1] = '\0';
+                index--;
+            }
+            else
+            {
+
+                printf("%c", '*');
+                tempstr[index] = character;
+                tempstr[index + 1] = '\0';
+                index++;
+                stars++;
+            }
+        }
+        if(strlen(tempstr) > 18)
+        {
+            printf("your password can have 18 characters at maximum!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 4)
+        {
+            printf("You need to enter at least 8 characters for your password!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 0)
+        {
+            printf("You need to enter at least 1 number for your password!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 1)
+        {
+            printf("You need to enter at least a lower case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 2)
+        {
+            printf("You need to enter at least a upper case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 3)
+        {
+            printf("You need to enter at least a Special character(@,#,%) for your password!");
+            continue;
+        }
+        if(password_checker(tempstr, strlen(tempstr)) == 5)
         {
             break;
         }
-        if(character == 8)
+        if(strcmp(tempstr, "") == 0)
         {
-
-            printf("\33[2K\r");
-            printf("\nPlease enter your password: ");
-            for(int i = 0 ; i < stars - 1 ; i++)
-            {
-                printf("%c", '*');
-            }
-            stars--;
-            tempstr[index - 1] = '\0';
-            index--;
-        }
-        else
-        {
-
-            printf("%c", '*');
-            tempstr[index] = character;
-            tempstr[index + 1] = '\0';
-            index++;
-            stars++;
+            break;
         }
     }
-    if(strlen(tempstr) > 18){
-        printf("your password can have 18 characters at maximum!");
-        continue;
-    }
-    if(password_checker(tempstr , strlen(tempstr)) == 4){
-        printf("You need to enter at least 8 characters for your password!");
-        continue;
-    }
-    if(password_checker(tempstr , strlen(tempstr)) == 0){
-        printf("You need to enter at least 1 number for your password!");
-        continue;
-    }
-    if(password_checker(tempstr , strlen(tempstr)) == 1){
-        printf("You need to enter at least a lower case alphabet for your password!");
-        continue;
-    }
-     if(password_checker(tempstr , strlen(tempstr)) == 2){
-        printf("You need to enter at least a upper case alphabet for your password!");
-        continue;
-    }
-    if(password_checker(tempstr , strlen(tempstr)) == 3){
-        printf("You need to enter at least a Special character(@,#,%) for your password!");
-        continue;
-    }
-     if(password_checker(tempstr , strlen(tempstr)) == 5){
-        break;
-    }
-     if(strcmp(tempstr , "") == 0){
-        break;
-    }
-     }
     printf("\n");
-    while(1){
-    printf("Please enter your new password again: ");
-    make_str_null(temp_pass_valid);
-    index = 0;
-    stars = 0;
     while(1)
     {
-        character = getch();
-        if(character == 13)
+        printf("Please enter your new password again: ");
+        make_str_null(temp_pass_valid);
+        index = 0;
+        stars = 0;
+        while(1)
+        {
+            character = getch();
+            if(character == 13)
+            {
+                break;
+            }
+            if(character == 8)
+            {
+                printf("\33[2K\r");
+                printf("\nPlease enter your password again: ");
+                for(int i = 0 ; i < stars - 1 ; i++)
+                {
+                    printf("%c", '*');
+                }
+                stars--;
+                temp_pass_valid[index - 1] = '\0';
+                index--;
+            }
+            else
+            {
+
+                printf("%c", '*');
+                temp_pass_valid[index] = character;
+                temp_pass_valid[index + 1] = '\0';
+                index++;
+                stars++;
+            }
+        }
+        if(strlen(temp_pass_valid) > 18)
+        {
+            printf("your password can have 18 characters at maximum!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 4)
+        {
+            printf("You need to enter at least 8 characters for your password!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 0)
+        {
+            printf("You need to enter at least 1 number for your password!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 1)
+        {
+            printf("You need to enter at least a lower case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 2)
+        {
+            printf("You need to enter at least a upper case alphabet for your password!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 3)
+        {
+            printf("You need to enter at least a Special character(@,#,%) for your password!");
+            continue;
+        }
+        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 5)
         {
             break;
         }
-        if(character == 8)
+        if(strcmp(temp_pass_valid, "") == 0)
         {
-            printf("\33[2K\r");
-            printf("\nPlease enter your password again: ");
-            for(int i = 0 ; i < stars - 1 ; i++)
-            {
-                printf("%c", '*');
-            }
-            stars--;
-            temp_pass_valid[index - 1] = '\0';
-            index--;
+            break;
         }
-        else
-        {
-
-            printf("%c", '*');
-            temp_pass_valid[index] = character;
-            temp_pass_valid[index + 1] = '\0';
-            index++;
-            stars++;
-        }
-        }
-        if(strlen(temp_pass_valid) > 18){
-        printf("your password can have 18 characters at maximum!");
-        continue;
-    }
-    if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 4){
-        printf("You need to enter at least 8 characters for your password!");
-        continue;
-    }
-    if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 0){
-        printf("You need to enter at least 1 number for your password!");
-        continue;
-    }
-    if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 1){
-        printf("You need to enter at least a lower case alphabet for your password!");
-        continue;
-    }
-     if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 2){
-        printf("You need to enter at least a upper case alphabet for your password!");
-        continue;
-    }
-    if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 3){
-        printf("You need to enter at least a Special character(@,#,%) for your password!");
-        continue;
-    }
-     if(password_checker(temp_pass_valid , strlen(temp_pass_valid)) == 5){
-        break;
-    }
-    if(strcmp(temp_pass_valid , "") == 0){
-        break;
-    }
     }
     printf("\n");
     if(strcmp(tempstr, "") != 0)
@@ -6142,143 +6212,191 @@ void make_ansiescape_work(void)
         }
     }
 }
-int isalldigit(char string[] , int lenght){
+int isalldigit(char string[], int lenght)
+{
     int flag = 0;
-    for(int index = 0 ; index < lenght ; index++){
-        if(isdigit(string[index]) == 0){
+    for(int index = 0 ; index < lenght ; index++)
+    {
+        if(isdigit(string[index]) == 0)
+        {
             flag = 1;
         }
     }
-    if(flag == 0){
+    if(flag == 0)
+    {
         return 1;
     }
-    else{
+    else
+    {
         return 0;
     }
 }
-int password_checker(char password[],int size){
-    int flag_Digit = 0 , flag_Upper_alpha = 0,flag_Lower_alpha = 0, flag_Special_char = 0;
-    if(size < 8){
+int password_checker(char password[],int size)
+{
+    int flag_Digit = 0, flag_Upper_alpha = 0,flag_Lower_alpha = 0, flag_Special_char = 0;
+    if(size < 8)
+    {
         return 4;
     }
-    for(int index = 0 ; index < size ; size++){
-        if(isdigit(password[index])){
+    for(int index = 0 ; index < size ; size++)
+    {
+        if(isdigit(password[index]))
+        {
             flag_Digit = 1;
         }
-        if(isalpha(password[index]) && islower(password[index])){
+        if(isalpha(password[index]) && islower(password[index]))
+        {
             flag_Lower_alpha = 1;
         }
-        if(isalpha(password[index]) && isupper(password[index])){
+        if(isalpha(password[index]) && isupper(password[index]))
+        {
             flag_Lower_alpha = 1;
         }
-        if(isalnum(password[index]) == 0){
+        if(isalnum(password[index]) == 0)
+        {
             flag_Special_char = 1;
         }
     }
-    if(flag_Digit == 0){
+    if(flag_Digit == 0)
+    {
         return 0;
     }
-    if(flag_Lower_alpha == 0){
+    if(flag_Lower_alpha == 0)
+    {
         return 1;
     }
-    if(flag_Upper_alpha == 0){
+    if(flag_Upper_alpha == 0)
+    {
         return 2;
     }
-    if(flag_Special_char == 0){
+    if(flag_Special_char == 0)
+    {
         return 3;
     }
     return 5;
 
 }
-int isaddress(char string[] , int lenght){
+int isaddress(char string[], int lenght)
+{
     int flag = 0;
-    for(int index = 0 ; index < lenght ; index++){
-        if(isalnum(string[index]) == 0 && string[index] != '-'){
+    for(int index = 0 ; index < lenght ; index++)
+    {
+        if(isalnum(string[index]) == 0 && string[index] != '-')
+        {
             flag = 1;
         }
-        if(string[index] == '-' && (string[index + 1] == '\0' || string[index + 1] == '-')){
+        if(string[index] == '-' && (string[index + 1] == '\0' || string[index + 1] == '-'))
+        {
             flag = 1;
         }
     }
-    if(flag == 0){
+    if(flag == 0)
+    {
         return 1;
     }
-    else{
+    else
+    {
         return 0;
     }
 }
-int isallalpha(char string[] , int lenght){
+int isallalpha(char string[], int lenght)
+{
     int flag = 0;
-    for(int index = 0 ; index < lenght ; index++){
-        if(isalpha(string[index]) == 0){
+    for(int index = 0 ; index < lenght ; index++)
+    {
+        if(isalpha(string[index]) == 0)
+        {
             flag = 1;
         }
     }
-    if(flag == 0){
+    if(flag == 0)
+    {
         return 1;
     }
-    else{
+    else
+    {
         return 0;
     }
 }
-int isemail(char email[] , int lenght){
+int isemail(char email[], int lenght)
+{
     int Index_of_atsign = 0;
     int isfalse = 0;
     int Index_of_Dot = 0;
-    for(int index = 0 ; index  < lenght ; index++){
-        if(isalnum(email[index] == 0) && (email[index] != '@' || email[index] != '_' ||  email[index] != '.')){                     isfalse = 1;
-        isfalse = 1;
-        }
-    }
-    for(int index = 0 ; lenght > index ; index++){
-        if(email[index] == '@' && email[index - 1] == '.'){
+    for(int index = 0 ; index  < lenght ; index++)
+    {
+        if(isalnum(email[index] == 0) && (email[index] != '@' || email[index] != '_' ||  email[index] != '.'))
+        {
+            isfalse = 1;
             isfalse = 1;
         }
-        else if(email[index] == '@' ){
+    }
+    for(int index = 0 ; lenght > index ; index++)
+    {
+        if(email[index] == '@' && email[index - 1] == '.')
+        {
+            isfalse = 1;
+        }
+        else if(email[index] == '@' )
+        {
             Index_of_atsign = index;
         }
     }
-    for(int index = 0 ; index < Index_of_atsign ; index++){
-        if(isalpha(email[index]) <= 0 && isdigit(email[index]) == 0){
-            if(email[index] != '.'){
+    for(int index = 0 ; index < Index_of_atsign ; index++)
+    {
+        if(isalpha(email[index]) <= 0 && isdigit(email[index]) == 0)
+        {
+            if(email[index] != '.')
+            {
                 isfalse = 1;
                 break;
             }
         }
     }
-    for(int index = Index_of_atsign + 1 ; index < lenght ; index++){
-        if(email[index] == '.' && email[index + 1] == '.'){
+    for(int index = Index_of_atsign + 1 ; index < lenght ; index++)
+    {
+        if(email[index] == '.' && email[index + 1] == '.')
+        {
             isfalse = 1;
             break;
         }
-        else if(email[index] == '.' && email[index + 1] == '\0'){
+        else if(email[index] == '.' && email[index + 1] == '\0')
+        {
             isfalse = 1;
             break;
         }
-        else if(email[index] == '.'){
+        else if(email[index] == '.')
+        {
             Index_of_Dot = index;
         }
-        else if(isalpha(email[index]) <= 0){
-            if(email[index] != '.' || isdigit(email[index]) == 1){
+        else if(isalpha(email[index]) <= 0)
+        {
+            if(email[index] != '.' || isdigit(email[index]) == 1)
+            {
                 isfalse = 1;
                 break;
             }
         }
     }
-    if(Index_of_Dot == 0){
-            isfalse = 1;
-        }
+    if(Index_of_Dot == 0)
+    {
+        isfalse = 1;
+    }
 
-    if(email[Index_of_atsign + 1] == '\0'){
+    if(email[Index_of_atsign + 1] == '\0')
+    {
         isfalse = 1;
     }
-    if(Index_of_atsign == 0){
+    if(Index_of_atsign == 0)
+    {
         isfalse = 1;
     }
-    if(isfalse == 1){
+    if(isfalse == 1)
+    {
         return -1;
     }
-    else{
+    else
+    {
         return 1;
     }
 
