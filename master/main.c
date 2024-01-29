@@ -57,6 +57,7 @@ struct user
     unsigned long int time_logout;
     int registered_builiding;
     char ID[20];
+
     struct user *link;
 }*start_user = NULL, *last_user = NULL;
 
@@ -71,6 +72,11 @@ void sign_up()
     int index = 0, stars = 0;
     char temp_time[31], option, character, password[30];
     system("cls");
+    printf("For getting back press b: ");
+    if(tolower(getche()) == 'b'){
+        Start_Page();
+    }
+    printf("\33[2K\r");
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "a+");
     if(user_fp == NULL)
@@ -83,10 +89,18 @@ void sign_up()
     user = malloc(sizeof(USER));
     printf("        you will use this information for using the application\n");
     make_list_user(user_fp);
-    while(1)
-    {
-        printf("\nPlease enter a user name: ");
+    while(1){
+        while(1){
+                printf("\nPlease enter a user name: ");
         gets(user->user_name);
+        if(strlen(user->user_name) <= 28){
+            break;
+        }
+        else{
+            printf("User name can not be more than 28 characters!\n");
+        }
+        }
+
         strcat(user->user_name, "\n");
         if(search_username_list_user(user->user_name)== 1)
         {
@@ -99,7 +113,9 @@ void sign_up()
         }
     }
     make_null_list_user();
-    printf("Please enter your password: ");
+
+    while(1){
+     printf("Please enter your password: ");
     index = 0;
     stars = 0;
     while(1)
@@ -131,6 +147,8 @@ void sign_up()
             index++;
             stars++;
         }
+    }
+    if(isp)
     }
     printf("\n");
     printf("\n            personal information\n");
@@ -196,6 +214,11 @@ void sign_up()
 void sign_in()
 {
     system("cls");
+    printf("For getting back press b: ");
+    if(tolower(getche()) == 'b'){
+        Start_Page();
+    }
+    printf("\33[2K\r");
     int index = 0, stars = 0;
     char character;
     char time_tmep[30];
@@ -5893,6 +5916,147 @@ void make_ansiescape_work(void)
         }
     }
 }
+int isalldigit(char string[] , int lenght){
+    int flag = 0;
+    for(int index = 0 ; index < lenght ; index++){
+        if(isdigit(string[index]) == 0){
+            flag = 1;
+        }
+    }
+    if(flag == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+int password_checker(char password[],int size){
+    int flag_Digit = 0 , flag_Upper_alpha = 0,flag_Lower_alpha = 0, flag_Special_char = 0;
+    if(size < 8){
+        return 4;
+    }
+    for(int index = 0 ; index < size ; size++){
+        if(isdigit(password[index])){
+            flag_Digit = 1;
+        }
+        if(isalpha(password[index]) && islower(password[index])){
+            flag_Lower_alpha = 1;
+        }
+        if(isalpha(password[index]) && isupper(password[index])){
+            flag_Lower_alpha = 1;
+        }
+        if(isalnum(password[index]) == 0){
+            flag_Special_char = 1;
+        }
+    }
+    if(flag_Digit == 0){
+        return 0;
+    }
+    if(flag_Lower_alpha == 0){
+        return 1;
+    }
+    if(flag_Upper_alpha == 0){
+        return 2;
+    }
+    if(flag_Special_char == 0){
+        return 3;
+    }
+    return 5;
+
+}
+int isaddress(char string[] , int lenght){
+    int flag = 0;
+    for(int index = 0 ; index < lenght ; index++){
+        if(isalnum(string[index]) == 0 && string[index] != '-'){
+            flag = 1;
+        }
+        if(string[index] == '-' && (string[index + 1] == '\0' || string[index + 1] == '-')){
+            flag = 1;
+        }
+    }
+    if(flag == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+int isallalpha(char string[] , int lenght){
+    int flag = 0;
+    for(int index = 0 ; index < lenght ; index++){
+        if(isalpha(string[index]) == 0){
+            flag = 1;
+        }
+    }
+    if(flag == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+int isemail(char email[] , int lenght){
+    int Index_of_atsign = 0;
+    int isfalse = 0;
+    int Index_of_Dot = 0;
+    for(int index = 0 ; index  < lenght ; index++){
+        if(isalnum(email[index] == 0) && (email[index] != '@' || email[index] != '_' ||  email[index] != '.')){                     isfalse = 1;
+        isfalse = 1;
+        }
+    }
+    for(int index = 0 ; lenght > index ; index++){
+        if(email[index] == '@' && email[index - 1] == '.'){
+            isfalse = 1;
+        }
+        else if(email[index] == '@' ){
+            Index_of_atsign = index;
+        }
+    }
+    for(int index = 0 ; index < Index_of_atsign ; index++){
+        if(isalpha(email[index]) <= 0 && isdigit(email[index]) == 0){
+            if(email[index] != '.'){
+                isfalse = 1;
+                break;
+            }
+        }
+    }
+    for(int index = Index_of_atsign + 1 ; index < lenght ; index++){
+        if(email[index] == '.' && email[index + 1] == '.'){
+            isfalse = 1;
+            break;
+        }
+        else if(email[index] == '.' && email[index + 1] == '\0'){
+            isfalse = 1;
+            break;
+        }
+        else if(email[index] == '.'){
+            Index_of_Dot = index;
+        }
+        else if(isalpha(email[index]) <= 0){
+            if(email[index] != '.' || isdigit(email[index]) == 1){
+                isfalse = 1;
+                break;
+            }
+        }
+    }
+    if(Index_of_Dot == 0){
+            isfalse = 1;
+        }
+
+    if(email[Index_of_atsign + 1] == '\0'){
+        isfalse = 1;
+    }
+    if(Index_of_atsign == 0){
+        isfalse = 1;
+    }
+    if(isfalse == 1){
+        return -1;
+    }
+    else{
+        return 1;
+    }
+
+}
 void main()
 {
     make_ansiescape_work();
@@ -5907,5 +6071,5 @@ void main()
     strcpy(user->user_name, "admin\n");
     current_user = user;*/
     Start_Page();
-    atexit(logout_time);
+
 }
