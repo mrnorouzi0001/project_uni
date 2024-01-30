@@ -584,6 +584,10 @@ void user_edit()
     {
         printf("\nPlease enter your new ID: ");
         gets(tempstr);
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
         if(strlen(tempstr) != 10)
         {
             printf("your ID must have 10 digits!");
@@ -595,10 +599,7 @@ void user_edit()
             continue;
         }
         break;
-        if(strcmp(tempstr, "") == 0)
-        {
-            break;
-        }
+
     }
     if(strcmp(tempstr, "") != 0)
     {
@@ -613,6 +614,10 @@ void user_edit()
     {
         printf("\nPlease enter your new Phone: ");
         gets(tempstr);
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
         if(strlen(tempstr) != 10)
         {
             printf("Your phone number must have 10 digits!");
@@ -628,10 +633,7 @@ void user_edit()
             printf("Please enter a valid phone number!");
             continue;
         }
-        if(strcmp(tempstr, "") == 0)
-        {
-            break;
-        }
+
         break;
     }
     if(strcmp(tempstr, "") != 0)
@@ -708,6 +710,10 @@ void user_edit()
                 stars++;
             }
         }
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
         if(strlen(tempstr) > 18)
         {
             printf("your password can have 18 characters at maximum!");
@@ -742,10 +748,7 @@ void user_edit()
         {
             break;
         }
-        if(strcmp(tempstr, "") == 0)
-        {
-            break;
-        }
+
     }
     printf("\n");
     while(1)
@@ -783,6 +786,10 @@ void user_edit()
                 stars++;
             }
         }
+        if(strcmp(tempstr, "") == 0)
+        {
+            break;
+        }
         if(strlen(temp_pass_valid) > 18)
         {
             printf("your password can have 18 characters at maximum!");
@@ -814,10 +821,6 @@ void user_edit()
             continue;
         }
         if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 5)
-        {
-            break;
-        }
-        if(strcmp(temp_pass_valid, "") == 0)
         {
             break;
         }
