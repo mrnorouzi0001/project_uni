@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include "cryptography\cryptography.h"
 void Start_Page();
 void make_list_user(FILE *user_fp);
 long long unsigned report_price_total();
@@ -189,6 +190,7 @@ void sign_up()
             break;
         }
     }
+    crypto(user->password , strlen(user->password));
     printf("\n");
     printf("\n            personal information\n");
     while(1)
@@ -391,6 +393,7 @@ void sign_in()
                 }
             }
             printf("\n");
+            crypto(password , strlen(password));
             strcat(password, "\n");
             if(search_password_list_user(user_name,password) == 1)
             {
@@ -826,6 +829,7 @@ void user_edit()
         {
             if(strcmp(tempstr, temp_pass_valid) == 0)
             {
+                crypto(tempstr , strlen(tempstr));
                 strcat(tempstr, "\n");
                 strcpy(temp_current->password, tempstr);
                 break;
@@ -883,7 +887,7 @@ void user_edit()
                     {
 
                         printf("\33[2K\r");
-                        printf("Please enter your password again: ");
+                        printf("Please enter your new password again: ");
                         for(int i = 0 ; i < stars - 1 ; i++)
                         {
                             printf("%c", '*');
