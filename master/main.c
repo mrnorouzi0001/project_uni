@@ -58,7 +58,8 @@ struct user
     unsigned long int time_logout;
     int registered_builiding;
     char ID[20];
-
+    char isactive[3];
+    unsigned long int time_banish;
     struct user *link;
 }*start_user = NULL, *last_user = NULL;
 
@@ -304,6 +305,10 @@ void sign_up()
             fputs("\n", user_fp);
             fputs(user->ID, user_fp);
             fputs("\n", user_fp);
+            fputs("1" , user_fp);
+            fputs("\n", user_fp);
+            fputs("0", user_fp);
+            fputs("\n", user_fp);
             system("cls");
             Sleep(2000);
             printf("the user has added to the application successfully!");
@@ -357,6 +362,21 @@ void sign_in()
     int tries = 0;
     if(search_username_list_user(user_name) == 1)
     {
+        temp = malloc(sizeof(USER));
+        temp = start_user;
+        while(temp != last_user){
+             if(strcmp(user_name , temp->user_name) == 0 && strcmp(temp->isactive , "0\n") == 0 && (time(NULL) - temp->time_banish) < 900){
+                printf("\nYou are banned from the application for %ld:%ld" , 15 - (time(NULL) - temp->time_banish)/ 60 , 60 - ((time(NULL) - temp->time_banish) % 60));
+                free(temp);
+                fclose(user_fp);
+                Sleep(2000);
+                system("cls");
+                make_null_list_user();
+                Start_Page();
+             }
+             temp = temp->link;
+        }
+       free(temp);
         while(1)
         {
             printf("Please enter your password: ");
@@ -395,19 +415,63 @@ void sign_in()
             printf("\n");
             crypto(password , strlen(password));
             strcat(password, "\n");
+            if(tries == 5){
+                printf("Too many failed attempts. You are banned for 15 minutes from application!");
+                Sleep(2000);
+                system("cls");
+                fclose(user_fp);
+            user_fp = fopen("Files\\users\\user.txt", "w+");
+            temp = malloc(sizeof(USER));
+            temp = start_user;
+            while(temp != last_user)
+            {
+                fputs(temp->user_name, user_fp);
+                fputs(temp->password, user_fp);
+                fputs(temp->name, user_fp);
+                fputs(temp->last_name, user_fp);
+                fputs(temp->phone, user_fp);
+                fputs(temp->email, user_fp);
+                itoa(temp->time_login, time_tmep, 10);
+                fputs(time_tmep, user_fp);
+                fputs("\n", user_fp);
+                itoa(temp->time_logout, time_tmep, 10);
+                fputs(time_tmep, user_fp);
+                fputs("\n", user_fp);
+                fputs(temp->ID, user_fp);
+                if(strcmp(user_name , temp->user_name) == 0){
+                fputs("0" , user_fp);
+                fputs("\n", user_fp);
+                itoa(time(NULL), time_tmep, 10);
+                fputs(time_tmep, user_fp);
+                fputs("\n", user_fp);
+                }
+                else{
+                fputs("1" , user_fp);
+                fputs("\n", user_fp);
+                fputs("0", user_fp);
+                fputs("\n", user_fp);
+                }
+                temp = temp->link;
+            }
+                fclose(user_fp);
+                make_null_list_user();
+                system("cls");
+                Start_Page();
+            }
             if(search_password_list_user(user_name,password) == 1)
             {
                 break;
             }
             else
             {
-                printf("wrong password! %d tries left!\n", tries + 1);
+                printf("wrong password! %d tries left!\n", 5 - tries );
                 tries++;
             }
         }
         printf("logging in. please wait!");
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt", "w+");
+        temp = malloc(sizeof(USER));
         temp = start_user;
         while(temp != last_user)
         {
@@ -424,6 +488,10 @@ void sign_in()
             fputs(time_tmep, user_fp);
             fputs("\n", user_fp);
             fputs(temp->ID, user_fp);
+            fputs("1" , user_fp);
+            fputs("\n", user_fp);
+            fputs("0", user_fp);
+            fputs("\n", user_fp);
             temp = temp->link;
         }
         Sleep(2000);
@@ -944,6 +1012,10 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp->ID, user_fp);
+                    fputs("1" , user_fp);
+                    fputs("\n" , user_fp);
+                    fputs("0" , user_fp);
+                     fputs("\n" , user_fp);
                 }
                 else
                 {
@@ -960,6 +1032,10 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp_current->ID, user_fp);
+                    fputs("1" , user_fp);
+                    fputs("\n" , user_fp);
+                    fputs("0" , user_fp);
+                    fputs("\n" , user_fp);
                 }
                 temp = temp->link;
             }
@@ -1007,6 +1083,9 @@ void logout_time()
         itoa(temp->time_login, time_tmep, 10);
         fputs(time_tmep, user_fp);
         fputs("\n", user_fp);
+        fputs(temp->isactive , user_fp);
+        fputs("0" , user_fp);
+        fputs("\n" , user_fp);
         if(strcmp(temp->user_name, current_user->user_name) == 0)
         {
             itoa(time(NULL), time_tmep, 10);
@@ -6734,6 +6813,9 @@ void make_list_user(FILE *user_fp)
         fgets(temp_time, 31, user_fp);
         temp->time_logout = atol(temp_time);
         fgets(temp->ID, 31, user_fp);
+        fgets(temp->isactive, 3, user_fp);
+        fgets(temp_time, 31, user_fp);
+        temp->time_banish = atol(temp_time);
         if(start_user == NULL)
         {
             start_user = temp;
@@ -6769,7 +6851,7 @@ int search_password_list_user(char user_name[30], char password[20])
     current_user = malloc(sizeof(USER));
     while(temp != NULL)
     {
-        if(strcmp(temp->user_name, user_name) == 0 && strcmp(temp->password, password) == 0)
+        if(strcmp(temp->user_name, user_name) == 0 && strcmp(temp->password, password) == 0 )
         {
             current_user = temp;
             temp->time_login = time(NULL);
