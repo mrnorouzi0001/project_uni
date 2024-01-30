@@ -51,7 +51,7 @@ struct user
     char password[20];
     char name[25];
     char last_name[45];
-    char phone[12];
+    char phone[15];
     char email[35];
     unsigned long int time_login;
     unsigned long int time_logout;
@@ -227,9 +227,9 @@ void sign_up()
     {
         printf("\nPlease enter Your phone number: ");
         gets(user->phone);
-        if(strlen(user->phone) != 10)
+        if(strlen(user->phone) != 11)
         {
-            printf("Your phone number must have 10 digits!");
+            printf("Your phone number must have 11 digits!");
             continue;
         }
         if(user->phone[0] != '0')
@@ -1259,26 +1259,144 @@ void adding_sale_buildings_commercial()
     file_ID = fopen("Files\\building\\ID.txt", "r+");
     BUILDING_SALE *building;
     building = malloc(sizeof(BUILDING_SALE));
-    printf("Please enter the municipality's area: ");
-    gets(building->municipalitys_area);
-    printf("Please enter the address of building: ");
-    gets(building->address_of_building);
-    printf("Please enter model of building: ");
-    gets(building->model);
+        while(1){
+        printf("Please enter the municipality's area: ");
+        gets(building->municipalitys_area);
+        if(strlen(building->municipalitys_area) > 4){
+            printf("You can have 9999 municipality areas at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->municipalitys_area , strlen(building->municipalitys_area)) == 0){
+            printf("Please enter a valid number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter the address of building: ");
+        gets(building->address_of_building);
+        if(strlen(building->address_of_building) > 98){
+            printf("Your address can have 98 characters at maximum!\n");
+            continue;
+        }
+        if(isaddress(building->address_of_building , strlen(building->address_of_building)) == 0){
+            printf("Please enter a valid address!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter model of building: ");
+        gets(building->model);
+        if(strlen(building->model) > 18){
+            printf("Your model type can have 18 characters at maximum!\n");
+            continue;
+        }
+        if(isallalpha(building->model , strlen(building->model)) == 0){
+            printf("Please enter a valid model!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
     printf("Please enter age of building: ");
     gets(building->age_of_building);
-    printf("Please enter The size of the infrastructure: ");
+        if(strlen(building->age_of_building) > 4){
+            printf("Your building can be 9999 years old at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->age_of_building , strlen(building->age_of_building)) == 0){
+            printf("Please enter a valid age!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the infrastructure: ");
     gets(building->size_of_the_infrastructure);
-    printf("Please enter amount of floors: ");
-    gets(building->amount_of_floors);
-    printf("Please enter The size of the main land: ");
-    gets(building->size_of_the_main_land);
-    printf("Please enter phone number of owner: ");
-    gets(building->phone_number_of_owner);
-    printf("Please enter amount of rooms: ");
+    if(strlen(building->size_of_the_infrastructure) > 8){
+        printf("your building can be 99999999 m^2 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->size_of_the_infrastructure , strlen(building->size_of_the_infrastructure)) == 0){
+        printf("Please enter a valid size!\n");
+        continue;
+    }
+    break;
+    }
+    while(1){
+        printf("Please enter amount of floors: ");
+        gets(building->amount_of_floors);
+        if(strlen(building->amount_of_floors)> 4){
+            printf("Your building can have 9999 floors at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_floors , strlen(building->amount_of_floors)) == 0){
+            printf("Please enter a valid number for floors!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the main land: ");
+        gets(building->size_of_the_main_land);
+        if(strlen(building->size_of_the_main_land)> 8){
+            printf("Your building can have 99999999 m^2 at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->size_of_the_main_land , strlen(building->size_of_the_main_land)) == 0){
+            printf("Please enter a valid number for size of main land!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter phone number of owner: ");
+        gets(building->phone_number_of_owner);
+        if(strlen(building->phone_number_of_owner) != 11)
+        {
+            printf("Your phone number must have 11 digits!\n");
+            continue;
+        }
+        if(building->phone_number_of_owner[0] != '0')
+        {
+            printf("Your phone number must starts with 0 digit!\n");
+            continue;
+        }
+        if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
+        {
+            printf("Please enter a valid phone number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+         printf("Please enter amount of rooms: ");
     gets(building->amount_of_rooms);
+        if(strlen(building->amount_of_rooms) > 4){
+            printf("Your building can have 9999 rooms at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_rooms , strlen(building->amount_of_rooms)) == 0){
+            printf("Please enter a valid number for amount of rooms!\n");
+            continue;
+        }
+        break;
+
+    }
+   while(1){
     printf("Please enter price: ");
     gets(building->price);
+    if(strlen(building->price) > 13){
+        printf("Your building price can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->price , strlen(building->price)) == 0){
+        printf("Please enter a valid price for price!\n");
+        continue;
+    }
+    break;
+   }
     strcpy(building->user, current_user->user_name);
     building->time = time(NULL);
     strcpy(building->isactive, "1");
@@ -1486,28 +1604,157 @@ void adding_rent_buildings_Residential()
     file_ID = fopen("Files\\building\\ID.txt", "r+");
     BUILDING_RENT *building;
     building = malloc(sizeof(BUILDING_RENT));
-    printf("Please enter the municipality's area: ");
-    gets(building->municipalitys_area);
-    printf("Please enter the address of building: ");
-    gets(building->address_of_building);
-    printf("Please enter model of building(apartment or villa): ");
-    gets(building->model);
+        while(1){
+        printf("Please enter the municipality's area: ");
+        gets(building->municipalitys_area);
+        if(strlen(building->municipalitys_area) > 4){
+            printf("You can have 9999 municipality areas at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->municipalitys_area , strlen(building->municipalitys_area)) == 0){
+            printf("Please enter a valid number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter the address of building: ");
+        gets(building->address_of_building);
+        if(strlen(building->address_of_building) > 98){
+            printf("Your address can have 98 characters at maximum!\n");
+            continue;
+        }
+        if(isaddress(building->address_of_building , strlen(building->address_of_building)) == 0){
+            printf("Please enter a valid address!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter model of building(apartment or villa): ");
+        gets(building->model);
+        if(strlen(building->model) > 18){
+            printf("Your model type can have 18 characters at maximum!\n");
+            continue;
+        }
+        if(isallalpha(building->model , strlen(building->model)) == 0){
+            printf("Please enter a valid model!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
     printf("Please enter age of building: ");
     gets(building->age_of_building);
-    printf("Please enter The size of the infrastructure: ");
+        if(strlen(building->age_of_building) > 4){
+            printf("Your building can be 9999 years old at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->age_of_building , strlen(building->age_of_building)) == 0){
+            printf("Please enter a valid age!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the infrastructure: ");
     gets(building->size_of_the_infrastructure);
-    printf("Please enter amount of floors: ");
-    gets(building->amount_of_floors);
-    printf("Please enter The size of the main land: ");
-    gets(building->size_of_the_main_land);
-    printf("Please enter phone number of owner: ");
-    gets(building->phone_number_of_owner);
-    printf("Please enter amount of rooms: ");
+    if(strlen(building->size_of_the_infrastructure) > 8){
+        printf("your building can be 99999999 m^2 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->size_of_the_infrastructure , strlen(building->size_of_the_infrastructure)) == 0){
+        printf("Please enter a valid size!\n");
+        continue;
+    }
+    break;
+    }
+    while(1){
+        printf("Please enter amount of floors: ");
+        gets(building->amount_of_floors);
+        if(strlen(building->amount_of_floors)> 4){
+            printf("Your building can have 9999 floors at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_floors , strlen(building->amount_of_floors)) == 0){
+            printf("Please enter a valid number for floors!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the main land: ");
+        gets(building->size_of_the_main_land);
+        if(strlen(building->size_of_the_main_land)> 8){
+            printf("Your building can have 99999999 m^2 at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->size_of_the_main_land , strlen(building->size_of_the_main_land)) == 0){
+            printf("Please enter a valid number for size of main land!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter phone number of owner: ");
+        gets(building->phone_number_of_owner);
+        if(strlen(building->phone_number_of_owner) != 11)
+        {
+            printf("Your phone number must have 11 digits!\n");
+            continue;
+        }
+        if(building->phone_number_of_owner[0] != '0')
+        {
+            printf("Your phone number must starts with 0 digit!\n");
+            continue;
+        }
+        if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
+        {
+            printf("Please enter a valid phone number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+         printf("Please enter amount of rooms: ");
     gets(building->amount_of_rooms);
+        if(strlen(building->amount_of_rooms) > 4){
+            printf("Your building can have 9999 rooms at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_rooms , strlen(building->amount_of_rooms)) == 0){
+            printf("Please enter a valid number for amount of rooms!\n");
+            continue;
+        }
+        break;
+
+    }
+   while(1){
     printf("Please enter prepayment: ");
     gets(building->prepayment);
-    printf("Please enter pay per month(for mortgage only enter 0): ");
-    gets(building->rent_per_month);
+    if(strlen(building->prepayment) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->prepayment , strlen(building->prepayment)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+   }
+    while(1){
+        printf("Please enter pay per month(for mortgage only enter 0): ");
+        gets(building->rent_per_month);
+        if(strlen(building->rent_per_month) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->rent_per_month , strlen(building->rent_per_month)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+    }
     strcpy(building->user, current_user->user_name);
     building->time = time(NULL);
     strcpy(building->isactive, "1");
@@ -1590,28 +1837,157 @@ void adding_rent_buildings_commercial()
     file_ID = fopen("Files\\building\\ID.txt", "r+");
     BUILDING_RENT *building;
     building = malloc(sizeof(BUILDING_RENT));
-    printf("Please enter the municipality's area: ");
-    gets(building->municipalitys_area);
-    printf("Please enter the address of building: ");
-    gets(building->address_of_building);
-    printf("Please enter model of building: ");
-    gets(building->model);
+    while(1){
+        printf("Please enter the municipality's area: ");
+        gets(building->municipalitys_area);
+        if(strlen(building->municipalitys_area) > 4){
+            printf("You can have 9999 municipality areas at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->municipalitys_area , strlen(building->municipalitys_area)) == 0){
+            printf("Please enter a valid number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter the address of building: ");
+        gets(building->address_of_building);
+        if(strlen(building->address_of_building) > 98){
+            printf("Your address can have 98 characters at maximum!\n");
+            continue;
+        }
+        if(isaddress(building->address_of_building , strlen(building->address_of_building)) == 0){
+            printf("Please enter a valid address!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter model of building: ");
+        gets(building->model);
+        if(strlen(building->model) > 18){
+            printf("Your model type can have 18 characters at maximum!\n");
+            continue;
+        }
+        if(isallalpha(building->model , strlen(building->model)) == 0){
+            printf("Please enter a valid model!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
     printf("Please enter age of building: ");
     gets(building->age_of_building);
-    printf("Please enter The size of the infrastructure: ");
+        if(strlen(building->age_of_building) > 4){
+            printf("Your building can be 9999 years old at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->age_of_building , strlen(building->age_of_building)) == 0){
+            printf("Please enter a valid age!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the infrastructure: ");
     gets(building->size_of_the_infrastructure);
-    printf("Please enter amount of floors: ");
-    gets(building->amount_of_floors);
-    printf("Please enter The size of the main land: ");
-    gets(building->size_of_the_main_land);
-    printf("Please enter phone number of owner: ");
-    gets(building->phone_number_of_owner);
-    printf("Please enter amount of rooms: ");
+    if(strlen(building->size_of_the_infrastructure) > 8){
+        printf("your building can be 99999999 m^2 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->size_of_the_infrastructure , strlen(building->size_of_the_infrastructure)) == 0){
+        printf("Please enter a valid size!\n");
+        continue;
+    }
+    break;
+    }
+    while(1){
+        printf("Please enter amount of floors: ");
+        gets(building->amount_of_floors);
+        if(strlen(building->amount_of_floors)> 4){
+            printf("Your building can have 9999 floors at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_floors , strlen(building->amount_of_floors)) == 0){
+            printf("Please enter a valid number for floors!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the main land: ");
+        gets(building->size_of_the_main_land);
+        if(strlen(building->size_of_the_main_land)> 8){
+            printf("Your building can have 99999999 m^2 at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->size_of_the_main_land , strlen(building->size_of_the_main_land)) == 0){
+            printf("Please enter a valid number for size of main land!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter phone number of owner: ");
+        gets(building->phone_number_of_owner);
+        if(strlen(building->phone_number_of_owner) != 11)
+        {
+            printf("Your phone number must have 11 digits!\n");
+            continue;
+        }
+        if(building->phone_number_of_owner[0] != '0')
+        {
+            printf("Your phone number must starts with 0 digit!\n");
+            continue;
+        }
+        if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
+        {
+            printf("Please enter a valid phone number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+         printf("Please enter amount of rooms: ");
     gets(building->amount_of_rooms);
+        if(strlen(building->amount_of_rooms) > 4){
+            printf("Your building can have 9999 rooms at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->amount_of_rooms , strlen(building->amount_of_rooms)) == 0){
+            printf("Please enter a valid number for amount of rooms!\n");
+            continue;
+        }
+        break;
+
+    }
+   while(1){
     printf("Please enter prepayment: ");
     gets(building->prepayment);
-    printf("Please enter pay per month(for mortgage only enter 0): ");
-    gets(building->rent_per_month);
+    if(strlen(building->prepayment) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->prepayment , strlen(building->prepayment)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+   }
+    while(1){
+        printf("Please enter pay per month(for mortgage only enter 0): ");
+        gets(building->rent_per_month);
+        if(strlen(building->rent_per_month) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->rent_per_month , strlen(building->rent_per_month)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+    }
     strcpy(building->user, current_user->user_name);
     building->time = time(NULL);
     strcpy(building->isactive, "1");
@@ -1693,21 +2069,104 @@ void adding_rent_buildings_filed()
     file_rent_res = fopen("Files\\building\\for_rent\\Filed.txt", "a+");
     file_ID = fopen("Files\\building\\ID.txt", "r+");
     BUILDING_RENT *building;
-    building = malloc(sizeof(BUILDING_RENT));
-    printf("Please enter the municipality's area: ");
-    gets(building->municipalitys_area);
-    printf("Please enter the address of building: ");
-    gets(building->address_of_building);
-    printf("Please enter model of building(farm or in-city): ");
-    gets(building->model);
-    printf("Please enter The size of the infrastructure: ");
+        while(1){
+        printf("Please enter the municipality's area: ");
+        gets(building->municipalitys_area);
+        if(strlen(building->municipalitys_area) > 4){
+            printf("You can have 9999 municipality areas at maximum!\n");
+            continue;
+        }
+        if(isalldigit(building->municipalitys_area , strlen(building->municipalitys_area)) == 0){
+            printf("Please enter a valid number!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter the address of building: ");
+        gets(building->address_of_building);
+        if(strlen(building->address_of_building) > 98){
+            printf("Your address can have 98 characters at maximum!\n");
+            continue;
+        }
+        if(isaddress(building->address_of_building , strlen(building->address_of_building)) == 0){
+            printf("Please enter a valid address!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter model of building: ");
+        gets(building->model);
+        if(strlen(building->model) > 18){
+            printf("Your model type can have 18 characters at maximum!\n");
+            continue;
+        }
+        if(isallalpha(building->model , strlen(building->model)) == 0){
+            printf("Please enter a valid model!\n");
+            continue;
+        }
+        break;
+    }
+    while(1){
+        printf("Please enter The size of the infrastructure: ");
     gets(building->size_of_the_infrastructure);
-    printf("Please enter phone number of owner: ");
-    gets(building->phone_number_of_owner);
+    if(strlen(building->size_of_the_infrastructure) > 8){
+        printf("your building can be 99999999 m^2 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->size_of_the_infrastructure , strlen(building->size_of_the_infrastructure)) == 0){
+        printf("Please enter a valid size!\n");
+        continue;
+    }
+    break;
+    }
+    while(1){
+        printf("Please enter phone number of owner: ");
+        gets(building->phone_number_of_owner);
+        if(strlen(building->phone_number_of_owner) != 11)
+        {
+            printf("Your phone number must have 11 digits!\n");
+            continue;
+        }
+        if(building->phone_number_of_owner[0] != '0')
+        {
+            printf("Your phone number must starts with 0 digit!\n");
+            continue;
+        }
+        if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
+        {
+            printf("Please enter a valid phone number!\n");
+            continue;
+        }
+        break;
+    }
+   while(1){
     printf("Please enter prepayment: ");
     gets(building->prepayment);
-    printf("Please enter pay per month(for mortgage only enter 0): ");
-    gets(building->rent_per_month);
+    if(strlen(building->prepayment) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->prepayment , strlen(building->prepayment)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+   }
+    while(1){
+        printf("Please enter pay per month(for mortgage only enter 0): ");
+        gets(building->rent_per_month);
+        if(strlen(building->rent_per_month) > 13){
+        printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+        continue;
+    }
+    if(isalldigit(building->rent_per_month , strlen(building->rent_per_month)) == 0){
+        printf("Please enter a valid price for prepayment!\n");
+        continue;
+    }
+    break;
+    }
     strcpy(building->user, current_user->user_name);
     building->time = time(NULL);
     strcpy(building->isactive, "1");
@@ -5910,7 +6369,7 @@ void make_list_user(FILE *user_fp)
         fgets(temp->password, 20, user_fp);
         fgets(temp->name, 25, user_fp);
         fgets(temp->last_name, 45, user_fp);
-        fgets(temp->phone, 12, user_fp);
+        fgets(temp->phone, 15, user_fp);
         fgets(temp->email, 35, user_fp);
         fgets(temp_time, 31, user_fp);
         temp->time_login = atol(temp_time);
