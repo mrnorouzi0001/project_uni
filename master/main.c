@@ -2811,9 +2811,9 @@ void page_admin_report()
         gets(prepayment_start);
         printf("Please enter the end of room range: ");
         gets(prepayment_end);
-        printf("Please enter the start of rent range: ");
+        printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
         gets(rent_start);
-        printf("Please enter the end of rent range:(if you wish to only look for a specific age enter 0 for this filed)");
+        printf("Please enter the end of rent range:");
         gets(rent_end);
         system("cls");
         report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
@@ -4131,6 +4131,12 @@ void report_rent_residential_rent_mortgage(char start_perpay[20], char end_prepa
     long int age_start, age_end, rent_start,rent_end, rent_file, pre_file;
     age_start = atol(start_perpay);
     age_end = atol(end_prepay);
+    if(age_start == 0){
+     age_start = age_end;
+    }
+     if(rent_start == 0){
+     rent_start = age_end;
+    }
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
     char id[7], TEMP[21];
@@ -4177,6 +4183,12 @@ void report_rent_commercial_rent_mortgage(char start_perpay[20], char end_prepay
     long int age_start, age_end, rent_start,rent_end, rent_file, pre_file;
     age_start = atol(start_perpay);
     age_end = atol(end_prepay);
+    if(age_start == 0){
+     age_start = age_end;
+    }
+     if(rent_start == 0){
+     rent_start = age_end;
+    }
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
     char id[7], TEMP[21];
@@ -4228,7 +4240,12 @@ void report_rent_filed_rent_mortgage(char start_perpay[20], char end_prepay[20],
     age_end = atol(end_prepay);
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
-
+    if(age_start == 0){
+     age_start = age_end;
+    }
+    if(rent_start == 0){
+     rent_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4517,6 +4534,9 @@ void report_rent_commercial_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4558,6 +4578,9 @@ void report_sale_residential_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -4650,6 +4673,9 @@ void report_rent_residential_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4690,6 +4716,9 @@ void report_rent_commercial_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4747,6 +4776,9 @@ void report_rent_residential_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4787,6 +4819,9 @@ void report_rent_commercial_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4828,6 +4863,9 @@ void report_rent_filed_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -4864,6 +4902,9 @@ void report_sale_residential_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -4902,6 +4943,9 @@ void report_sale_commercial_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -4940,6 +4984,9 @@ void report_sale_filed_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -4989,6 +5036,9 @@ void report_sale_residential_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -5028,6 +5078,9 @@ void report_sale_residential_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -5067,6 +5120,9 @@ void report_sale_commercial_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
+     if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -5105,6 +5161,9 @@ void report_sale_filed_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
+     if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
