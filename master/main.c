@@ -4,9 +4,6 @@
 #include<string.h>
 #include<ctype.h>
 #include "cryptography\cryptography.h"
-void Start_Page();
-void make_list_user(FILE *user_fp);
-long long unsigned report_price_total();
 struct building_sale
 {
     char *municipalitys_area[6];
@@ -69,15 +66,118 @@ typedef struct building_rent BUILDING_RENT;
 
 USER *current_user;
 int inner_flag = 0;
+
+void adding_rent_buildings_commercial();
+void adding_rent_buildings_filed();
+void adding_rent_buildings_Residential();
+void adding_sale_buildings_commercial();
+void adding_sale_buildings_Residential();
+void adding_sale_buildings_filed();
+void delete_menu_rent_buildings();
+void delete_menu_sale_buildings();
+void delete_rent_buildings_commercial();
+void delete_rent_buildings_filed();
+void delete_rent_buildings_Residential();
+void delete_sale_buildings_commercial();
+void delete_sale_buildings_Residential();
+void delete_sale_buildings_filed();
+void Edit_application_name();
+const char * getting_app_name();
+int isaddress(char string[], int lenght);
+int isallalpha(char string[], int lenght);
+int isalldigit(char string[], int lenght);
+int isemail(char string[], int lenght);
+void logout_time();
+void main();
+void main_page();
+void make_ansiescape_work();
+void make_list_building_rent();
+void make_list_building_rent_filed();
+void make_list_building_sale();
+void make_list_building_sale_filed();
+void make_list_user(FILE *user_fp);
+void make_null_list_building_rent();
+void make_null_list_building_sale();
+void make_null_list_user();
+void make_str_null(char string[]);
+void menu_adding_building();
+void menu_delete_building();
+void menu_rent_buildings();
+void menu_sale_buildings();
+void page_admin_report();
+void page_reports_normal();
+int password_checker(char password[], int size);
+void Pre_Start();
+int PreStart_Checker();
+void report_date_main_deleted_buildings_month();
+void report_date_main_deleted_building_three_month();
+void report_date_main_deleted_building_week();
+void report_date_main_deleted_buildings();
+void report_date_main_registered_building_month();
+void report_date_main_registered_building_three_month();
+void report_date_main_registered_building_week();
+void report_date_main_registered_buildings();
+void report_model_building_model_rent();
+void report_model_building_model_sale();
+void report_model_main();
+unsigned long long report_price_total();
+void report_rent_commercial();
+void report_rent_commercial_age(char start_age[6], char end_age[6]);
+void report_rent_commercial_area(char chose[30]);
+void report_rent_commercial_floor(char chose[30]);
+void report_rent_commercial_rent_mortgage(char start_prepay[20], char end_prepay[20], char start_rent[20], char end_rent[20]);
+void report_rent_commercial_room(char start_age[6], char end_age[6]);
+void report_rent_commercial_size(char start_age[6], char end_age[6]);
+void report_rent_filed();
+void report_rent_filed_area(char chose[30]);
+void report_rent_filed_rent_mortgage(char start_prepay[20], char end_prepay[20], char start_rent[20], char end_rent[20]);
+void report_rent_filed_size(char start_age[6], char end_age[6]);
+void report_rent_residential();
+void report_rent_residential_age(char start_age[6], char end_age[6]);
+void report_rent_residential_area(char chose[30]);
+void report_rent_residential_floor(char chose[30]);
+void report_rent_residential_rent_mortgage(char start_prepay[20], char end_prepay[20], char start_rent[20], char end_rent[20]);
+void report_rent_residential_room(char start_age[6], char end_age[6]);
+void report_rent_residential_size(char start_age[6], char end_age[6]);
+void report_sale_commercial();
+void report_sale_commercial_age(char start_age[6], char end_age[6]);
+void report_sale_commercial_area(char chose[30]);
+void report_sale_commercial_floor(char chose[30]);
+void report_sale_commercial_price(char start_age[20], char end_age[20]);
+void report_sale_commercial_room(char start_age[6], char end_age[6]);
+void report_sale_commercial_size(char start_age[6], char end_age[6]);
+void report_sale_filed();
+void report_sale_filed_area(char chose[30]);
+void report_sale_filed_price(char start_age[20], char end_age[20]);
+void report_sale_filed_size(char start_age[6], char end_age[6]);
+void report_sale_residential();
+void report_sale_residential_age(char start_age[6], char end_age[6]);
+void report_sale_residential_area(char chose[30]);
+void report_sale_residential_floor(char chose[30]);
+void report_sale_residential_price(char start_age[6], char end_age[6]);
+void report_sale_residential_room(char start_age[6], char end_age[6]);
+void report_sale_residential_size(char start_age[6], char end_age[6]);
+void report_time_user();
+void report_user_trunover();
+void report_time_user();
+void report_user_trunover();
+int search_password_list_user(char user_name[30], char password[20]);
+int search_username_list_user(char user_name[30]);
+void sign_in();
+void sign_up();
+void sortLinkedList(USER **head);
+void sortListHelper(USER **head, USER *newNode);
+void Start_Page();
+void user_edit();
 void sign_up()
 {
-    int index = 0, stars = 0 , checker = 0;
+    int index = 0, stars = 0, checker = 0;
     char temp_time[31], option, character, password[30];
     system("cls");
     printf("For getting back press b: ");
     if(tolower(getche()) == 'b')
     {
-        Start_Page();
+        return;
     }
     printf("\33[2K\r");
     FILE *user_fp;
@@ -105,6 +205,7 @@ void sign_up()
             else
             {
                 printf("User name can not be more than 28 characters!");
+                fflush(stdin);
             }
         }
 
@@ -158,7 +259,7 @@ void sign_up()
             }
         }
         checker = password_checker(user->password, strlen(user->password));
-        printf("%d" , checker);
+        printf("%d", checker);
         if(strlen(user->password) > 18)
         {
             printf("your password can have 18 characters at maximum!");
@@ -195,7 +296,7 @@ void sign_up()
             break;
         }
     }
-    crypto(user->password , strlen(user->password));
+    crypto(user->password, strlen(user->password));
     printf("\n");
     printf("\n            personal information\n");
     while(1)
@@ -205,6 +306,7 @@ void sign_up()
         if(23 < strlen(user->name))
         {
             printf("Your name can have 23 character at maximum!");
+            fflush(stdin);
             continue;
         }
         if(isallalpha(user->name, strlen(user->name)) == 0)
@@ -221,6 +323,7 @@ void sign_up()
         if(43 < strlen(user->last_name))
         {
             printf("Your last name can have 43 character at maximum!");
+            fflush(stdin);
             continue;
         }
         if(isallalpha(user->last_name, strlen(user->last_name)) == 0)
@@ -237,6 +340,7 @@ void sign_up()
         if(strlen(user->phone) != 11)
         {
             printf("Your phone number must have 11 digits!");
+            fflush(stdin);
             continue;
         }
         if(user->phone[0] != '0')
@@ -258,6 +362,7 @@ void sign_up()
         if(strlen(user->email) > 33)
         {
             printf("Your email can have 33 characters at maximum!");
+            fflush(stdin);
             continue;
         }
         if(isemail(user->email, strlen(user->email)) == -1)
@@ -274,6 +379,7 @@ void sign_up()
         if(strlen(user->ID) != 10)
         {
             printf("your ID must have 10 digits!");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(user->ID, strlen(user->ID)) == 0)
@@ -308,7 +414,7 @@ void sign_up()
             fputs("\n", user_fp);
             fputs(user->ID, user_fp);
             fputs("\n", user_fp);
-            fputs("1" , user_fp);
+            fputs("1", user_fp);
             fputs("\n", user_fp);
             fputs("0", user_fp);
             fputs("\n", user_fp);
@@ -319,14 +425,14 @@ void sign_up()
             free(user_fp);
             fclose(user_fp);
             Sleep(2000);
-            Start_Page();
+            return;
         }
         if(option == 'N' || option == 'n')
         {
             free(user);
             fclose(user_fp);
             system("cls");
-            Start_Page();
+            return;
         }
         else
         {
@@ -341,7 +447,7 @@ void sign_in()
     printf("For getting back press b: ");
     if(tolower(getche()) == 'b')
     {
-        Start_Page();
+        return;
     }
     printf("\33[2K\r");
     int index = 0, stars = 0;
@@ -360,6 +466,7 @@ void sign_in()
     char user_name[30], password[25];
     printf("Please enter your user name: ");
     gets(user_name);
+    printf("%s", user_name);
     strcat(user_name, "\n");
     make_list_user(user_fp);
     int tries = 0;
@@ -367,19 +474,21 @@ void sign_in()
     {
         temp = malloc(sizeof(USER));
         temp = start_user;
-        while(temp != last_user){
-             if(strcmp(user_name , temp->user_name) == 0 && strcmp(temp->isactive , "0\n") == 0 && (time(NULL) - temp->time_banish) < 900){
-                printf("\nYou are banned from the application for %ld:%ld" , 15 - (time(NULL) - temp->time_banish)/ 60 , 60 - ((time(NULL) - temp->time_banish) % 60));
+        while(temp != last_user)
+        {
+            if(strcmp(user_name, temp->user_name) == 0 && strcmp(temp->isactive, "0\n") == 0 && (time(NULL) - temp->time_banish) < 900)
+            {
+                printf("\nYou are banned from the application for %ld:%ld", 15 - (time(NULL) - temp->time_banish)/ 60, 60 - ((time(NULL) - temp->time_banish) % 60));
                 free(temp);
                 fclose(user_fp);
                 Sleep(2000);
                 system("cls");
                 make_null_list_user();
-                Start_Page();
-             }
-             temp = temp->link;
+                return;
+            }
+            temp = temp->link;
         }
-       free(temp);
+        free(temp);
         while(1)
         {
             printf("Please enter your password: ");
@@ -416,50 +525,53 @@ void sign_in()
                 }
             }
             printf("\n");
-            crypto(password , strlen(password));
+            crypto(password, strlen(password));
             strcat(password, "\n");
-            if(tries == 5){
+            if(tries == 5)
+            {
                 printf("Too many failed attempts. You are banned for 15 minutes from application!");
                 Sleep(2000);
                 system("cls");
                 fclose(user_fp);
-            user_fp = fopen("Files\\users\\user.txt", "w+");
-            temp = malloc(sizeof(USER));
-            temp = start_user;
-            while(temp != last_user)
-            {
-                fputs(temp->user_name, user_fp);
-                fputs(temp->password, user_fp);
-                fputs(temp->name, user_fp);
-                fputs(temp->last_name, user_fp);
-                fputs(temp->phone, user_fp);
-                fputs(temp->email, user_fp);
-                itoa(temp->time_login, time_tmep, 10);
-                fputs(time_tmep, user_fp);
-                fputs("\n", user_fp);
-                itoa(temp->time_logout, time_tmep, 10);
-                fputs(time_tmep, user_fp);
-                fputs("\n", user_fp);
-                fputs(temp->ID, user_fp);
-                if(strcmp(user_name , temp->user_name) == 0){
-                fputs("0" , user_fp);
-                fputs("\n", user_fp);
-                itoa(time(NULL), time_tmep, 10);
-                fputs(time_tmep, user_fp);
-                fputs("\n", user_fp);
+                user_fp = fopen("Files\\users\\user.txt", "w+");
+                temp = malloc(sizeof(USER));
+                temp = start_user;
+                while(temp != last_user)
+                {
+                    fputs(temp->user_name, user_fp);
+                    fputs(temp->password, user_fp);
+                    fputs(temp->name, user_fp);
+                    fputs(temp->last_name, user_fp);
+                    fputs(temp->phone, user_fp);
+                    fputs(temp->email, user_fp);
+                    itoa(temp->time_login, time_tmep, 10);
+                    fputs(time_tmep, user_fp);
+                    fputs("\n", user_fp);
+                    itoa(temp->time_logout, time_tmep, 10);
+                    fputs(time_tmep, user_fp);
+                    fputs("\n", user_fp);
+                    fputs(temp->ID, user_fp);
+                    if(strcmp(user_name, temp->user_name) == 0)
+                    {
+                        fputs("0", user_fp);
+                        fputs("\n", user_fp);
+                        itoa(time(NULL), time_tmep, 10);
+                        fputs(time_tmep, user_fp);
+                        fputs("\n", user_fp);
+                    }
+                    else
+                    {
+                        fputs("1", user_fp);
+                        fputs("\n", user_fp);
+                        fputs("0", user_fp);
+                        fputs("\n", user_fp);
+                    }
+                    temp = temp->link;
                 }
-                else{
-                fputs("1" , user_fp);
-                fputs("\n", user_fp);
-                fputs("0", user_fp);
-                fputs("\n", user_fp);
-                }
-                temp = temp->link;
-            }
                 fclose(user_fp);
                 make_null_list_user();
                 system("cls");
-                Start_Page();
+                return;
             }
             if(search_password_list_user(user_name,password) == 1)
             {
@@ -491,7 +603,8 @@ void sign_in()
             fputs(time_tmep, user_fp);
             fputs("\n", user_fp);
             fputs(temp->ID, user_fp);
-            fputs("1" , user_fp);
+
+            fputs("1", user_fp);
             fputs("\n", user_fp);
             fputs("0", user_fp);
             fputs("\n", user_fp);
@@ -509,65 +622,81 @@ void sign_in()
         Sleep(2000);
         fclose(user_fp);
         make_null_list_user();
-        Start_Page();
+        return;
     }
 }
 void main_page()
 {
     int option = 0;
     system("cls");
-    printf("1. Adding new building\n");
-    printf("2. Deleting the buildings\n");
-    printf("3. Reports\n");
-    printf("4. settings\n");
-    printf("5. sign out\n");
-    printf("Please choice your option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    printf("Welcome Dear %s", current_user->user_name);
+    while(1)
     {
-    case 1:
-    {
-        menu_adding_building();
-        break;
-    }
-    case 2:
-    {
-        menu_delete_building();
-    }
-    case 3:
-    {
-        if(strcmp(current_user->user_name, "admin\n") == 0)
-        {
-            page_admin_report();
-        }
-        else
-        {
-            page_reports_normal();
-        }
-        break;
-    }
-    case 4:
-    {
-        user_edit();
-        break;
-    }
-    case 5:
-    {
-        logout_time();
-        free(current_user);
-        printf("Logging out");
-        Sleep(2000);
-        Start_Page();
-    }
-    default:
-    {
-        printf("Please enter a valid option");
-        Sleep(2000);
+        option = 0;
         system("cls");
-        main_page();
+        printf("Welcome Dear %s", current_user->user_name);
+        printf("1. Adding new building\n");
+        printf("2. Deleting the buildings\n");
+        printf("3. Reports\n");
+        printf("4. settings\n");
+        printf("5. sign out\n");
+        printf("Please choice your option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            menu_adding_building();
+            break;
+        }
+        case 2:
+        {
+            menu_delete_building();
+        }
+        case 3:
+        {
+            if(strcmp(current_user->user_name, "admin\n") == 0)
+            {
+                page_admin_report();
+            }
+            else
+            {
+                page_reports_normal();
+            }
+            break;
+        }
+        case 4:
+        {
+            user_edit();
+            break;
+        }
+        case 5:
+        {
+            logout_time();
+            free(current_user);
+            printf("Logging out");
+            Sleep(2000);
+            return;
+        }
+        default:
+        {
+            printf("Please enter a valid option");
+            Sleep(2000);
+            system("cls");
+            break;
+        }
+        }
+
     }
-    }
+}
+const char * getting_app_name()
+{
+    static char * name[52];
+    FILE *fp;
+    fp = fopen("Files\\PreStart\\Settings.txt", "r");
+    fgets(name, 52, fp);
+    return name;
 }
 void user_edit()
 {
@@ -903,7 +1032,7 @@ void user_edit()
         {
             if(strcmp(tempstr, temp_pass_valid) == 0)
             {
-                crypto(tempstr , strlen(tempstr));
+                crypto(tempstr, strlen(tempstr));
                 strcat(tempstr, "\n");
                 strcpy(temp_current->password, tempstr);
                 break;
@@ -1015,10 +1144,10 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp->ID, user_fp);
-                    fputs("1" , user_fp);
-                    fputs("\n" , user_fp);
-                    fputs("0" , user_fp);
-                     fputs("\n" , user_fp);
+                    fputs("1", user_fp);
+                    fputs("\n", user_fp);
+                    fputs("0", user_fp);
+                    fputs("\n", user_fp);
                 }
                 else
                 {
@@ -1035,10 +1164,10 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp_current->ID, user_fp);
-                    fputs("1" , user_fp);
-                    fputs("\n" , user_fp);
-                    fputs("0" , user_fp);
-                    fputs("\n" , user_fp);
+                    fputs("1", user_fp);
+                    fputs("\n", user_fp);
+                    fputs("0", user_fp);
+                    fputs("\n", user_fp);
                 }
                 temp = temp->link;
             }
@@ -1048,7 +1177,7 @@ void user_edit()
             system("cls");
             printf("The user was edited Successfully!");
             Sleep(2000);
-            main_page();
+            return;
         }
         else if(checker == 'N' || checker == 'n')
         {
@@ -1056,7 +1185,7 @@ void user_edit()
             fclose(user_fp);
             system("cls");
             free(temp_current);
-            main_page();
+            return;
         }
         else
         {
@@ -1086,9 +1215,7 @@ void logout_time()
         itoa(temp->time_login, time_tmep, 10);
         fputs(time_tmep, user_fp);
         fputs("\n", user_fp);
-        fputs(temp->isactive , user_fp);
-        fputs("0" , user_fp);
-        fputs("\n" , user_fp);
+
         if(strcmp(temp->user_name, current_user->user_name) == 0)
         {
             itoa(time(NULL), time_tmep, 10);
@@ -1102,6 +1229,11 @@ void logout_time()
             fputs("\n", user_fp);
         }
         fputs(temp->ID, user_fp);
+
+        fputs(temp->isactive, user_fp);
+        itoa(temp->time_banish, time_tmep, 10);
+        fputs(time_tmep, user_fp);
+        fputs("\n", user_fp);
         temp = temp->link;
     }
     fclose(user_fp);
@@ -1109,37 +1241,46 @@ void logout_time()
 }
 void Start_Page()
 {
-    system("cls");
+
     int checker = 0;
-    printf("1. sign up\n");
-    printf("2. sign in\n");
-    printf("3. exit\n");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    int flag = 0;
+    while(1)
     {
-    case 1 :
-    {
-        sign_up();
-        break;
-    }
-    case 2 :
-    {
-        sign_in();
-        break;
-    }
-    case 3 :
-    {
-        exit(0);
-        break;
-    }
-    default:
-    {
+        flag = 0;
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        Start_Page();
-    }
+        printf("Welcome to the %s real state agency!\n", getting_app_name());
+        printf("1. sign up\n");
+        printf("2. sign in\n");
+        printf("3. exit\n");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            sign_up();
+            break;
+        }
+        case 2 :
+        {
+            sign_in();
+            break;
+        }
+        case 3 :
+        {
+            exit(0);
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            system("cls");
+            break;
+        }
+        }
     }
 }
 void make_str_null(char string[])
@@ -1152,81 +1293,91 @@ void make_str_null(char string[])
 void menu_adding_building()
 {
     int checker = 0;
-    system("cls");
-    printf("Adding building\n");
-    printf("1. For sale buildings\n");
-    printf("2. For rent buildings\n");
-    printf("3. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+
+    while(1)
     {
-    case 1 :
-    {
-        menu_sale_buildings();
-        break;
-    }
-    case 2 :
-    {
-        menu_rent_buildings();
-        break;
-    }
-    case 3 :
-    {
-        main_page();
-        break;
-    }
-    default:
-    {
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        menu_adding_building();
+        printf("Adding building\n");
+        printf("1. For sale buildings\n");
+        printf("2. For rent buildings\n");
+        printf("3. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            menu_sale_buildings();
+            break;
+        }
+        case 2 :
+        {
+            menu_rent_buildings();
+            break;
+        }
+        case 3 :
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
     }
-    }
+
 }
 void menu_sale_buildings()
 {
-    system("cls");
     int checker = 0;
-    printf("Adding building\\for sale\n");
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    while(1)
     {
-    case 1 :
-    {
-        adding_sale_buildings_Residential();
-        break;
-    }
-    case 2 :
-    {
-        adding_sale_buildings_commercial();
-        break;
-    }
-    case 3 :
-    {
-        adding_sale_buildings_filed();
-        break;
-    }
-    case 4:
-    {
-        menu_adding_building();
-        break;
-    }
-    default:
-    {
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        menu_sale_buildings();
-    }
+        printf("Adding building\\for sale\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            adding_sale_buildings_Residential();
+            break;
+        }
+        case 2 :
+        {
+            adding_sale_buildings_commercial();
+            break;
+        }
+        case 3 :
+        {
+            adding_sale_buildings_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
     }
 }
 void adding_sale_buildings_Residential()
@@ -1253,7 +1404,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter the municipality's area: ");
         gets(building->municipalitys_area);
         if(strlen(building->municipalitys_area) > 4)
-        {
+        {fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
             continue;
         }
@@ -1269,7 +1420,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter the address of building: ");
         gets(building->address_of_building);
         if(strlen(building->address_of_building) > 98)
-        {
+        {fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
             continue;
         }
@@ -1285,7 +1436,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter model of building: ");
         gets(building->model);
         if(strlen(building->model) > 18)
-        {
+        {fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
             continue;
         }
@@ -1301,7 +1452,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter age of building: ");
         gets(building->age_of_building);
         if(strlen(building->age_of_building) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
             continue;
         }
@@ -1317,7 +1468,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter The size of the infrastructure: ");
         gets(building->size_of_the_infrastructure);
         if(strlen(building->size_of_the_infrastructure) > 8)
-        {
+        {fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -1333,7 +1484,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter amount of floors: ");
         gets(building->amount_of_floors);
         if(strlen(building->amount_of_floors)> 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
             continue;
         }
@@ -1349,7 +1500,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter The size of the main land: ");
         gets(building->size_of_the_main_land);
         if(strlen(building->size_of_the_main_land)> 8)
-        {
+        {fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -1365,7 +1516,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter phone number of owner: ");
         gets(building->phone_number_of_owner);
         if(strlen(building->phone_number_of_owner) != 11)
-        {
+        {fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
             continue;
         }
@@ -1386,7 +1537,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter amount of rooms: ");
         gets(building->amount_of_rooms);
         if(strlen(building->amount_of_rooms) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
             continue;
         }
@@ -1403,7 +1554,7 @@ void adding_sale_buildings_Residential()
         printf("Please enter price: ");
         gets(building->price);
         if(strlen(building->price) > 13)
-        {
+        {fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -1467,14 +1618,14 @@ void adding_sale_buildings_Residential()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_sale_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
-        menu_sale_buildings();
+        return;
     }
 
 }
@@ -1501,7 +1652,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter the municipality's area: ");
         gets(building->municipalitys_area);
         if(strlen(building->municipalitys_area) > 4)
-        {
+        {fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
             continue;
         }
@@ -1517,7 +1668,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter the address of building: ");
         gets(building->address_of_building);
         if(strlen(building->address_of_building) > 98)
-        {
+        {fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
             continue;
         }
@@ -1533,7 +1684,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter model of building: ");
         gets(building->model);
         if(strlen(building->model) > 18)
-        {
+        {fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
             continue;
         }
@@ -1549,7 +1700,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter age of building: ");
         gets(building->age_of_building);
         if(strlen(building->age_of_building) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
             continue;
         }
@@ -1565,7 +1716,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter The size of the infrastructure: ");
         gets(building->size_of_the_infrastructure);
         if(strlen(building->size_of_the_infrastructure) > 8)
-        {
+        {fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -1581,7 +1732,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter amount of floors: ");
         gets(building->amount_of_floors);
         if(strlen(building->amount_of_floors)> 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
             continue;
         }
@@ -1597,7 +1748,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter The size of the main land: ");
         gets(building->size_of_the_main_land);
         if(strlen(building->size_of_the_main_land)> 8)
-        {
+        {fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -1613,7 +1764,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter phone number of owner: ");
         gets(building->phone_number_of_owner);
         if(strlen(building->phone_number_of_owner) != 11)
-        {
+        {fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
             continue;
         }
@@ -1634,7 +1785,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter amount of rooms: ");
         gets(building->amount_of_rooms);
         if(strlen(building->amount_of_rooms) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
             continue;
         }
@@ -1651,7 +1802,7 @@ void adding_sale_buildings_commercial()
         printf("Please enter price: ");
         gets(building->price);
         if(strlen(building->price) > 13)
-        {
+        {fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -1714,14 +1865,14 @@ void adding_sale_buildings_commercial()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_sale_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
-        menu_sale_buildings();
+        return;
     }
 }
 void adding_sale_buildings_filed()
@@ -1748,7 +1899,7 @@ void adding_sale_buildings_filed()
         printf("Please enter the municipality's area: ");
         gets(building->municipalitys_area);
         if(strlen(building->municipalitys_area) > 4)
-        {
+        {fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
             continue;
         }
@@ -1764,7 +1915,7 @@ void adding_sale_buildings_filed()
         printf("Please enter the address of building: ");
         gets(building->address_of_building);
         if(strlen(building->address_of_building) > 98)
-        {
+        {fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
             continue;
         }
@@ -1780,7 +1931,7 @@ void adding_sale_buildings_filed()
         printf("Please enter model of building: ");
         gets(building->model);
         if(strlen(building->model) > 18)
-        {
+        {fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
             continue;
         }
@@ -1796,7 +1947,7 @@ void adding_sale_buildings_filed()
         printf("Please enter The size of the infrastructure: ");
         gets(building->size_of_the_infrastructure);
         if(strlen(building->size_of_the_infrastructure) > 8)
-        {
+        {fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -1814,7 +1965,7 @@ void adding_sale_buildings_filed()
         printf("Please enter phone number of owner: ");
         gets(building->phone_number_of_owner);
         if(strlen(building->phone_number_of_owner) != 11)
-        {
+        {fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
             continue;
         }
@@ -1836,7 +1987,7 @@ void adding_sale_buildings_filed()
         printf("Please enter price: ");
         gets(building->price);
         if(strlen(building->price) > 13)
-        {
+        {fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -1892,57 +2043,63 @@ void adding_sale_buildings_filed()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_sale_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_sale_res);
-        menu_sale_buildings();
+        return;
     }
 }
 void menu_rent_buildings()
 {
-    system("cls");
+
     int checker = 0;
-    printf("Adding building\\for rent\n");
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    while(1)
     {
-    case 1 :
-    {
-        adding_rent_buildings_Residential();
-        break;
-    }
-    case 2 :
-    {
-        adding_rent_buildings_commercial();
-        break;
-    }
-    case 3 :
-    {
-        adding_rent_buildings_filed();
-        break;
-    }
-    case 4:
-    {
-        menu_adding_building();
-        break;
-    }
-    default:
-    {
+
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        menu_rent_buildings();
-    }
+        printf("Adding building\\for rent\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            adding_rent_buildings_Residential();
+            break;
+        }
+        case 2 :
+        {
+            adding_rent_buildings_commercial();
+            break;
+        }
+        case 3 :
+        {
+            adding_rent_buildings_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
     }
 }
 void adding_rent_buildings_Residential()
@@ -1968,7 +2125,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter the municipality's area: ");
         gets(building->municipalitys_area);
         if(strlen(building->municipalitys_area) > 4)
-        {
+        {fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
             continue;
         }
@@ -1984,7 +2141,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter the address of building: ");
         gets(building->address_of_building);
         if(strlen(building->address_of_building) > 98)
-        {
+        {fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
             continue;
         }
@@ -2000,7 +2157,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter model of building(apartment or villa): ");
         gets(building->model);
         if(strlen(building->model) > 18)
-        {
+        {fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
             continue;
         }
@@ -2016,7 +2173,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter age of building: ");
         gets(building->age_of_building);
         if(strlen(building->age_of_building) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
             continue;
         }
@@ -2032,7 +2189,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter The size of the infrastructure: ");
         gets(building->size_of_the_infrastructure);
         if(strlen(building->size_of_the_infrastructure) > 8)
-        {
+        {fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -2048,7 +2205,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter amount of floors: ");
         gets(building->amount_of_floors);
         if(strlen(building->amount_of_floors)> 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
             continue;
         }
@@ -2064,7 +2221,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter The size of the main land: ");
         gets(building->size_of_the_main_land);
         if(strlen(building->size_of_the_main_land)> 8)
-        {
+        {fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -2080,7 +2237,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter phone number of owner: ");
         gets(building->phone_number_of_owner);
         if(strlen(building->phone_number_of_owner) != 11)
-        {
+        {fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
             continue;
         }
@@ -2101,7 +2258,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter amount of rooms: ");
         gets(building->amount_of_rooms);
         if(strlen(building->amount_of_rooms) > 4)
-        {
+        {fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
             continue;
         }
@@ -2118,7 +2275,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter prepayment: ");
         gets(building->prepayment);
         if(strlen(building->prepayment) > 13)
-        {
+        {fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -2134,7 +2291,7 @@ void adding_rent_buildings_Residential()
         printf("Please enter pay per month(for mortgage only enter 0): ");
         gets(building->rent_per_month);
         if(strlen(building->rent_per_month) > 13)
-        {
+        {fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -2199,14 +2356,14 @@ void adding_rent_buildings_Residential()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_rent_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_rent_res);
-        menu_rent_buildings();
+        return;
     }
 }
 void adding_rent_buildings_commercial()
@@ -2234,6 +2391,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->municipalitys_area) > 4)
         {
             printf("You can have 9999 municipality areas at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
@@ -2250,6 +2408,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->address_of_building) > 98)
         {
             printf("Your address can have 98 characters at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
@@ -2266,6 +2425,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->model) > 18)
         {
             printf("Your model type can have 18 characters at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
@@ -2282,6 +2442,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->age_of_building) > 4)
         {
             printf("Your building can be 9999 years old at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->age_of_building, strlen(building->age_of_building)) == 0)
@@ -2298,6 +2459,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->size_of_the_infrastructure) > 8)
         {
             printf("your building can be 99999999 m^2 at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
@@ -2314,6 +2476,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->amount_of_floors)> 4)
         {
             printf("Your building can have 9999 floors at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->amount_of_floors, strlen(building->amount_of_floors)) == 0)
@@ -2330,6 +2493,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->size_of_the_main_land)> 8)
         {
             printf("Your building can have 99999999 m^2 at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->size_of_the_main_land, strlen(building->size_of_the_main_land)) == 0)
@@ -2346,6 +2510,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->phone_number_of_owner) != 11)
         {
             printf("Your phone number must have 11 digits!\n");
+            fflush(stdin);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
@@ -2367,6 +2532,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->amount_of_rooms) > 4)
         {
             printf("Your building can have 9999 rooms at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->amount_of_rooms, strlen(building->amount_of_rooms)) == 0)
@@ -2384,6 +2550,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->prepayment) > 13)
         {
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->prepayment, strlen(building->prepayment)) == 0)
@@ -2400,6 +2567,7 @@ void adding_rent_buildings_commercial()
         if(strlen(building->rent_per_month) > 13)
         {
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            fflush(stdin);
             continue;
         }
         if(isalldigit(building->rent_per_month, strlen(building->rent_per_month)) == 0)
@@ -2463,14 +2631,14 @@ void adding_rent_buildings_commercial()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_rent_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_rent_res);
-        menu_rent_buildings();
+        return;
     }
 }
 void adding_rent_buildings_filed()
@@ -2495,7 +2663,7 @@ void adding_rent_buildings_filed()
         printf("Please enter the municipality's area: ");
         gets(building->municipalitys_area);
         if(strlen(building->municipalitys_area) > 4)
-        {
+        {fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
             continue;
         }
@@ -2511,7 +2679,7 @@ void adding_rent_buildings_filed()
         printf("Please enter the address of building: ");
         gets(building->address_of_building);
         if(strlen(building->address_of_building) > 98)
-        {
+        {fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
             continue;
         }
@@ -2527,7 +2695,7 @@ void adding_rent_buildings_filed()
         printf("Please enter model of building: ");
         gets(building->model);
         if(strlen(building->model) > 18)
-        {
+        {fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
             continue;
         }
@@ -2543,7 +2711,7 @@ void adding_rent_buildings_filed()
         printf("Please enter The size of the infrastructure: ");
         gets(building->size_of_the_infrastructure);
         if(strlen(building->size_of_the_infrastructure) > 8)
-        {
+        {fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
             continue;
         }
@@ -2559,7 +2727,7 @@ void adding_rent_buildings_filed()
         printf("Please enter phone number of owner: ");
         gets(building->phone_number_of_owner);
         if(strlen(building->phone_number_of_owner) != 11)
-        {
+        {fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
             continue;
         }
@@ -2580,7 +2748,7 @@ void adding_rent_buildings_filed()
         printf("Please enter prepayment: ");
         gets(building->prepayment);
         if(strlen(building->prepayment) > 13)
-        {
+        {fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -2596,7 +2764,7 @@ void adding_rent_buildings_filed()
         printf("Please enter pay per month(for mortgage only enter 0): ");
         gets(building->rent_per_month);
         if(strlen(building->rent_per_month) > 13)
-        {
+        {fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             continue;
         }
@@ -2655,280 +2823,274 @@ void adding_rent_buildings_filed()
         system("cls");
         printf("building has added successfully");
         Sleep(2000);
-        menu_rent_buildings();
+        return;
     }
     else
     {
         free(building);
         fclose(file_ID);
         fclose(file_rent_res);
-        menu_rent_buildings();
+        return;
     }
 }
 void page_admin_report()
 {
-    system("cls");
-    printf("Reports\n");
     int option;
-    printf("1. Specific model of buildings\n");
-    printf("2. Buildings with Specific area\n");
-    printf("3. Buildings with Specific age\n");
-    printf("4. Buildings with Specific infrastructure size\n");
-    printf("5. Buildings with Specific prices\n");
-    printf("6. Buildings with Specific Room's amount\n");
-    printf("7. Total price of building\n");
-    printf("8. Buildings with Specific rent and mortgage price\n");
-    printf("9. Users Financial turnover\n");
-    printf("10. Date of registered buildings\n");
-    printf("11. Buildings with Specific floors\n");
-    printf("12. Date of deleted buildings\n");
-    printf("13. Users activity\n");
-    printf("14. Back\n");
-    printf("Please choice your report: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
-    {
-    case 1:
+    while(1)
     {
         system("cls");
-        report_model_main();
-        break;
-    }
-    case 2:
-    {
-        system("cls");
-        inner_flag = 0;
-        char chose[12];
-        printf("Please enter a municipalitys area: ");
-        gets(chose);
-        strcat(chose, "\n");
-        system("cls");
-        report_sale_residential_area(chose);
-        report_sale_commercial_area(chose);
-        report_rent_residential_area(chose);
-        report_rent_commercial_area(chose);
-        report_rent_filed_area(chose);
-        report_sale_filed_area(chose);
-        break;
-    }
-    case 3:
-    {
-        system("cls");
-        inner_flag = 0;
-        char age_start[6], age_finish[6];
-        printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(age_start);
-        printf("Please enter the end of age range: ");
-        gets(age_finish);
-        system("cls");
-        report_sale_residential_age(age_start, age_finish);
-        report_sale_commercial_age(age_start, age_finish);
-        report_rent_residential_age(age_start, age_finish);
-        report_rent_commercial_age(age_start, age_finish);
-    }
-    case 4:
-    {
-        system("cls");
-        inner_flag = 0;
-        char size_start[6], size_finish[6];
-        printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(size_start);
-        printf("Please enter the end of size range: ");
-        gets(size_finish);
-        system("cls");
-        report_sale_residential_size(size_start, size_finish);
-        report_sale_commercial_size(size_start, size_finish);
-        report_rent_filed_size(size_start, size_finish);
-        report_rent_residential_size(size_start, size_finish);
-        report_rent_commercial_size(size_start, size_finish);
-        report_sale_filed_size(size_start, size_finish);
-    }
-    case 5:
-    {
-        system("cls");
-        inner_flag = 0;
-        char price_start[20], price_finish[20];
-        printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(price_start);
-        printf("Please enter the end of price range: ");
-        gets(price_finish);
-        system("cls");
-        report_sale_residential_price(price_start, price_finish);
-        report_sale_commercial_price(price_start, price_finish);
-        report_sale_filed_price(price_start, price_finish);
-    }
-    case 6:
-    {
-        system("cls");
-        inner_flag = 0;
-        char floor_start[6], floor_finish[6];
-        printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(floor_start);
-        printf("Please enter the end of room range: ");
-        gets(floor_finish);
-        system("cls");
-        report_rent_residential_room(floor_start, floor_finish);
-        report_rent_commercial_room(floor_start, floor_finish);
-        report_sale_residential_room(floor_start, floor_finish);
-        report_sale_commercial_room(floor_start, floor_finish);
-    }
-    case 7:
-    {
-        system("cls");
-        if(report_price_total() == 0)
+        printf("Reports\n");
+        option = 0;
+        printf("1. Specific model of buildings\n");
+        printf("2. Buildings with Specific area\n");
+        printf("3. Buildings with Specific age\n");
+        printf("4. Buildings with Specific infrastructure size\n");
+        printf("5. Buildings with Specific prices\n");
+        printf("6. Buildings with Specific Room's amount\n");
+        printf("7. Total price of building\n");
+        printf("8. Buildings with Specific rent and mortgage price\n");
+        printf("9. Users Financial turnover\n");
+        printf("10. Date of registered buildings\n");
+        printf("11. Buildings with Specific floors\n");
+        printf("12. Date of deleted buildings\n");
+        printf("13. Users activity\n");
+        printf("14. Back\n");
+        printf("Please choice your report: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
         {
-            printf("There is no price to show!\n");
-            printf("For getting back to report menu , press any key....");
-            getchar();
-            if(strcmp(current_user->user_name, "admin\n")== 0)
+        case 1:
+        {
+            system("cls");
+            report_model_main();
+            break;
+        }
+        case 2:
+        {
+            system("cls");
+            inner_flag = 0;
+            char chose[12];
+            printf("Please enter a municipality area: ");
+            gets(chose);
+            strcat(chose, "\n");
+            system("cls");
+            report_sale_residential_area(chose);
+            report_sale_commercial_area(chose);
+            report_rent_residential_area(chose);
+            report_rent_commercial_area(chose);
+            report_rent_filed_area(chose);
+            report_sale_filed_area(chose);
+            break;
+        }
+        case 3:
+        {
+            system("cls");
+            inner_flag = 0;
+            char age_start[6], age_finish[6];
+            printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(age_start);
+            printf("Please enter the end of age range: ");
+            gets(age_finish);
+            system("cls");
+            report_sale_residential_age(age_start, age_finish);
+            report_sale_commercial_age(age_start, age_finish);
+            report_rent_residential_age(age_start, age_finish);
+            report_rent_commercial_age(age_start, age_finish);
+            break;
+        }
+        case 4:
+        {
+            system("cls");
+            inner_flag = 0;
+            char size_start[6], size_finish[6];
+            printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(size_start);
+            printf("Please enter the end of size range: ");
+            gets(size_finish);
+            system("cls");
+            report_sale_residential_size(size_start, size_finish);
+            report_sale_commercial_size(size_start, size_finish);
+            report_rent_filed_size(size_start, size_finish);
+            report_rent_residential_size(size_start, size_finish);
+            report_rent_commercial_size(size_start, size_finish);
+            report_sale_filed_size(size_start, size_finish);
+            break;
+        }
+        case 5:
+        {
+            system("cls");
+            inner_flag = 0;
+            char price_start[20], price_finish[20];
+            printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(price_start);
+            printf("Please enter the end of price range: ");
+            gets(price_finish);
+            system("cls");
+            report_sale_residential_price(price_start, price_finish);
+            report_sale_commercial_price(price_start, price_finish);
+            report_sale_filed_price(price_start, price_finish);
+            break;
+        }
+        case 6:
+        {
+            system("cls");
+            inner_flag = 0;
+            char floor_start[6], floor_finish[6];
+            printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(floor_start);
+            printf("Please enter the end of room range: ");
+            gets(floor_finish);
+            system("cls");
+            report_rent_residential_room(floor_start, floor_finish);
+            report_rent_commercial_room(floor_start, floor_finish);
+            report_sale_residential_room(floor_start, floor_finish);
+            report_sale_commercial_room(floor_start, floor_finish);
+            break;
+        }
+        case 7:
+        {
+            system("cls");
+            if(report_price_total() == 0)
             {
-                page_admin_report();
+                printf("There is no price to show!\n");
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                break;
             }
             else
             {
-                page_reports_normal();
+                printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                break;
             }
         }
-        else
+        case 8:
         {
-            printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
-            printf("For getting back to report menu , press any key....");
-            getchar();
-            if(strcmp(current_user->user_name, "admin\n")== 0)
-            {
-                page_admin_report();
-            }
-            else
-            {
-                page_reports_normal();
-            }
+            system("cls");
+            inner_flag = 0;
+            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
+            printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(prepayment_start);
+            printf("Please enter the end of room range: ");
+            gets(prepayment_end);
+            printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(rent_start);
+            printf("Please enter the end of rent range:");
+            gets(rent_end);
+            system("cls");
+            report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            report_rent_filed_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            break;
         }
-    }
-    case 8:
-    {
-        system("cls");
-        inner_flag = 0;
-        char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-        printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(prepayment_start);
-        printf("Please enter the end of room range: ");
-        gets(prepayment_end);
-        printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(rent_start);
-        printf("Please enter the end of rent range:");
-        gets(rent_end);
-        system("cls");
-        report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-        report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-        report_rent_filed_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-    }
-    case 9:
-    {
-        system("cls");
-        report_user_trunover();
-        printf("\nFor getting back to the report menu , press any key.....");
-        getchar();
-        page_admin_report();
-    }
-    case 10:
-    {
-        system("cls");
-        report_date_main_registered_buildings();
-        break;
-    }
-    case 11:
-    {
-        system("cls");
-        inner_flag = 0;
-        char chose[12];
-        printf("Please enter an amount for floor: ");
-        gets(chose);
-        strcat(chose, "\n");
-        system("cls");
-        report_sale_residential_floor(chose);
-        report_rent_residential_floor(chose);
-        report_rent_commercial_floor(chose);
-        report_sale_commercial_floor(chose);
-        break;
-    }
-    case 12:
-    {
-        system("cls");
-        report_date_main_deleted_buildings();
-    }
-    case 13:
-    {
-        system("cls");
-        report_time_user();
-        printf("Press any key to get back to the menu");
-        getchar();
-    }
-    case 14:
-    {
-        system("cls");
-        main_page();
-    }
-    default:
-    {
-        system("cls");
-        printf("Please enter a valid option!");
-        Sleep(2500);
-        page_admin_report();
-    }
+        case 9:
+        {
+            system("cls");
+            report_user_trunover();
+            printf("\nFor getting back to the report menu , press any key.....");
+            getchar();
+            break;
+        }
+        case 10:
+        {
+            system("cls");
+            report_date_main_registered_buildings();
+            break;
+        }
+        case 11:
+        {
+            system("cls");
+            inner_flag = 0;
+            char chose[12];
+            printf("Please enter an amount for floor: ");
+            gets(chose);
+            strcat(chose, "\n");
+            system("cls");
+            report_sale_residential_floor(chose);
+            report_rent_residential_floor(chose);
+            report_rent_commercial_floor(chose);
+            report_sale_commercial_floor(chose);
+            break;
+        }
+        case 12:
+        {
+            system("cls");
+            report_date_main_deleted_buildings();
+            break;
+        }
+        case 13:
+        {
+            system("cls");
+            report_time_user();
+            printf("Press any key to get back to the menu");
+            getchar();
+            break;
+        }
+        case 14:
+        {
+            system("cls");
+            return;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(2500);
+            break;
+        }
+        }
     }
 }
 void report_date_main_deleted_buildings()
 {
-    system("cls");
     int option;
-    printf("Reports\\deleted buildings\n");
-    printf("1. past week\n");
-    printf("2. past month\n");
-    printf("3. past 3 month\n");
-    printf("4. back\n");
-    printf("Please enter a option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    while(1)
     {
-    case 1:
-    {
-        inner_flag = 0;
-        report_date_main_deleted_building_week();
-        break;
-    }
-    case 2:
-    {
-        inner_flag = 0;
-        report_date_main_deleted_building_three_month();
-        break;
-    }
-    case 3:
-    {
-        inner_flag = 0;
-        report_date_main_deleted_building_month();
-        break;
-    }
-    case 4:
-    {
-        if(strcmp(current_user->user_name, "admin\n") == 0)
-        {
-            page_admin_report();
-        }
-        else
-        {
-            page_reports_normal();
-        }
-        break;
-    }
-    default:
-    {
+        option = 0;
         system("cls");
-        printf("Please enter a valid option!");
-        Sleep(1500);
-        report_date_main_registered_buildings();
-    }
+        printf("Reports\\deleted buildings\n");
+        printf("1. past week\n");
+        printf("2. past month\n");
+        printf("3. past 3 month\n");
+        printf("4. back\n");
+        printf("Please enter a option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            inner_flag = 0;
+            report_date_main_deleted_building_week();
+            break;
+        }
+        case 2:
+        {
+            inner_flag = 0;
+            report_date_main_deleted_building_month();
+            break;
+        }
+        case 3:
+        {
+            inner_flag = 0;
+            report_date_main_deleted_building__three_month();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(1500);
+            break;
+        }
+        }
     }
 }
 void report_date_main_deleted_building_month()
@@ -3100,13 +3262,13 @@ void report_date_main_deleted_building_month()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_date_main_deleted_building_three_month()
@@ -3273,13 +3435,13 @@ void report_date_main_deleted_building_three_month()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_date_main_deleted_building_week()
@@ -3445,66 +3607,62 @@ void report_date_main_deleted_building_week()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_date_main_registered_buildings()
 {
-    system("cls");
     int option;
-    printf("Reports\\registered buildings\n");
-    printf("1. past week\n");
-    printf("2. past month\n");
-    printf("3. past 3 month\n");
-    printf("4. back\n");
-    printf("Please enter a option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    system("cls");
+    while(1)
     {
-    case 1:
-    {
-        inner_flag = 0;
-        report_date_main_registered_building_week();
-        break;
-    }
-    case 2:
-    {
-        inner_flag = 0;
-        report_date_main_registered_building_month();
-        break;
-    }
-    case 3:
-    {
-        inner_flag = 0;
-        report_date_main_registered_building_month();
-        break;
-    }
-    case 4:
-    {
-        if(strcmp(current_user->user_name, "admin\n") == 0)
+        printf("Reports\\registered buildings\n");
+        printf("1. past week\n");
+        printf("2. past month\n");
+        printf("3. past 3 month\n");
+        printf("4. back\n");
+        printf("Please enter a option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
         {
-            page_admin_report();
-        }
-        else
+        case 1:
         {
-            page_reports_normal();
+            inner_flag = 0;
+            report_date_main_registered_building_week();
+            break;
         }
-        break;
-    }
-    default:
-    {
-        system("cls");
-        printf("Please enter a valid option!");
-        Sleep(1500);
-        report_date_main_registered_buildings();
-    }
+        case 2:
+        {
+            inner_flag = 0;
+            report_date_main_registered_building_month();
+            break;
+        }
+        case 3:
+        {
+            inner_flag = 0;
+            report_date_main_registered_building_three_month();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(1500);
+            break;
+        }
+        }
     }
 }
 void report_date_main_registered_building_month()
@@ -3667,13 +3825,13 @@ void report_date_main_registered_building_month()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_date_main_registered_building_three_month()
@@ -3835,13 +3993,13 @@ void report_date_main_registered_building_three_month()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_date_main_registered_building_week()
@@ -4010,13 +4168,13 @@ void report_date_main_registered_building_week()
     {
         printf("There is no item to show!");
         Sleep(1500);
-        report_date_main_registered_buildings();
+        return;
     }
     else
     {
         printf("For getting back press any key.....");
         getchar();
-        report_date_main_registered_buildings();
+        return;
     }
 }
 void report_user_trunover()
@@ -4134,11 +4292,13 @@ void report_rent_residential_rent_mortgage(char start_perpay[20], char end_prepa
     long int age_start, age_end, rent_start,rent_end, rent_file, pre_file;
     age_start = atol(start_perpay);
     age_end = atol(end_prepay);
-    if(age_start == 0){
-     age_start = age_end;
+    if(age_start == 0)
+    {
+        age_start = age_end;
     }
-     if(rent_start == 0){
-     rent_start = age_end;
+    if(rent_start == 0)
+    {
+        rent_start = age_end;
     }
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
@@ -4186,11 +4346,13 @@ void report_rent_commercial_rent_mortgage(char start_perpay[20], char end_prepay
     long int age_start, age_end, rent_start,rent_end, rent_file, pre_file;
     age_start = atol(start_perpay);
     age_end = atol(end_prepay);
-    if(age_start == 0){
-     age_start = age_end;
+    if(age_start == 0)
+    {
+        age_start = age_end;
     }
-     if(rent_start == 0){
-     rent_start = age_end;
+    if(rent_start == 0)
+    {
+        rent_start = age_end;
     }
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
@@ -4243,11 +4405,13 @@ void report_rent_filed_rent_mortgage(char start_perpay[20], char end_prepay[20],
     age_end = atol(end_prepay);
     rent_start = atol(start_rent);
     rent_end = atol(end_rent);
-    if(age_start == 0){
-     age_start = age_end;
+    if(age_start == 0)
+    {
+        age_start = age_end;
     }
-    if(rent_start == 0){
-     rent_start = age_end;
+    if(rent_start == 0)
+    {
+        rent_start = age_end;
     }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
@@ -4294,14 +4458,7 @@ void report_rent_filed_rent_mortgage(char start_perpay[20], char end_prepay[20],
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp("admin\n", current_user->user_name) == 0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 
 }
 void report_rent_residential_floor(char chose[30])
@@ -4437,14 +4594,7 @@ void report_sale_commercial_floor(char chose[30])
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp("admin\n", current_user->user_name) == 0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 }
 long long unsigned report_price_total()
 {
@@ -4537,7 +4687,8 @@ void report_rent_commercial_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4581,7 +4732,8 @@ void report_sale_residential_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4662,21 +4814,15 @@ void report_sale_commercial_room(char start_age[6], char end_age[6])
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp(current_user->user_name, "admin\n")==0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 }
 void report_rent_residential_age(char start_age[6], char end_age[6])
 {
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4719,7 +4865,8 @@ void report_rent_commercial_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4764,14 +4911,7 @@ void report_rent_commercial_age(char start_age[6], char end_age[6])
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp("admin\n", current_user->user_name) == 0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 
 }
 void report_rent_residential_size(char start_age[6], char end_age[6])
@@ -4779,7 +4919,8 @@ void report_rent_residential_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4822,7 +4963,8 @@ void report_rent_commercial_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4866,7 +5008,8 @@ void report_rent_filed_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4905,7 +5048,8 @@ void report_sale_residential_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4946,7 +5090,8 @@ void report_sale_commercial_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -4987,7 +5132,8 @@ void report_sale_filed_size(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -5024,14 +5170,7 @@ void report_sale_filed_size(char start_age[6], char end_age[6])
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp(current_user->user_name, "admin\n")==0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 
 }
 void report_sale_residential_age(char start_age[6], char end_age[6])
@@ -5039,7 +5178,8 @@ void report_sale_residential_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -5081,7 +5221,8 @@ void report_sale_residential_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
-    if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -5123,7 +5264,8 @@ void report_sale_commercial_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
-     if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -5164,7 +5306,8 @@ void report_sale_filed_price(char start_age[20], char end_age[20])
     long int age_start, age_end,  age_file;
     age_start = atol(start_age);
     age_end = atol(end_age);
-     if(age_start == 0){
+    if(age_start == 0)
+    {
         age_start = age_end;
     }
     char id[7], TEMP[21];
@@ -5201,14 +5344,7 @@ void report_sale_filed_price(char start_age[20], char end_age[20])
     make_null_list_building_sale();
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp(current_user->user_name, "admin\n")== 0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 
 }
 void report_sale_commercial_age(char start_age[6], char end_age[6])
@@ -5438,145 +5574,140 @@ void report_sale_filed_area(char chose[30])
     }
     printf("For getting back press any key.....");
     getchar();
-    if(strcmp("admin\n", current_user->user_name) == 0)
-    {
-        page_admin_report();
-    }
-    else
-    {
-        page_reports_normal();
-    }
+    return;
 
 }
 void report_model_main()
 {
-
-    system("cls");
     int option;
-    printf("Reports\\specific model of buildings\n");
-    printf("1. For sale\n");
-    printf("2. For rent\n");
-    printf("3. Back\n");
-    printf("Please chose an option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    while(1)
     {
-    case 1:
-    {
-        report_model_building_model_sale();
-        break;
-    }
-    case 2:
-    {
-        report_model_building_model_rent();
-        break;
-    }
-    case 3:
-    {
-        if(strcmp("admin\n", current_user->user_name) == 0)
-        {
-            page_admin_report();
-        }
-        else
-        {
-            page_reports_normal();
-        }
-        break;
-    }
-    default:
-    {
-        printf("Please enter a valid option!");
-        Sleep(1000);
         system("cls");
-        report_model_main();
-    }
+        option = 0;
+        printf("Reports\\specific model of buildings\n");
+        printf("1. For sale\n");
+        printf("2. For rent\n");
+        printf("3. Back\n");
+        printf("Please chose an option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            report_model_building_model_sale();
+            break;
+        }
+        case 2:
+        {
+            report_model_building_model_rent();
+            break;
+        }
+        case 3:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            printf("Please enter a valid option!");
+            Sleep(1000);
+            system("cls");
+            break;
+        }
+        }
     }
 }
 void report_model_building_model_sale()
 {
-    system("cls");
     int option;
-    printf("Reports\\specific model of buildings\\for sale\n");
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please chose an option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    while(1)
     {
-    case 1:
-    {
-        report_sale_residential();
-        break;
-    }
-    case 2:
-    {
-        report_sale_commercial();
-        break;
-    }
-    case 3:
-    {
-        report_sale_filed();
-        break;
-    }
-    case 4:
-    {
-        report_model_main();
-        break;
-    }
-    default:
-    {
-        printf("Please enter a valid option!");
-        Sleep(1000);
+        option =0;
         system("cls");
-        report_model_building_model_sale();
-    }
+        printf("Reports\\specific model of buildings\\for sale\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please chose an option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            report_sale_residential();
+            break;
+        }
+        case 2:
+        {
+            report_sale_commercial();
+            break;
+        }
+        case 3:
+        {
+            report_sale_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            printf("Please enter a valid option!");
+            Sleep(1000);
+            system("cls");
+        }
+        }
     }
 }
 void report_model_building_model_rent()
 {
-    system("cls");
     int option;
-    printf("Reports\\specific model of buildings\\for rent\n");
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please chose an option: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
+    while(1)
     {
-    case 1:
-    {
-        report_rent_residential();
-        break;
-    }
-    case 2:
-    {
-        report_rent_commercial();
-        break;
-    }
-    case 3:
-    {
-        report_rent_filed();
-        break;
-    }
-    case 4:
-    {
-        report_model_main();
-        break;
-    }
-    default:
-    {
-        printf("Please enter a valid option!");
-        Sleep(1000);
         system("cls");
-        report_model_building_model_rent();
-    }
+        option = 0;
+        printf("Reports\\specific model of buildings\\for rent\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please chose an option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            report_rent_residential();
+            break;
+        }
+        case 2:
+        {
+            report_rent_commercial();
+            break;
+        }
+        case 3:
+        {
+            report_rent_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            printf("Please enter a valid option!");
+            Sleep(1000);
+            system("cls");
+        }
+        }
     }
 }
 void report_rent_residential()
@@ -5626,7 +5757,7 @@ void report_rent_residential()
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
-            report_model_building_model_rent();
+            return;
             break;
         }
         else
@@ -5682,7 +5813,7 @@ void report_rent_commercial()
         if(checker == 'b' || checker == 'B')
         {
 
-            report_model_building_model_rent();
+            return;
             break;
         }
         else
@@ -5734,7 +5865,7 @@ void report_rent_filed()
         if(checker == 'b' || checker == 'B')
         {
 
-            report_model_building_model_rent();
+            return;
             break;
         }
         else
@@ -5788,7 +5919,7 @@ void report_sale_residential()
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
-            report_model_building_model_sale();
+            return;
             break;
         }
         else
@@ -5842,7 +5973,7 @@ void report_sale_commercial()
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
-            report_model_building_model_sale();
+            return;
             break;
         }
         else
@@ -5892,7 +6023,7 @@ void report_sale_filed()
         checker = getche();
         if(checker == 'b' || checker == 'B')
         {
-            report_model_building_model_sale();
+            return;
             break;
         }
         else
@@ -5901,266 +6032,284 @@ void report_sale_filed()
         }
     }
 }
-void page_reports_normal()
+void page_reports_normal();
 {
-    system("cls");
     int option;
-    printf("1. Specific model of buildings\n");
-    printf("2. Buildings with Specific area\n");
-    printf("3. Buildings with Specific age\n");
-    printf("4. Buildings with Specific infrastructure size\n");
-    printf("5. Buildings with Specific prices\n");
-    printf("6. Buildings with Specific Room's amount\n");
-    printf("7. Total price of building\n");
-    printf("8. Buildings with Specific rent and mortgage price\n");
-    printf("9. Date of registered buildings\n");
-    printf("10. Buildings with Specific floors\n");
-    printf("11. Back");
-    printf("\nPlease choice your report: ");
-    scanf("%d", &option);
-    getchar();
-    switch(option)
-    {
-    case 1:
-    {
-        report_model_main();
-        break;
-    }
-    case 2:
-    {
-        inner_flag = 0;
-        char chose[12];
-        printf("Please enter a municipalitys area: ");
-        gets(chose);
-        strcat(chose, "\n");
-        system("cls");
-        report_sale_residential_area(chose);
-        report_sale_commercial_area(chose);
-        report_rent_residential_area(chose);
-        report_rent_commercial_area(chose);
-        report_rent_filed_area(chose);
-        report_sale_filed_area(chose);
-        break;
-    }
-    case 3:
-    {
-        inner_flag = 0;
-        char age_start[6], age_finish[6];
-        printf("Please enter the start of age range: ");
-        gets(age_start);
-        printf("Please enter the end of age range:(if you wish to only look for a specific age enter 0 for this filed): ");
-        gets(age_finish);
-        system("cls");
-        report_sale_residential_age(age_start, age_finish);
-        report_sale_commercial_age(age_start, age_finish);
-        report_rent_residential_age(age_start, age_finish);
-        report_rent_commercial_age(age_start, age_finish);
-    }
-    case 4:
-    {
-        inner_flag = 0;
-        char size_start[6], size_finish[6];
-        printf("Please enter the start of size range: ");
-        gets(size_start);
-        printf("Please enter the end of size range:(if you wish to only look for a specific age enter 0 for this filed)");
-        gets(size_finish);
-        system("cls");
-        report_sale_residential_size(size_start, size_finish);
-        report_sale_commercial_size(size_start, size_finish);
-        report_rent_filed_size(size_start, size_finish);
-        report_rent_residential_size(size_start, size_finish);
-        report_rent_commercial_size(size_start, size_finish);
-        report_sale_filed_size(size_start, size_finish);
-    }
-    case 5:
-    {
-        inner_flag = 0;
-        char price_start[20], price_finish[20];
-        printf("Please enter the start of price range: ");
-        gets(price_start);
-        printf("Please enter the end of price range:(if you wish to only look for a specific age enter 0 for this filed)");
-        gets(price_finish);
-        system("cls");
-        report_sale_residential_price(price_start, price_finish);
-        report_sale_commercial_price(price_start, price_finish);
-        report_sale_filed_price(price_start, price_finish);
-    }
-    case 6:
-    {
-        inner_flag = 0;
-        char floor_start[6], floor_finish[6];
-        printf("Please enter the start of room range: ");
-        gets(floor_start);
-        printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
-        gets(floor_finish);
-        system("cls");
-        report_rent_residential_room(floor_start, floor_finish);
-        report_rent_commercial_room(floor_start, floor_finish);
-        report_sale_residential_room(floor_start, floor_finish);
-        report_sale_commercial_room(floor_start, floor_finish);
-    }
-    case 7:
+    while(1)
     {
         system("cls");
-        if(report_price_total() == 0)
+        printf("Reports\n");
+        option = 0;
+        printf("1. Specific model of buildings\n");
+        printf("2. Buildings with Specific area\n");
+        printf("3. Buildings with Specific age\n");
+        printf("4. Buildings with Specific infrastructure size\n");
+        printf("5. Buildings with Specific prices\n");
+        printf("6. Buildings with Specific Room's amount\n");
+        printf("7. Total price of building\n");
+        printf("8. Buildings with Specific rent and mortgage price\n");
+        printf("9. Date of registered buildings\n");
+        printf("10. Buildings with Specific floors\n");
+        printf("11. Back\n");
+        printf("Please choice your report: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
         {
-            printf("There is no price to show!\n");
-            printf("For getting back to report menu , press any key....");
-            getchar();
-            if(strcmp(current_user->user_name, "admin\n")== 0)
+        case 1:
+        {
+            system("cls");
+            report_model_main();
+            break;
+        }
+        case 2:
+        {
+            system("cls");
+            inner_flag = 0;
+            char chose[12];
+            printf("Please enter a municipality area: ");
+            gets(chose);
+            strcat(chose, "\n");
+            system("cls");
+            report_sale_residential_area(chose);
+            report_sale_commercial_area(chose);
+            report_rent_residential_area(chose);
+            report_rent_commercial_area(chose);
+            report_rent_filed_area(chose);
+            report_sale_filed_area(chose);
+            break;
+        }
+        case 3:
+        {
+            system("cls");
+            inner_flag = 0;
+            char age_start[6], age_finish[6];
+            printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(age_start);
+            printf("Please enter the end of age range: ");
+            gets(age_finish);
+            system("cls");
+            report_sale_residential_age(age_start, age_finish);
+            report_sale_commercial_age(age_start, age_finish);
+            report_rent_residential_age(age_start, age_finish);
+            report_rent_commercial_age(age_start, age_finish);
+            break;
+        }
+        case 4:
+        {
+            system("cls");
+            inner_flag = 0;
+            char size_start[6], size_finish[6];
+            printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(size_start);
+            printf("Please enter the end of size range: ");
+            gets(size_finish);
+            system("cls");
+            report_sale_residential_size(size_start, size_finish);
+            report_sale_commercial_size(size_start, size_finish);
+            report_rent_filed_size(size_start, size_finish);
+            report_rent_residential_size(size_start, size_finish);
+            report_rent_commercial_size(size_start, size_finish);
+            report_sale_filed_size(size_start, size_finish);
+            break;
+        }
+        case 5:
+        {
+            system("cls");
+            inner_flag = 0;
+            char price_start[20], price_finish[20];
+            printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(price_start);
+            printf("Please enter the end of price range: ");
+            gets(price_finish);
+            system("cls");
+            report_sale_residential_price(price_start, price_finish);
+            report_sale_commercial_price(price_start, price_finish);
+            report_sale_filed_price(price_start, price_finish);
+            break;
+        }
+        case 6:
+        {
+            system("cls");
+            inner_flag = 0;
+            char floor_start[6], floor_finish[6];
+            printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(floor_start);
+            printf("Please enter the end of room range: ");
+            gets(floor_finish);
+            system("cls");
+            report_rent_residential_room(floor_start, floor_finish);
+            report_rent_commercial_room(floor_start, floor_finish);
+            report_sale_residential_room(floor_start, floor_finish);
+            report_sale_commercial_room(floor_start, floor_finish);
+            break;
+        }
+        case 7:
+        {
+            system("cls");
+            if(report_price_total() == 0)
             {
-                page_admin_report();
+                printf("There is no price to show!\n");
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                break;
             }
             else
             {
-                page_reports_normal();
+                printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
+                printf("For getting back to report menu , press any key....");
+                getchar();
+                break;
             }
         }
-        else
+        case 8:
         {
-            printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
-            printf("For getting back to report menu , press any key....");
-            getchar();
-            if(strcmp(current_user->user_name, "admin\n")== 0)
-            {
-                page_admin_report();
-            }
-            else
-            {
-                page_reports_normal();
-            }
+            system("cls");
+            inner_flag = 0;
+            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
+            printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(prepayment_start);
+            printf("Please enter the end of room range: ");
+            gets(prepayment_end);
+            printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
+            gets(rent_start);
+            printf("Please enter the end of rent range:");
+            gets(rent_end);
+            system("cls");
+            report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            report_rent_filed_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
+            break;
         }
-    }
-    case 8:
-    {
-        inner_flag = 0;
-        char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-        printf("Please enter the start of prepayment range: ");
-        gets(prepayment_start);
-        printf("Please enter the end of room range:(if you wish to only look for a specific age enter 0 for this filed)");
-        gets(prepayment_end);
-        printf("Please enter the start of rent range: ");
-        gets(rent_start);
-        printf("Please enter the end of rent range:(if you wish to only look for a specific age enter 0 for this filed)");
-        gets(rent_end);
-        system("cls");
-        report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-        report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-        report_rent_filed_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
-    }
 
-    case 9:
-    {
-        report_date_main_registered_buildings();
-        break;
-    }
-    case 10:
-    {
-        inner_flag = 0;
-        char chose[12];
-        printf("Please enter an amount for floor: ");
-        gets(chose);
-        strcat(chose, "\n");
-        system("cls");
-        report_sale_residential_floor(chose);
-        report_rent_residential_floor(chose);
-        report_rent_commercial_floor(chose);
-        report_sale_commercial_floor(chose);
-        break;
-    }
-    case 11:
-    {
-        page_reports_normal();
-    }
-    default:
-    {
-        system("cls");
-        printf("Please enter a valid option!");
-        Sleep(2500);
-        page_admin_report();
-    }
+        case 9:
+        {
+            system("cls");
+            report_date_main_registered_buildings();
+            break;
+        }
+        case 10:
+        {
+            system("cls");
+            inner_flag = 0;
+            char chose[12];
+            printf("Please enter an amount for floor: ");
+            gets(chose);
+            strcat(chose, "\n");
+            system("cls");
+            report_sale_residential_floor(chose);
+            report_rent_residential_floor(chose);
+            report_rent_commercial_floor(chose);
+            report_sale_commercial_floor(chose);
+            break;
+        }
+        case 11:
+        {
+            system("cls");
+            return;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option!");
+            Sleep(2500);
+            break;
+        }
+        }
     }
 }
 
 void menu_delete_building()
 {
     int checker = 0;
-    system("cls");
-    printf("Deleting buildings\n");
-    printf("1. For sale buildings\n");
-    printf("2. For rent buildings\n");
-    printf("3. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    while(1)
     {
-    case 1 :
-    {
-        delete_menu_sale_buildings();
-        break;
-    }
-    case 2 :
-    {
-        delete_menu_rent_buildings();
-        break;
-    }
-    case 3 :
-    {
-        main_page();
-        break;
-    }
-    default:
-    {
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        menu_delete_building();
+        printf("Deleting buildings\n");
+        printf("1. For sale buildings\n");
+        printf("2. For rent buildings\n");
+        printf("3. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            delete_menu_sale_buildings();
+            break;
+        }
+        case 2 :
+        {
+            delete_menu_rent_buildings();
+            break;
+        }
+        case 3 :
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
     }
-    }
+
 }
 void delete_menu_sale_buildings()
 {
-    system("cls");
-
     int checker = 0;
-    printf("Deleting buildings\\for sale\n");
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    while(1)
     {
-    case 1 :
-    {
-        delete_sale_buildings_Residential();
-        break;
-    }
-    case 2 :
-    {
-        delete_sale_buildings_commercial();
-        break;
-    }
-    case 3 :
-    {
-        delete_sale_buildings_filed();
-        break;
-    }
-    case 4:
-    {
-        menu_delete_building();
-        break;
-    }
-    default:
-    {
+        checker = 0;
+
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        delete_menu_sale_buildings();
-    }
+
+
+
+        printf("Deleting buildings\\for sale\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            delete_sale_buildings_Residential();
+            break;
+        }
+        case 2 :
+        {
+            delete_sale_buildings_commercial();
+            break;
+        }
+        case 3 :
+        {
+            delete_sale_buildings_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
     }
 }
 void delete_sale_buildings_Residential()
@@ -6196,64 +6345,67 @@ void delete_sale_buildings_Residential()
     }
     if(flag != 0)
     {
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_sale;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_sale\\Residential.txt", "w+");
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_sale;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->age_of_building, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->amount_of_floors, fp);
-                    fputs(temp->size_of_the_main_land, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->amount_of_rooms, fp);
-                    fputs(temp->price, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_sale_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_sale_buildings_Residential();
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_sale\\Residential.txt", "w+");
+                temp = start_building_sale;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->age_of_building, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->amount_of_floors, fp);
+                        fputs(temp->size_of_the_main_land, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->amount_of_rooms, fp);
+                        fputs(temp->price, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("Please enter a valid ID\n");
+                Sleep(3000);
+
+            }
         }
 
     }
@@ -6264,7 +6416,7 @@ void delete_sale_buildings_Residential()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_sale_buildings();
+        return;
     }
 }
 void delete_sale_buildings_commercial()
@@ -6300,64 +6452,67 @@ void delete_sale_buildings_commercial()
     }
     if(flag != 0)
     {
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_sale;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_sale\\Commercial.txt", "w+");
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_sale;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->age_of_building, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->amount_of_floors, fp);
-                    fputs(temp->size_of_the_main_land, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->amount_of_rooms, fp);
-                    fputs(temp->price, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_sale_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_sale_buildings_commercial();
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_sale\\Commercial.txt", "w+");
+                temp = start_building_sale;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->age_of_building, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->amount_of_floors, fp);
+                        fputs(temp->size_of_the_main_land, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->amount_of_rooms, fp);
+                        fputs(temp->price, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("Please enter a valid ID");
+                Sleep(3000);
+
+            }
         }
 
     }
@@ -6368,7 +6523,7 @@ void delete_sale_buildings_commercial()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_sale_buildings();
+        return;
     }
 }
 void delete_sale_buildings_filed()
@@ -6400,61 +6555,64 @@ void delete_sale_buildings_filed()
     }
     if(flag != 0)
     {
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_sale;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_sale\\Filed.txt", "w+");
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_sale;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->amount_of_rooms, fp);
-                    fputs(temp->price, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_sale_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_sale();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_sale_buildings_filed();
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_sale\\Filed.txt", "w+");
+                temp = start_building_sale;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->amount_of_rooms, fp);
+                        fputs(temp->price, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_sale();
+                printf("Please enter a valid ID");
+                Sleep(3000);
+
+            }
         }
 
     }
@@ -6465,51 +6623,57 @@ void delete_sale_buildings_filed()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_sale_buildings();
+        return;
     }
 }
 void delete_menu_rent_buildings()
 {
-    system("cls");
-    printf("Deleting buildings\\for rent\n");
     int checker = 0;
-    printf("1. Residential buildings\n");
-    printf("2. Commercial\n");
-    printf("3. Normal filed\n");
-    printf("4. back\n");
-    printf("Please choice your option: ");
-    scanf("%d", &checker);
-    getchar();
-    switch(checker)
+    while(1)
     {
-    case 1 :
-    {
-        delete_rent_buildings_Residential();
-        break;
-    }
-    case 2 :
-    {
-        delete_rent_buildings_commercial();
-        break;
-    }
-    case 3 :
-    {
-        delete_rent_buildings_filed();
-        break;
-    }
-    case 4:
-    {
-        menu_delete_building();
-        break;
-    }
-    default:
-    {
+        checker = 0;
         system("cls");
-        printf("Please enter a valid option");
-        Sleep(1000);
-        delete_menu_rent_buildings();
+        printf("Deleting buildings\\for rent\n");
+        printf("1. Residential buildings\n");
+        printf("2. Commercial\n");
+        printf("3. Normal filed\n");
+        printf("4. back\n");
+        printf("Please choice your option: ");
+        scanf("%d", &checker);
+        getchar();
+        switch(checker)
+        {
+        case 1 :
+        {
+            delete_rent_buildings_Residential();
+            break;
+        }
+        case 2 :
+        {
+            delete_rent_buildings_commercial();
+            break;
+        }
+        case 3 :
+        {
+            delete_rent_buildings_filed();
+            break;
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            system("cls");
+            printf("Please enter a valid option");
+            Sleep(1000);
+            break;
+        }
+        }
+
     }
-    }
+
 }
 void delete_rent_buildings_Residential()
 {
@@ -6545,68 +6709,69 @@ void delete_rent_buildings_Residential()
     }
     if(flag != 0)
     {
-
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_rent;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_rent\\Residential.txt", "w+");
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_rent;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->age_of_building, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->amount_of_floors, fp);
-                    fputs(temp->size_of_the_main_land, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->amount_of_rooms, fp);
-                    fputs(temp->prepayment, fp);
-                    fputs(temp->rent_per_month, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_rent_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_rent_buildings_Residential();
-        }
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_rent\\Residential.txt", "w+");
+                temp = start_building_rent;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->age_of_building, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->amount_of_floors, fp);
+                        fputs(temp->size_of_the_main_land, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->amount_of_rooms, fp);
+                        fputs(temp->prepayment, fp);
+                        fputs(temp->rent_per_month, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("Please enter a valid ID");
+                Sleep(3000);
 
+            }
+        }
     }
     else
     {
@@ -6615,7 +6780,7 @@ void delete_rent_buildings_Residential()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_rent_buildings();
+        return;
     }
 }
 void delete_rent_buildings_commercial()
@@ -6652,65 +6817,70 @@ void delete_rent_buildings_commercial()
     }
     if(flag != 0)
     {
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_rent;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_rent\\Commercial.txt", "w+");
+
+
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_rent;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->age_of_building, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->amount_of_floors, fp);
-                    fputs(temp->size_of_the_main_land, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->amount_of_rooms, fp);
-                    fputs(temp->prepayment, fp);
-                    fputs(temp->rent_per_month, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_rent_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_rent_buildings_Residential();
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_rent\\Commercial.txt", "w+");
+                temp = start_building_rent;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->age_of_building, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->amount_of_floors, fp);
+                        fputs(temp->size_of_the_main_land, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->amount_of_rooms, fp);
+                        fputs(temp->prepayment, fp);
+                        fputs(temp->rent_per_month, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("Please enter a valid ID");
+                Sleep(3000);
+
+            }
         }
 
     }
@@ -6721,7 +6891,7 @@ void delete_rent_buildings_commercial()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_rent_buildings();
+        return;
     }
 }
 void delete_rent_buildings_filed()
@@ -6754,63 +6924,66 @@ void delete_rent_buildings_filed()
     }
     if(flag != 0)
     {
-        flag = 0;
-        printf("For deleting the building please enter its id:");
-        gets(id);
-        strcat(id, "\n");
-        temp = start_building_rent;
-        while(temp != NULL)
+        while(1)
         {
-            if(strcmp(id, temp->id) == 0)
-            {
-                flag++;
-                strcpy(temp->isactive, "0\n");
-            }
-            temp = temp->link;
-        }
-        if(flag != 0)
-        {
-            fclose(fp);
-            fp = fopen("Files\\building\\for_rent\\Filed.txt", "w+");
+            flag = 0;
+            printf("For deleting the building please enter its id:");
+            gets(id);
+            strcat(id, "\n");
             temp = start_building_rent;
             while(temp != NULL)
             {
-                if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                if(strcmp(id, temp->id) == 0)
                 {
-                    fputs(temp->municipalitys_area, fp);
-                    fputs(temp->address_of_building, fp);
-                    fputs(temp->model, fp);
-                    fputs(temp->size_of_the_infrastructure, fp);
-                    fputs(temp->phone_number_of_owner, fp);
-                    fputs(temp->prepayment, fp);
-                    fputs(temp->rent_per_month, fp);
-                    fputs(temp->user, fp);
-                    itoa(temp->time, TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
-                    fputs(temp->isactive, fp);
-                    fputs(temp->id, fp);
-                    itoa(time(NULL), TEMP, 10);
-                    fputs(TEMP, fp);
-                    fputs("\n", fp);
+                    flag++;
+                    strcpy(temp->isactive, "0\n");
                 }
                 temp = temp->link;
             }
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("The building has deleted successfully");
-            Sleep(3000);
-            delete_menu_rent_buildings();
-        }
-        else
-        {
-            fclose(fp);
-            make_null_list_building_rent();
-            printf("Please enter a valid ID");
-            Sleep(3000);
-            delete_rent_buildings_Residential();
-        }
+            if(flag != 0)
+            {
+                fclose(fp);
+                fp = fopen("Files\\building\\for_rent\\Filed.txt", "w+");
+                temp = start_building_rent;
+                while(temp != NULL)
+                {
+                    if((strcmp(temp->isactive, "1\n") == 0) || (strcmp(temp->isactive, "0\n") == 0))
+                    {
+                        fputs(temp->municipalitys_area, fp);
+                        fputs(temp->address_of_building, fp);
+                        fputs(temp->model, fp);
+                        fputs(temp->size_of_the_infrastructure, fp);
+                        fputs(temp->phone_number_of_owner, fp);
+                        fputs(temp->prepayment, fp);
+                        fputs(temp->rent_per_month, fp);
+                        fputs(temp->user, fp);
+                        itoa(temp->time, TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                        fputs(temp->isactive, fp);
+                        fputs(temp->id, fp);
+                        itoa(time(NULL), TEMP, 10);
+                        fputs(TEMP, fp);
+                        fputs("\n", fp);
+                    }
+                    temp = temp->link;
+                }
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("The building has deleted successfully");
+                Sleep(3000);
+                return;
+            }
+            else
+            {
+                fclose(fp);
+                make_null_list_building_rent();
+                printf("Please enter a valid ID");
+                Sleep(3000);
 
+            }
+
+        }
     }
     else
     {
@@ -6819,7 +6992,7 @@ void delete_rent_buildings_filed()
         system("cls");
         printf("There is no building to delete!");
         Sleep(2000);
-        delete_menu_rent_buildings();
+        return;
     }
 }
 
@@ -6842,11 +7015,11 @@ void report_time_user()
         temp->user_name[strlen(temp->user_name) - 1] = '\0';
         time = start_user->time_login;
         info = localtime(&time);
-        strftime (time_str,80,"20%y/%m/%d",info);
+        strftime (time_str,80,"20%y/%m/%d %H:%M:%S",info);
         printf("last time of %s user login is:%s\n",temp->user_name,time_str);
         time = start_user->time_logout;
         info = localtime(&time);
-        strftime (time_str,80,"20%y/%m/%d",info);
+        strftime (time_str,80,"20%y/%m/%d %H:%M:%S",info);
         printf("last time of %s user logout is:%s\n",temp->user_name, time_str);
         printf("\n");
         temp = temp->link;
@@ -7209,17 +7382,17 @@ int password_checker(char password[],int size)
         if(isalpha(password[index]) && islower(password[index]))
         {
             flag_Lower_alpha = 1;
-             continue;
+            continue;
         }
         if(isalpha(password[index]) && isupper(password[index]))
         {
             flag_Upper_alpha = 1;
-             continue;
+            continue;
         }
         if(isalnum(password[index]) == 0)
         {
             flag_Special_char = 1;
-             continue;
+            continue;
         }
     }
     if(flag_Digit == 0)
@@ -7366,87 +7539,90 @@ int isemail(char email[], int lenght)
     }
 
 }
-int PreStart_Checker(){
+int PreStart_Checker()
+{
     char checker;
     FILE *PreStart_f;
-    PreStart_f = fopen("Files\\PreStart\\Settings.txt" , "r+");
+    PreStart_f = fopen("Files\\PreStart\\Settings.txt", "r+");
     fgetc(PreStart_f);
-    if(feof(PreStart_f)){
+    if(feof(PreStart_f))
+    {
         fclose(PreStart_f);
         return 0;
     }
-    else{
-        ungetc(checker , PreStart_f);
+    else
+    {
+        ungetc(checker, PreStart_f);
         fclose(PreStart_f);
         return 1;
     }
 }
-void Pre_Start(){
+void Pre_Start()
+{
     char *name[52];
     FILE *fp;
     printf("Thank You for choosing our program!\n");
-     printf("\33[2K\r");
-        while(1){
+    printf("\33[2K\r");
+    while(1)
+    {
 
         printf("Please choose a new name for your application(50 characters at maximum): ");
         gets(name);
-        if(strlen(name) > 50){
+        if(strlen(name) > 50)
+        {
             printf("Please enter a name less than 50 characters!\n");
             fflush(stdin);
         }
-        else{
+        else
+        {
             break;
         }
     }
-    fp = fopen("Files\\PreStart\\Settings.txt" , "r+");
-    fputs(name , fp);
+    fp = fopen("Files\\PreStart\\Settings.txt", "r+");
+    fputs(name, fp);
     fclose(fp);
 }
-const char * getting_app_name(){
-    static char * name[52];
-    FILE *fp;
-    fp = fopen("Files\\PreStart\\Settings.txt" , "r");
-    fgets(name , 52 , fp);
-    return name;
-}
-void Edit_application_name(){
+
+void Edit_application_name()
+{
     char *name[52];
     FILE *fp;
     printf("for getting back , press b: ");
-    if(islower(getche()) == 'b'){
+    if(islower(getche()) == 'b')
+    {
         return;
     }
-     printf("\33[2K\r");
-        while(1){
+    printf("\33[2K\r");
+    while(1)
+    {
 
         printf("Please choose a new name for your application(50 characters at maximum): ");
         gets(name);
-        if(strlen(name) > 50){
+        if(strlen(name) > 50)
+        {
             printf("Please enter a name less than 50 characters!\n");
             fflush(stdin);
         }
-        else{
+        else
+        {
             break;
         }
     }
-    fp = fopen("Files\\PreStart\\Settings.txt" , "w+");
-    fputs(name , fp);
+    fp = fopen("Files\\PreStart\\Settings.txt", "w+");
+    fputs(name, fp);
     fclose(fp);
 }
 void main()
 {
     make_ansiescape_work();
-    /*USER *user;
-    user = malloc(sizeof(USER));
-    strcpy(user->email, "amir@fgm.com");
-    strcpy(user->ID, "2");
-    strcpy(user->last_name, "sca");
-    strcpy(user->name, "ewsa");
-    strcpy(user->password, "1324");
-    strcpy(user->phone, "4587");
-    strcpy(user->user_name, "admin\n");
-    current_user = user;*/
-    Edit_application_name();
-    printf("$s");
 
+    if(PreStart_Checker() == 0)
+    {
+        Pre_Start();
+        Start_Page();
+    }
+    else
+    {
+        Start_Page();
+    }
 }
