@@ -9,56 +9,56 @@ void make_list_user(FILE *user_fp);
 long long unsigned report_price_total();
 struct building_sale
 {
-    char municipalitys_area[6];
-    char address_of_building[100];
-    char model[20];
-    char age_of_building[6];
-    char size_of_the_infrastructure[10];
-    char amount_of_floors[6];
-    char size_of_the_main_land[10];
-    char phone_number_of_owner[15];
-    char amount_of_rooms[6];
-    char price[15];
-    char user[30];
+    char *municipalitys_area[6];
+    char *address_of_building[100];
+    char *model[20];
+    char *age_of_building[6];
+    char *size_of_the_infrastructure[10];
+    char *amount_of_floors[6];
+    char *size_of_the_main_land[10];
+    char *phone_number_of_owner[15];
+    char *amount_of_rooms[6];
+    char *price[15];
+    char *user[30];
     unsigned long int time;
-    char isactive[3];
+    char *isactive[3];
     char id[7];
     unsigned long int time_delete;
     struct building_sale *link;
 }*start_building_sale = NULL, *last_building_sale;
 struct building_rent
 {
-    char municipalitys_area[6];
-    char address_of_building[100];
-    char model[20];
-    char age_of_building[6];
-    char size_of_the_infrastructure[10];
-    char amount_of_floors[6];
-    char size_of_the_main_land[10];
-    char phone_number_of_owner[15];
-    char amount_of_rooms[6];
-    char prepayment[15];
-    char rent_per_month[15];
-    char user[30];
+    char *municipalitys_area[6];
+    char *address_of_building[100];
+    char *model[20];
+    char *age_of_building[6];
+    char *size_of_the_infrastructure[10];
+    char *amount_of_floors[6];
+    char *size_of_the_main_land[10];
+    char *phone_number_of_owner[15];
+    char *amount_of_rooms[6];
+    char *prepayment[15];
+    char *rent_per_month[15];
+    char *user[30];
     unsigned long int time;
-    char isactive[3];
-    char id[7];
+    char *isactive[3];
+    char *id[7];
     unsigned long int time_delete;
     struct building_rent *link;
 }*start_building_rent, *last_building_rent;
 struct user
 {
-    char user_name[30];
-    char password[20];
-    char name[25];
-    char last_name[45];
-    char phone[15];
-    char email[35];
+    char *user_name[30];
+    char *password[20];
+    char *name[25];
+    char *last_name[45];
+    char *phone[15];
+    char *email[35];
     unsigned long int time_login;
     unsigned long int time_logout;
     int registered_builiding;
-    char ID[20];
-    char isactive[3];
+    char *ID[20];
+    char *isactive[3];
     unsigned long int time_banish;
     struct user *link;
 }*start_user = NULL, *last_user = NULL;
@@ -71,7 +71,7 @@ USER *current_user;
 int inner_flag = 0;
 void sign_up()
 {
-    int index = 0, stars = 0;
+    int index = 0, stars = 0 , checker = 0;
     char temp_time[31], option, character, password[30];
     system("cls");
     printf("For getting back press b: ");
@@ -131,13 +131,14 @@ void sign_up()
             character = getch();
             if(character == 13)
             {
+                printf("\n");
                 break;
             }
             if(character == 8)
             {
 
                 printf("\33[2K\r");
-                printf("\nPlease enter your password: ");
+                printf("Please enter your password: ");
                 for(int i = 0 ; i < stars - 1 ; i++)
                 {
                     printf("%c", '*');
@@ -156,37 +157,40 @@ void sign_up()
                 stars++;
             }
         }
+        checker = password_checker(user->password, strlen(user->password));
+        printf("%d" , checker);
         if(strlen(user->password) > 18)
         {
             printf("your password can have 18 characters at maximum!");
+            fflush(stdin);
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 4)
+        if(checker == 4)
         {
             printf("You need to enter at least 8 characters for your password!");
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 0)
+        if(checker == 0)
         {
             printf("You need to enter at least 1 number for your password!");
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 1)
+        if(checker == 1)
         {
             printf("You need to enter at least a lower case alphabet for your password!");
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 2)
+        if(checker == 2)
         {
             printf("You need to enter at least a upper case alphabet for your password!");
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 3)
+        if(checker == 3)
         {
             printf("You need to enter at least a Special character(@,#,%) for your password!");
             continue;
         }
-        if(password_checker(user->password, strlen(user->password)) == 5)
+        if(checker == 5)
         {
             break;
         }
@@ -198,7 +202,7 @@ void sign_up()
     {
         printf("\nPlease enter your name: ");
         gets(user->name);
-        if(23 > strlen(user->name))
+        if(23 < strlen(user->name))
         {
             printf("Your name can have 23 character at maximum!");
             continue;
@@ -214,7 +218,7 @@ void sign_up()
     {
         printf("\nPlease enter your last name: ");
         gets(user->last_name);
-        if(43 > strlen(user->last_name))
+        if(43 < strlen(user->last_name))
         {
             printf("Your last name can have 43 character at maximum!");
             continue;
@@ -285,7 +289,6 @@ void sign_up()
         option = getchar();
         if(option == 'Y' || option == 'y')
         {
-
             fputs(user->user_name, user_fp);
             fputs("\n", user_fp);
             fputs(user->password, user_fp);
@@ -7196,23 +7199,27 @@ int password_checker(char password[],int size)
     {
         return 4;
     }
-    for(int index = 0 ; index < size ; size++)
+    for(int index = 0 ; index < size ; index++)
     {
         if(isdigit(password[index]))
         {
             flag_Digit = 1;
+            continue;
         }
         if(isalpha(password[index]) && islower(password[index]))
         {
             flag_Lower_alpha = 1;
+             continue;
         }
         if(isalpha(password[index]) && isupper(password[index]))
         {
-            flag_Lower_alpha = 1;
+            flag_Upper_alpha = 1;
+             continue;
         }
         if(isalnum(password[index]) == 0)
         {
             flag_Special_char = 1;
+             continue;
         }
     }
     if(flag_Digit == 0)
@@ -7359,6 +7366,73 @@ int isemail(char email[], int lenght)
     }
 
 }
+int PreStart_Checker(){
+    char checker;
+    FILE *PreStart_f;
+    PreStart_f = fopen("Files\\PreStart\\Settings.txt" , "r+");
+    fgetc(PreStart_f);
+    if(feof(PreStart_f)){
+        fclose(PreStart_f);
+        return 0;
+    }
+    else{
+        ungetc(checker , PreStart_f);
+        fclose(PreStart_f);
+        return 1;
+    }
+}
+void Pre_Start(){
+    char *name[52];
+    FILE *fp;
+    printf("Thank You for choosing our program!\n");
+     printf("\33[2K\r");
+        while(1){
+
+        printf("Please choose a new name for your application(50 characters at maximum): ");
+        gets(name);
+        if(strlen(name) > 50){
+            printf("Please enter a name less than 50 characters!\n");
+            fflush(stdin);
+        }
+        else{
+            break;
+        }
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt" , "r+");
+    fputs(name , fp);
+    fclose(fp);
+}
+const char * getting_app_name(){
+    static char * name[52];
+    FILE *fp;
+    fp = fopen("Files\\PreStart\\Settings.txt" , "r");
+    fgets(name , 52 , fp);
+    return name;
+}
+void Edit_application_name(){
+    char *name[52];
+    FILE *fp;
+    printf("for getting back , press b: ");
+    if(islower(getche()) == 'b'){
+        return;
+    }
+     printf("\33[2K\r");
+        while(1){
+
+        printf("Please choose a new name for your application(50 characters at maximum): ");
+        gets(name);
+        if(strlen(name) > 50){
+            printf("Please enter a name less than 50 characters!\n");
+            fflush(stdin);
+        }
+        else{
+            break;
+        }
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt" , "w+");
+    fputs(name , fp);
+    fclose(fp);
+}
 void main()
 {
     make_ansiescape_work();
@@ -7372,6 +7446,7 @@ void main()
     strcpy(user->phone, "4587");
     strcpy(user->user_name, "admin\n");
     current_user = user;*/
-    Start_Page();
+    Edit_application_name();
+    printf("$s");
 
 }
