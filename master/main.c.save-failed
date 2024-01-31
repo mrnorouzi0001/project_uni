@@ -6069,7 +6069,7 @@ void report_sale_filed()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        return;
+        report_model_building_model_sale();
     }
     while(1)
     {
@@ -6086,7 +6086,7 @@ void report_sale_filed()
         }
     }
 }
-void page_reports_normal()
+void page_reports_normal();
 {
     int option;
     while(1)
