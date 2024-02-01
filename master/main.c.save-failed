@@ -4,6 +4,8 @@
 #include<string.h>
 #include<ctype.h>
 #include "cryptography\cryptography.h"
+#include <mmsystem.h>
+#pragma comment(lib,"Winmm.lib")
 struct building_sale
 {
     char *municipalitys_area[6];
@@ -67,6 +69,10 @@ typedef struct building_rent BUILDING_RENT;
 USER *current_user;
 int inner_flag = 0;
 
+void Edit_application_background_color();
+void Edit_application_text_color();
+void Edit_application_name();
+void menu_edit_application();
 void adding_rent_buildings_commercial();
 void adding_rent_buildings_filed();
 void adding_rent_buildings_Residential();
@@ -81,8 +87,9 @@ void delete_rent_buildings_Residential();
 void delete_sale_buildings_commercial();
 void delete_sale_buildings_Residential();
 void delete_sale_buildings_filed();
-void Edit_application_name();
 const char * getting_app_name();
+const char * getting_app_background_color();
+const char * getting_app_Text_color();
 int isaddress(char string[], int lenght);
 int isallalpha(char string[], int lenght);
 int isalldigit(char string[], int lenght);
@@ -171,6 +178,7 @@ void Start_Page();
 void user_edit();
 void sign_up()
 {
+    PlaySound("Audios\\Sign_up.wav",NULL,SND_ASYNC | SND_FILENAME);
     int index = 0, stars = 0, checker = 0;
     char temp_time[31], option, character, password[30];
     system("cls");
@@ -206,6 +214,7 @@ void sign_up()
             {
                 printf("User name can not be more than 28 characters!");
                 fflush(stdin);
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             }
         }
 
@@ -213,6 +222,7 @@ void sign_up()
         if(search_username_list_user(user->user_name)== 1)
         {
             printf("This user name has already taken.");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
         else
         {
@@ -221,83 +231,117 @@ void sign_up()
         }
     }
     make_null_list_user();
-
     while(1)
     {
-        printf("\nPlease enter your password: ");
-        index = 0;
-        stars = 0;
         while(1)
         {
-            character = getch();
-            if(character == 13)
+            printf("\nPlease enter your password: ");
+            index = 0;
+            stars = 0;
+            while(1)
             {
-                printf("\n");
+                character = getch();
+                if(character == 13)
+                {
+                    printf("\n");
+                    break;
+                }
+                if(character == 8)
+                {
+
+                    printf("\33[2K\r");
+                    printf("Please enter your password: ");
+                    for(int i = 0 ; i < stars - 1 ; i++)
+                    {
+                        printf("%c", '*');
+                    }
+                    stars--;
+                    user->password[index - 1] = '\0';
+                    index--;
+                }
+                else
+                {
+
+                    printf("%c", '*');
+                    user->password[index] = character;
+                    user->password[index + 1] = '\0';
+                    index++;
+                    stars++;
+                }
+            }
+            checker = password_checker(user->password, strlen(user->password));
+
+            if(strlen(user->password) > 18)
+            {
+                printf("your password can have 18 characters at maximum!");
+                fflush(stdin);
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(checker == 4)
+            {
+                printf("You need to enter at least 8 characters for your password!");
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(checker == 0)
+            {
+                printf("You need to enter at least 1 number for your password!");
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(checker == 1)
+            {
+                printf("You need to enter at least a lower case alphabet for your password!");
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(checker == 2)
+            {
+                printf("You need to enter at least a upper case alphabet for your password!");
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(checker == 3)
+            {
+                printf("You need to enter at least a Special character(@,#,%) for your password!");
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+
+            }
+            if(checker == 5)
+            {
                 break;
             }
-            if(character == 8)
+        }
+        printf("\n");
+        while(1)
+        {
+            printf("Please enter your password again: ");
+            gets(password);
+            if(strlen(password) > 18)
             {
-
-                printf("\33[2K\r");
-                printf("Please enter your password: ");
-                for(int i = 0 ; i < stars - 1 ; i++)
-                {
-                    printf("%c", '*');
-                }
-                stars--;
-                user->password[index - 1] = '\0';
-                index--;
+                printf("passwords aren't matched!\n");
+                fflush(stdin);
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
             }
-            else
-            {
-
-                printf("%c", '*');
-                user->password[index] = character;
-                user->password[index + 1] = '\0';
-                index++;
-                stars++;
-            }
+            break;
         }
-        checker = password_checker(user->password, strlen(user->password));
-        printf("%d", checker);
-        if(strlen(user->password) > 18)
-        {
-            printf("your password can have 18 characters at maximum!");
-            fflush(stdin);
-            continue;
-        }
-        if(checker == 4)
-        {
-            printf("You need to enter at least 8 characters for your password!");
-            continue;
-        }
-        if(checker == 0)
-        {
-            printf("You need to enter at least 1 number for your password!");
-            continue;
-        }
-        if(checker == 1)
-        {
-            printf("You need to enter at least a lower case alphabet for your password!");
-            continue;
-        }
-        if(checker == 2)
-        {
-            printf("You need to enter at least a upper case alphabet for your password!");
-            continue;
-        }
-        if(checker == 3)
-        {
-            printf("You need to enter at least a Special character(@,#,%) for your password!");
-            continue;
-        }
-        if(checker == 5)
+        if(strcmp(password, user->password) ==0)
         {
             break;
         }
+        else
+        {
+            printf("passwords aren't matched!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            continue;
+        }
     }
-    crypto(user->password, strlen(user->password));
     printf("\n");
+    crypto(user->password, strlen(user->password));
+
     printf("\n            personal information\n");
     while(1)
     {
@@ -307,11 +351,13 @@ void sign_up()
         {
             printf("Your name can have 23 character at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(user->name, strlen(user->name)) == 0)
         {
             printf("Please enter a valid name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -324,11 +370,13 @@ void sign_up()
         {
             printf("Your last name can have 43 character at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(user->last_name, strlen(user->last_name)) == 0)
         {
             printf("Please enter a valid last name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -341,16 +389,19 @@ void sign_up()
         {
             printf("Your phone number must have 11 digits!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(user->phone[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(user->phone, strlen(user->phone)) == 0)
         {
             printf("Please enter a valid phone number!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -363,11 +414,13 @@ void sign_up()
         {
             printf("Your email can have 33 characters at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isemail(user->email, strlen(user->email)) == -1)
         {
             printf("Please enter a valid email!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -380,11 +433,13 @@ void sign_up()
         {
             printf("your ID must have 10 digits!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(user->ID, strlen(user->ID)) == 0)
         {
             printf("Please enter a valid ID!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -420,11 +475,12 @@ void sign_up()
             fputs("\n", user_fp);
             system("cls");
             Sleep(2000);
+            PlaySound("Audios\\Sign_up_sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("the user has added to the application successfully!");
             free(user);
             free(user_fp);
             fclose(user_fp);
-            Sleep(2000);
+            Sleep(3000);
             return;
         }
         if(option == 'N' || option == 'n')
@@ -436,7 +492,8 @@ void sign_up()
         }
         else
         {
-            printf("Please enter a valid character");
+            printf("Please enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
     }
 
@@ -463,9 +520,20 @@ void sign_in()
         fclose(user_fp);
         exit(0);
     }
-    char user_name[30], password[25];
-    printf("Please enter your user name: ");
-    gets(user_name);
+    char *user_name[30], *password[25];
+    while(1)
+    {
+        printf("Please enter your user name: ");
+        gets(user_name);
+        if(strlen(user_name) > 28)
+        {
+            printf("Please enter user name that is 28 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            continue;
+        }
+        break;
+    }
+
     printf("%s", user_name);
     strcat(user_name, "\n");
     make_list_user(user_fp);
@@ -478,6 +546,7 @@ void sign_in()
         {
             if(strcmp(user_name, temp->user_name) == 0 && strcmp(temp->isactive, "0\n") == 0 && (time(NULL) - temp->time_banish) < 900)
             {
+                PlaySound("Audios\\Banned.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("\nYou are banned from the application for %ld:%ld", 15 - (time(NULL) - temp->time_banish)/ 60, 60 - ((time(NULL) - temp->time_banish) % 60));
                 free(temp);
                 fclose(user_fp);
@@ -529,8 +598,9 @@ void sign_in()
             strcat(password, "\n");
             if(tries == 5)
             {
+                PlaySound("Audios\\Failed_attemps.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Too many failed attempts. You are banned for 15 minutes from application!");
-                Sleep(2000);
+                Sleep(10000);
                 system("cls");
                 fclose(user_fp);
                 user_fp = fopen("Files\\users\\user.txt", "w+");
@@ -561,9 +631,9 @@ void sign_in()
                     }
                     else
                     {
-                        fputs("1", user_fp);
-                        fputs("\n", user_fp);
-                        fputs("0", user_fp);
+                        fputs(temp->isactive, user_fp);
+                        itoa(temp->time_banish, time_tmep, 10);
+                        fputs(time_tmep, user_fp);
                         fputs("\n", user_fp);
                     }
                     temp = temp->link;
@@ -579,10 +649,13 @@ void sign_in()
             }
             else
             {
+                PlaySound("Audios\\Pass_not_match.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("wrong password! %d tries left!\n", 5 - tries );
                 tries++;
+                Sleep(5000);
             }
         }
+        PlaySound("Audios\\Sucess_login.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("logging in. please wait!");
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt", "w+");
@@ -619,7 +692,7 @@ void sign_in()
             }
             temp = temp->link;
         }
-        Sleep(2000);
+        Sleep(3000);
         fclose(user_fp);
         make_null_list_user();
         system("cls");
@@ -627,8 +700,9 @@ void sign_in()
     }
     else
     {
+        PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("we don't have this user name!");
-        Sleep(2000);
+        Sleep(3000);
         fclose(user_fp);
         make_null_list_user();
         return;
@@ -636,6 +710,7 @@ void sign_in()
 }
 void main_page()
 {
+    PlaySound("Audios\\Main_menu.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option = 0;
     system("cls");
     printf("Welcome Dear %s", current_user->user_name);
@@ -649,6 +724,7 @@ void main_page()
         printf("3. Reports\n");
         printf("4. settings\n");
         printf("5. sign out\n");
+        printf("6. application settings\n");
         printf("Please choice your option: ");
         scanf("%d", &option);
         getchar();
@@ -685,13 +761,31 @@ void main_page()
             logout_time();
             free(current_user);
             printf("Logging out");
-            Sleep(2000);
+            Sleep(3000);
             return;
+        }
+        case 6:
+        {
+
+            system("cls");
+            if(strcmp(current_user->user_name, "admin\n") == 0)
+            {
+                menu_edit_application();
+                break;
+            }
+            else
+            {
+                PlaySound("Audios\\Only_admin.wav",NULL,SND_ASYNC | SND_FILENAME);
+                printf("Only admin can change the program settings!");
+                Sleep(3000);
+            }
+            break;
         }
         default:
         {
             printf("Please enter a valid option");
-            Sleep(2000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             system("cls");
             break;
         }
@@ -702,32 +796,63 @@ void main_page()
 const char * getting_app_name()
 {
     static char * name[52];
+    char temp[52];
     FILE *fp;
     fp = fopen("Files\\PreStart\\Settings.txt", "r");
-    fgets(name, 52, fp);
+    fgets(temp, 52, fp);
+    temp[strlen(temp) - 1] = '\0';
+    strcpy(name, temp);
+    fclose(fp);
     return name;
+}
+const char * getting_app_background_color()
+{
+    static char * BG_color[52];
+    char temp[52];
+    FILE *fp;
+    fp = fopen("Files\\PreStart\\Settings.txt", "r");
+    fgets(temp, 52, fp);
+    fgets(temp, 12, fp);
+    temp[strlen(temp) - 1] = '\0';
+    strcpy(BG_color, temp);
+    fclose(fp);
+    return BG_color;
+}
+const char * getting_app_Text_color()
+{
+    static char * Text_color[52];
+    FILE *fp;
+    fp = fopen("Files\\PreStart\\Settings.txt", "r");
+    fgets(Text_color, 52, fp);
+    fgets(Text_color, 52, fp);
+    fgets(Text_color, 6, fp);
+    fclose(fp);
+    return Text_color;
 }
 void user_edit()
 {
+    PlaySound("Audios\\User_edit.wav",NULL,SND_ASYNC | SND_FILENAME);
     int index = 0, stars = 0;
     system("cls");
-    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker, character;
+    char *tempstr[34], *temp_pass_valid[25], *temp_user[25], *temp_time[15], checker, character;
     FILE *user_fp;
     user_fp = fopen("Files\\users\\user.txt", "r");
     make_list_user(user_fp);
     USER *temp, *temp_current = NULL;
+    printf("For getting back, press b: ");
+    if(tolower(getche()) == 'b')
+    {
+        return;
+    }
+    fclose(user_fp);
+    printf("\33[2K\r");
     if(temp_current == NULL)
     {
         temp_current = malloc(sizeof(USER));
     }
     printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
-    printf("For getting back, press b: ");
-    if(tolower(getche()) == 'b')
-    {
-        main_page();
-    }
-    printf("\33[2K\r");
+
     strcpy(temp_user, current_user->user_name);
     while(1)
     {
@@ -741,11 +866,14 @@ void user_edit()
         if(isallalpha(tempstr, strlen(tempstr)) == 0)
         {
             printf("Please enter a valid name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(strlen(tempstr) > 23)
         {
             printf("Your name can have 23 character at maximum!");
+            fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -770,11 +898,16 @@ void user_edit()
         if(isallalpha(tempstr, strlen(tempstr)) == 0)
         {
             printf("Please enter a valid last name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         if(strlen(tempstr) > 43)
         {
+
             printf("Your last name can have 43 character at maximum!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            fflush(stdin);
             continue;
         }
 
@@ -800,11 +933,16 @@ void user_edit()
         if(strlen(tempstr) != 10)
         {
             printf("your ID must have 10 digits!");
+            fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(isallalpha(tempstr, strlen(tempstr)) == 0)
         {
             printf("Please enter a valid ID!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         break;
@@ -822,6 +960,7 @@ void user_edit()
     while(1)
     {
         printf("\nPlease enter your new Phone: ");
+
         gets(tempstr);
         if(strcmp(tempstr, "") == 0)
         {
@@ -829,17 +968,24 @@ void user_edit()
         }
         if(strlen(tempstr) != 10)
         {
+            fflush(stdin);
             printf("Your phone number must have 10 digits!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(tempstr[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(isalldigit(tempstr, strlen(tempstr)) == 0)
         {
             printf("Please enter a valid phone number!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
 
@@ -865,11 +1011,15 @@ void user_edit()
         if(strlen(tempstr) > 33)
         {
             printf("Your email can have 33 characters at maximum!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(isemail(tempstr, strlen(tempstr)) == -1)
         {
             printf("Please enter a valid email!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            fflush(stdin);
             continue;
         }
         break;
@@ -926,31 +1076,44 @@ void user_edit()
         if(strlen(tempstr) > 18)
         {
             printf("your password can have 18 characters at maximum!");
+            fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 4)
         {
             printf("You need to enter at least 8 characters for your password!");
+
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 0)
         {
             printf("You need to enter at least 1 number for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 1)
         {
             printf("You need to enter at least a lower case alphabet for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 2)
         {
             printf("You need to enter at least a upper case alphabet for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 3)
         {
             printf("You need to enter at least a Special character(@,#,%) for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 5)
@@ -1001,37 +1164,11 @@ void user_edit()
         }
         if(strlen(temp_pass_valid) > 18)
         {
+            fflush(stdin);
             printf("your password can have 18 characters at maximum!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 4)
-        {
-            printf("You need to enter at least 8 characters for your password!");
-            continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 0)
-        {
-            printf("You need to enter at least 1 number for your password!");
-            continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 1)
-        {
-            printf("You need to enter at least a lower case alphabet for your password!");
-            continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 2)
-        {
-            printf("You need to enter at least a upper case alphabet for your password!");
-            continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 3)
-        {
-            printf("You need to enter at least a Special character(@,#,%) for your password!");
-            continue;
-        }
-        if(password_checker(temp_pass_valid, strlen(temp_pass_valid)) == 5)
-        {
-            break;
         }
     }
     printf("\n");
@@ -1174,8 +1311,8 @@ void user_edit()
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                     fputs(temp_current->ID, user_fp);
-                    fputs(temp->isactive, user_fp);
-                    itoa(temp->time_banish, temp_time, 10);
+                    fputs(temp_current->isactive, user_fp);
+                    itoa(temp_current->time_banish, temp_time, 10);
                     fputs(temp_time, user_fp);
                     fputs("\n", user_fp);
                 }
@@ -1185,6 +1322,7 @@ void user_edit()
             make_null_list_user();
             fclose(user_fp);
             system("cls");
+            PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("The user was edited Successfully!");
             Sleep(2000);
             return;
@@ -1200,6 +1338,7 @@ void user_edit()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
     }
 }
@@ -1251,7 +1390,7 @@ void logout_time()
 }
 void Start_Page()
 {
-
+    PlaySound("Audios\\Start_page.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     int flag = 0;
     while(1)
@@ -1259,7 +1398,9 @@ void Start_Page()
         flag = 0;
         checker = 0;
         system("cls");
-        printf("Welcome to the %s real state agency!\n", getting_app_name());
+        printf("%s", getting_app_background_color());
+        printf("%s", getting_app_Text_color());
+        printf("            Welcome to the %s real state agency!\n", getting_app_name());
         printf("1. sign up\n");
         printf("2. sign in\n");
         printf("3. exit\n");
@@ -1285,9 +1426,11 @@ void Start_Page()
         default:
         {
             system("cls");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("Please enter a valid option");
-            Sleep(1000);
+            Sleep(3500);
             system("cls");
+
             break;
         }
         }
@@ -1303,7 +1446,7 @@ void make_str_null(char string[])
 void menu_adding_building()
 {
     int checker = 0;
-
+    PlaySound("Audios\\menu_adding_main.wav",NULL,SND_ASYNC | SND_FILENAME);
     while(1)
     {
         checker = 0;
@@ -1336,7 +1479,8 @@ void menu_adding_building()
         {
             system("cls");
             printf("Please enter a valid option");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
@@ -1345,6 +1489,7 @@ void menu_adding_building()
 }
 void menu_sale_buildings()
 {
+    PlaySound("Audios\\menu_adding_main_for_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     while(1)
     {
@@ -1384,7 +1529,8 @@ void menu_sale_buildings()
         {
             system("cls");
             printf("Please enter a valid option");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
@@ -1392,6 +1538,7 @@ void menu_sale_buildings()
 }
 void adding_sale_buildings_Residential()
 {
+    PlaySound("Audios\\adding_residental_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -1651,6 +1798,7 @@ void adding_sale_buildings_Residential()
 }
 void adding_sale_buildings_commercial()
 {
+    PlaySound("Audios\\adding_comm_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -1894,7 +2042,8 @@ void adding_sale_buildings_commercial()
         fclose(file_sale_res);
         system("cls");
         printf("building has added successfully");
-        Sleep(2000);
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -1907,6 +2056,7 @@ void adding_sale_buildings_commercial()
 }
 void adding_sale_buildings_filed()
 {
+    PlaySound("Audios\\adding_filed_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -2078,7 +2228,8 @@ void adding_sale_buildings_filed()
         fclose(file_sale_res);
         system("cls");
         printf("building has added successfully");
-        Sleep(2000);
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -2091,11 +2242,10 @@ void adding_sale_buildings_filed()
 }
 void menu_rent_buildings()
 {
-
+    PlaySound("Audios\\menu_adding_main_for_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     while(1)
     {
-
         checker = 0;
         system("cls");
         printf("Adding building\\for rent\n");
@@ -2132,7 +2282,8 @@ void menu_rent_buildings()
         {
             system("cls");
             printf("Please enter a valid option");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
@@ -2140,6 +2291,7 @@ void menu_rent_buildings()
 }
 void adding_rent_buildings_Residential()
 {
+    PlaySound("Audios\\adding_residental_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -2415,6 +2567,7 @@ void adding_rent_buildings_Residential()
 }
 void adding_rent_buildings_commercial()
 {
+    PlaySound("Audios\\adding_comm_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -2677,7 +2830,8 @@ void adding_rent_buildings_commercial()
         fclose(file_rent_res);
         system("cls");
         printf("building has added successfully");
-        Sleep(2000);
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -2690,6 +2844,7 @@ void adding_rent_buildings_commercial()
 }
 void adding_rent_buildings_filed()
 {
+    PlaySound("Audios\\adding_filed_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int id = 0;
     char char_id[7], temp[25];
     system("cls");
@@ -2876,7 +3031,8 @@ void adding_rent_buildings_filed()
         fclose(file_rent_res);
         system("cls");
         printf("building has added successfully");
-        Sleep(2000);
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -2889,6 +3045,7 @@ void adding_rent_buildings_filed()
 }
 void page_admin_report()
 {
+    PlaySound("Audios\\Reports.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option;
     while(1)
     {
@@ -2917,16 +3074,35 @@ void page_admin_report()
         case 1:
         {
             system("cls");
+            PlaySound("Audios\\Report_main_model.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             report_model_main();
             break;
         }
         case 2:
         {
+            PlaySound("Audios\\Report_MA.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter a municipality area: ");
-            gets(chose);
+            char *chose[12];
+            while(1)
+            {
+                printf("Please enter a municipality area: ");
+                gets(chose);
+                if(strlen(chose) > 4)
+                {
+                    printf("maximum municipality area is 9999!\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                    fflush(stdin);
+
+                }
+                if(isalldigit(chose, strlen(chose)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                }
+            }
+
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_area(chose);
@@ -2939,13 +3115,47 @@ void page_admin_report()
         }
         case 3:
         {
+            PlaySound("Audios\\Report_age.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char age_start[6], age_finish[6];
-            printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(age_start);
-            printf("Please enter the end of age range: ");
-            gets(age_finish);
+            char *age_start[6], *age_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
+                gets(age_start);
+                if(strlen(age_start) > 4)
+                {
+                    printf("maximum age is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(age_start, strlen(age_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of age range: ");
+                gets(age_finish);
+                if(strlen(age_finish) > 4)
+                {
+                    printf("maximum age is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(age_finish, strlen(age_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+
             system("cls");
             report_sale_residential_age(age_start, age_finish);
             report_sale_commercial_age(age_start, age_finish);
@@ -2955,13 +3165,46 @@ void page_admin_report()
         }
         case 4:
         {
+            PlaySound("Audios\\Report_Size.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char size_start[6], size_finish[6];
-            printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(size_start);
-            printf("Please enter the end of size range: ");
-            gets(size_finish);
+            char *size_start[6], *size_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of size range(if you wish to only look for a specific size enter 0 for this filed): ");
+                gets(size_start);
+                if(strlen(size_start) > 8)
+                {
+                    printf("maximum size is 99999999 m^2!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(size_start, strlen(size_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of size range: ");
+                gets(size_finish);
+                if(strlen(size_finish) > 8)
+                {
+                    printf("maximum size is 99999999 m^2!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(size_finish, strlen(size_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_sale_residential_size(size_start, size_finish);
             report_sale_commercial_size(size_start, size_finish);
@@ -2973,13 +3216,46 @@ void page_admin_report()
         }
         case 5:
         {
+            PlaySound("Audios\\Report_price.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char price_start[20], price_finish[20];
-            printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(price_start);
-            printf("Please enter the end of price range: ");
-            gets(price_finish);
+            char *price_start[20], *price_finish[20];
+            while(1)
+            {
+                printf("Please enter the start of price range(if you wish to only look for a specific price enter 0 for this filed): ");
+                gets(price_start);
+                if(strlen(price_start) > 13)
+                {
+                    printf("maximum price is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(price_start, strlen(price_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of price range: ");
+                gets(price_finish);
+                if(strlen(price_finish) > 13)
+                {
+                    printf("maximum price is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(price_finish, strlen(price_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_sale_residential_price(price_start, price_finish);
             report_sale_commercial_price(price_start, price_finish);
@@ -2988,25 +3264,61 @@ void page_admin_report()
         }
         case 6:
         {
+            PlaySound("Audios\\Report_room.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char floor_start[6], floor_finish[6];
-            printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(floor_start);
-            printf("Please enter the end of room range: ");
-            gets(floor_finish);
+            char *room_start[6], *room_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of room range(if you wish to only look for a specific room enter 0 for this filed): ");
+                gets(room_start);
+                if(strlen(room_start) > 4)
+                {
+                    printf("maximum room is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(room_start, strlen(room_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of room range: ");
+                gets(room_finish);
+                if(strlen(room_finish) > 4)
+                {
+                    printf("maximum room is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(room_finish, strlen(room_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
-            report_rent_residential_room(floor_start, floor_finish);
-            report_rent_commercial_room(floor_start, floor_finish);
-            report_sale_residential_room(floor_start, floor_finish);
-            report_sale_commercial_room(floor_start, floor_finish);
+            report_rent_residential_room(room_start, room_finish);
+            report_rent_commercial_room(room_start, room_finish);
+            report_sale_residential_room(room_start, room_finish);
+            report_sale_commercial_room(room_start, room_finish);
             break;
         }
         case 7:
         {
+            PlaySound("Audios\\Report_price_total.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             if(report_price_total() == 0)
             {
+                PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+                Sleep(3000);
                 printf("There is no price to show!\n");
                 printf("For getting back to report menu , press any key....");
                 getchar();
@@ -3014,6 +3326,7 @@ void page_admin_report()
             }
             else
             {
+
                 printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
                 printf("For getting back to report menu , press any key....");
                 getchar();
@@ -3022,17 +3335,82 @@ void page_admin_report()
         }
         case 8:
         {
+            PlaySound("Audios\\Report_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-            printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(prepayment_start);
-            printf("Please enter the end of room range: ");
-            gets(prepayment_end);
-            printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(rent_start);
-            printf("Please enter the end of rent range:");
-            gets(rent_end);
+            char *prepayment_start[20], *prepayment_end[20], *rent_start[20], *rent_end[20];
+            while(1)
+            {
+                printf("Please enter the start of prepayment range(if you wish to only look for a specific prepayment enter 0 for this filed): ");
+                gets(prepayment_start);
+                if(strlen(prepayment_start) > 13)
+                {
+                    printf("maximum prepayment is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(prepayment_start, strlen(prepayment_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of prepayment range: ");
+                gets(prepayment_end);
+                if(strlen(prepayment_end) > 13)
+                {
+                    printf("maximum prepayment is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(prepayment_end, strlen(prepayment_end)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the start of rent range(if you wish to only look for a specific rent enter 0 for this filed): ");
+                gets(rent_start);
+                if(strlen(rent_start) > 13)
+                {
+                    printf("maximum rent is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(rent_start, strlen(rent_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of rent range: ");
+                gets(rent_end);
+                if(strlen(rent_end) > 13)
+                {
+                    printf("maximum rent is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(rent_end, strlen(rent_end)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
             report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
@@ -3041,6 +3419,7 @@ void page_admin_report()
         }
         case 9:
         {
+            PlaySound("Audios\\Report_user_f.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             report_user_trunover();
             printf("\nFor getting back to the report menu , press any key.....");
@@ -3049,17 +3428,35 @@ void page_admin_report()
         }
         case 10:
         {
+            PlaySound("Audios\\Report_restigered.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             report_date_main_registered_buildings();
             break;
         }
         case 11:
         {
+            PlaySound("Audios\\Report_floor.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter an amount for floor: ");
-            gets(chose);
+            char *chose[12];
+            while(1)
+            {
+                printf("Please enter a floor amount: ");
+                gets(chose);
+                if(strlen(chose) > 4)
+                {
+                    printf("maximum floor  is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(chose, strlen(chose)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_floor(chose);
@@ -3070,12 +3467,14 @@ void page_admin_report()
         }
         case 12:
         {
+            PlaySound("Audios\\Report_delete.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             report_date_main_deleted_buildings();
             break;
         }
         case 13:
         {
+            PlaySound("Audios\\Report_user_a.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             report_time_user();
             printf("Press any key to get back to the menu");
@@ -3091,7 +3490,8 @@ void page_admin_report()
         {
             system("cls");
             printf("Please enter a valid option!");
-            Sleep(2500);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
@@ -3129,7 +3529,7 @@ void report_date_main_deleted_buildings()
         case 3:
         {
             inner_flag = 0;
-            report_date_main_deleted_building__three_month();
+            report_date_main_deleted_building_three_month();
             break;
         }
         case 4:
@@ -3141,7 +3541,8 @@ void report_date_main_deleted_buildings()
         {
             system("cls");
             printf("Please enter a valid option!");
-            Sleep(1500);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
@@ -3149,6 +3550,7 @@ void report_date_main_deleted_buildings()
 }
 void report_date_main_deleted_building_month()
 {
+    PlaySound("Audios\\Report_delete_month.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
@@ -3315,7 +3717,8 @@ void report_date_main_deleted_building_month()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -3327,6 +3730,8 @@ void report_date_main_deleted_building_month()
 }
 void report_date_main_deleted_building_three_month()
 {
+    PlaySound("Audios\\Report_delete_3_month.wav",NULL,SND_ASYNC | SND_FILENAME);
+
     system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
@@ -3488,7 +3893,8 @@ void report_date_main_deleted_building_three_month()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -3500,6 +3906,7 @@ void report_date_main_deleted_building_three_month()
 }
 void report_date_main_deleted_building_week()
 {
+    PlaySound("Audios\\Report_delete_week.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
@@ -3660,7 +4067,8 @@ void report_date_main_deleted_building_week()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -3673,9 +4081,10 @@ void report_date_main_deleted_building_week()
 void report_date_main_registered_buildings()
 {
     int option;
-    system("cls");
+
     while(1)
     {
+        system("cls");
         printf("Reports\\registered buildings\n");
         printf("1. past week\n");
         printf("2. past month\n");
@@ -3713,14 +4122,17 @@ void report_date_main_registered_buildings()
         {
             system("cls");
             printf("Please enter a valid option!");
-            Sleep(1500);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
+
         }
         }
     }
 }
 void report_date_main_registered_building_month()
 {
+    PlaySound("Audios\\Report_add_month.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
@@ -3878,7 +4290,8 @@ void report_date_main_registered_building_month()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -3890,6 +4303,8 @@ void report_date_main_registered_building_month()
 }
 void report_date_main_registered_building_three_month()
 {
+    PlaySound("Audios\\Report_add_3_month.wav",NULL,SND_ASYNC | SND_FILENAME);
+
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
@@ -4046,7 +4461,8 @@ void report_date_main_registered_building_three_month()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -4058,6 +4474,8 @@ void report_date_main_registered_building_three_month()
 }
 void report_date_main_registered_building_week()
 {
+    PlaySound("Audios\\Report_add_week.wav",NULL,SND_ASYNC | SND_FILENAME);
+
     system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
@@ -4221,7 +4639,8 @@ void report_date_main_registered_building_week()
     if(inner_flag == 0)
     {
         printf("There is no item to show!");
-        Sleep(1500);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
         return;
     }
     else
@@ -4264,7 +4683,6 @@ void report_user_trunover()
         {
             if(strcmp(build_sale->user, temp->user_name) == 0)
             {
-                \
                 temp->registered_builiding++;
             }
             build_sale = build_sale->link;
@@ -4386,7 +4804,6 @@ void report_rent_residential_rent_mortgage(char start_perpay[20], char end_prepa
                     printf("Rent per month: %s", temp->rent_per_month);
                     printf("\n");
                     inner_flag++;
-
                 }
             }
         }
@@ -4509,6 +4926,8 @@ void report_rent_filed_rent_mortgage(char start_perpay[20], char end_prepay[20],
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
     }
     printf("For getting back press any key.....");
     getchar();
@@ -4645,6 +5064,8 @@ void report_sale_commercial_floor(char chose[30])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
     }
     printf("For getting back press any key.....");
     getchar();
@@ -4864,6 +5285,8 @@ void report_sale_commercial_room(char start_age[6], char end_age[6])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
 
     }
     printf("For getting back press any key.....");
@@ -4961,6 +5384,8 @@ void report_rent_commercial_age(char start_age[6], char end_age[6])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
 
     }
     printf("For getting back press any key.....");
@@ -5221,6 +5646,8 @@ void report_sale_filed_size(char start_age[6], char end_age[6])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
     }
     printf("For getting back press any key.....");
     getchar();
@@ -5393,6 +5820,8 @@ void report_sale_filed_price(char start_age[20], char end_age[20])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
     }
     fclose(fp);
     make_null_list_building_sale();
@@ -5625,6 +6054,8 @@ void report_sale_filed_area(char chose[30])
     if(inner_flag == 0)
     {
         printf("There is no item to show!\n");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(3000);
     }
     printf("For getting back press any key.....");
     getchar();
@@ -5633,6 +6064,7 @@ void report_sale_filed_area(char chose[30])
 }
 void report_model_main()
 {
+
     int option;
     while(1)
     {
@@ -5665,7 +6097,8 @@ void report_model_main()
         default:
         {
             printf("Please enter a valid option!");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             system("cls");
             break;
         }
@@ -5674,6 +6107,7 @@ void report_model_main()
 }
 void report_model_building_model_sale()
 {
+    PlaySound("Audios\\Report_model_for_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option;
     while(1)
     {
@@ -5712,7 +6146,8 @@ void report_model_building_model_sale()
         default:
         {
             printf("Please enter a valid option!");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             system("cls");
         }
         }
@@ -5720,6 +6155,7 @@ void report_model_building_model_sale()
 }
 void report_model_building_model_rent()
 {
+    PlaySound("Audios\\Report_model_for_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option;
     while(1)
     {
@@ -5758,7 +6194,8 @@ void report_model_building_model_rent()
         default:
         {
             printf("Please enter a valid option!");
-            Sleep(1000);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             system("cls");
         }
         }
@@ -5766,6 +6203,7 @@ void report_model_building_model_rent()
 }
 void report_rent_residential()
 {
+    PlaySound("Audios\\Report_residental_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\report_rent_residential\n");
     char id[7], TEMP[21], checker;
@@ -5817,11 +6255,14 @@ void report_rent_residential()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
     }
 }
 void report_rent_commercial()
 {
+    PlaySound("Audios\\Report_comm_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\commercial\n");
     char id[7], TEMP[21], checker;
@@ -5873,11 +6314,14 @@ void report_rent_commercial()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
     }
 }
 void report_rent_filed()
 {
+    PlaySound("Audios\\Report_filed_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Reports\\specific model of buildings\\for rent\\filed\n");
     char id[7], TEMP[21], checker;
@@ -5925,11 +6369,14 @@ void report_rent_filed()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
     }
 }
 void report_sale_residential()
 {
+    PlaySound("Audios\\Report_residental_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Reports\\specific model of buildings\\for sale\\residential\n");
     char id[7], TEMP[21], checker;
@@ -5979,11 +6426,15 @@ void report_sale_residential()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
     }
 }
 void report_sale_commercial()
 {
+    PlaySound("Audios\\Report_comm_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
+
     system("cls");
     printf("Reports\\specific model of buildings\\for sale\\commercial\n");
     char id[7], TEMP[21], checker;
@@ -6033,11 +6484,15 @@ void report_sale_commercial()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
     }
 }
 void report_sale_filed()
 {
+    PlaySound("Audios\\Report_filed_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
+
     system("cls");
     printf("Reports\\specific model of buildings\\for sale\\field\n");
     char id[7], TEMP[21], checker;
@@ -6069,7 +6524,7 @@ void report_sale_filed()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_sale();
+        return;
     }
     while(1)
     {
@@ -6083,11 +6538,13 @@ void report_sale_filed()
         else
         {
             printf("\nPlease enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
     }
 }
-void page_reports_normal();
+void page_reports_normal()
 {
+    PlaySound("Audios\\Reports.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option;
     while(1)
     {
@@ -6113,16 +6570,35 @@ void page_reports_normal();
         case 1:
         {
             system("cls");
+            PlaySound("Audios\\Report_main_model.wav",NULL,SND_ASYNC | SND_FILENAME);
+
             report_model_main();
             break;
         }
         case 2:
         {
+            PlaySound("Audios\\Report_MA.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter a municipality area: ");
-            gets(chose);
+            char *chose[12];
+            while(1)
+            {
+                printf("Please enter a municipality area: ");
+                gets(chose);
+                if(strlen(chose) > 4)
+                {
+                    printf("maximum municipality area is 9999!\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                    fflush(stdin);
+
+                }
+                if(isalldigit(chose, strlen(chose)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                }
+            }
+
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_area(chose);
@@ -6135,13 +6611,47 @@ void page_reports_normal();
         }
         case 3:
         {
+            PlaySound("Audios\\Report_age.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char age_start[6], age_finish[6];
-            printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(age_start);
-            printf("Please enter the end of age range: ");
-            gets(age_finish);
+            char *age_start[6], *age_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
+                gets(age_start);
+                if(strlen(age_start) > 4)
+                {
+                    printf("maximum age is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(age_start, strlen(age_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of age range: ");
+                gets(age_finish);
+                if(strlen(age_finish) > 4)
+                {
+                    printf("maximum age is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(age_finish, strlen(age_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+
             system("cls");
             report_sale_residential_age(age_start, age_finish);
             report_sale_commercial_age(age_start, age_finish);
@@ -6151,13 +6661,46 @@ void page_reports_normal();
         }
         case 4:
         {
+            PlaySound("Audios\\Report_Size.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char size_start[6], size_finish[6];
-            printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(size_start);
-            printf("Please enter the end of size range: ");
-            gets(size_finish);
+            char *size_start[6], *size_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of size range(if you wish to only look for a specific size enter 0 for this filed): ");
+                gets(size_start);
+                if(strlen(size_start) > 8)
+                {
+                    printf("maximum size is 99999999 m^2!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(size_start, strlen(size_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of size range: ");
+                gets(size_finish);
+                if(strlen(size_finish) > 8)
+                {
+                    printf("maximum size is 99999999 m^2!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(size_finish, strlen(size_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_sale_residential_size(size_start, size_finish);
             report_sale_commercial_size(size_start, size_finish);
@@ -6169,13 +6712,46 @@ void page_reports_normal();
         }
         case 5:
         {
+            PlaySound("Audios\\Report_price.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char price_start[20], price_finish[20];
-            printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(price_start);
-            printf("Please enter the end of price range: ");
-            gets(price_finish);
+            char *price_start[20], *price_finish[20];
+            while(1)
+            {
+                printf("Please enter the start of price range(if you wish to only look for a specific price enter 0 for this filed): ");
+                gets(price_start);
+                if(strlen(price_start) > 13)
+                {
+                    printf("maximum price is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(price_start, strlen(price_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of price range: ");
+                gets(price_finish);
+                if(strlen(price_finish) > 13)
+                {
+                    printf("maximum price is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(price_finish, strlen(price_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_sale_residential_price(price_start, price_finish);
             report_sale_commercial_price(price_start, price_finish);
@@ -6184,25 +6760,61 @@ void page_reports_normal();
         }
         case 6:
         {
+            PlaySound("Audios\\Report_room.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char floor_start[6], floor_finish[6];
-            printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(floor_start);
-            printf("Please enter the end of room range: ");
-            gets(floor_finish);
+            char *room_start[6], *room_finish[6];
+            while(1)
+            {
+                printf("Please enter the start of room range(if you wish to only look for a specific room enter 0 for this filed): ");
+                gets(room_start);
+                if(strlen(room_start) > 4)
+                {
+                    printf("maximum room is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(room_start, strlen(room_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of room range: ");
+                gets(room_finish);
+                if(strlen(room_finish) > 4)
+                {
+                    printf("maximum room is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(room_finish, strlen(room_finish)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
-            report_rent_residential_room(floor_start, floor_finish);
-            report_rent_commercial_room(floor_start, floor_finish);
-            report_sale_residential_room(floor_start, floor_finish);
-            report_sale_commercial_room(floor_start, floor_finish);
+            report_rent_residential_room(room_start, room_finish);
+            report_rent_commercial_room(room_start, room_finish);
+            report_sale_residential_room(room_start, room_finish);
+            report_sale_commercial_room(room_start, room_finish);
             break;
         }
         case 7:
         {
+            PlaySound("Audios\\Report_price_total.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             if(report_price_total() == 0)
             {
+                PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+                Sleep(3000);
                 printf("There is no price to show!\n");
                 printf("For getting back to report menu , press any key....");
                 getchar();
@@ -6210,6 +6822,7 @@ void page_reports_normal();
             }
             else
             {
+
                 printf("The total worth of salable buildings and fileds are equal to: %lld\n", report_price_total());
                 printf("For getting back to report menu , press any key....");
                 getchar();
@@ -6218,37 +6831,119 @@ void page_reports_normal();
         }
         case 8:
         {
+            PlaySound("Audios\\Report_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-            printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(prepayment_start);
-            printf("Please enter the end of room range: ");
-            gets(prepayment_end);
-            printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
-            gets(rent_start);
-            printf("Please enter the end of rent range:");
-            gets(rent_end);
+            char *prepayment_start[20], *prepayment_end[20], *rent_start[20], *rent_end[20];
+            while(1)
+            {
+                printf("Please enter the start of prepayment range(if you wish to only look for a specific prepayment enter 0 for this filed): ");
+                gets(prepayment_start);
+                if(strlen(prepayment_start) > 13)
+                {
+                    printf("maximum prepayment is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(prepayment_start, strlen(prepayment_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of prepayment range: ");
+                gets(prepayment_end);
+                if(strlen(prepayment_end) > 13)
+                {
+                    printf("maximum prepayment is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(prepayment_end, strlen(prepayment_end)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the start of rent range(if you wish to only look for a specific rent enter 0 for this filed): ");
+                gets(rent_start);
+                if(strlen(rent_start) > 13)
+                {
+                    printf("maximum rent is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(rent_start, strlen(rent_start)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
+            while(1)
+            {
+                printf("Please enter the end of rent range: ");
+                gets(rent_end);
+                if(strlen(rent_end) > 13)
+                {
+                    printf("maximum rent is 9-999-999-999-999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(rent_end, strlen(rent_end)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             system("cls");
             report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
             report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
             report_rent_filed_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
             break;
         }
-
         case 9:
         {
+            PlaySound("Audios\\Report_restigered.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             report_date_main_registered_buildings();
             break;
         }
         case 10:
         {
+            PlaySound("Audios\\Report_floor.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter an amount for floor: ");
-            gets(chose);
+            char *chose[12];
+            while(1)
+            {
+                printf("Please enter a floor amount: ");
+                gets(chose);
+                if(strlen(chose) > 4)
+                {
+                    printf("maximum floor  is 9999!\n");
+                    fflush(stdin);
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+                if(isalldigit(chose, strlen(chose)) == 0)
+                {
+                    printf("Please enter a valid option\n");
+                    PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+                }
+            }
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_floor(chose);
@@ -6257,6 +6952,7 @@ void page_reports_normal();
             report_sale_commercial_floor(chose);
             break;
         }
+
         case 11:
         {
             system("cls");
@@ -6266,15 +6962,16 @@ void page_reports_normal();
         {
             system("cls");
             printf("Please enter a valid option!");
-            Sleep(2500);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
             break;
         }
         }
     }
 }
-
 void menu_delete_building()
 {
+    PlaySound("Audios\\delete_main_menu.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     while(1)
     {
@@ -6307,8 +7004,9 @@ void menu_delete_building()
         default:
         {
             system("cls");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("Please enter a valid option");
-            Sleep(1000);
+            Sleep(3000);
             break;
         }
         }
@@ -6317,15 +7015,12 @@ void menu_delete_building()
 }
 void delete_menu_sale_buildings()
 {
+    PlaySound("Audios\\delete_main_menu_for_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     while(1)
     {
         checker = 0;
-
         system("cls");
-
-
-
         printf("Deleting buildings\\for sale\n");
         printf("1. Residential buildings\n");
         printf("2. Commercial\n");
@@ -6359,8 +7054,9 @@ void delete_menu_sale_buildings()
         default:
         {
             system("cls");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("Please enter a valid option");
-            Sleep(1000);
+            Sleep(3000);
             break;
         }
         }
@@ -6368,6 +7064,7 @@ void delete_menu_sale_buildings()
 }
 void delete_sale_buildings_Residential()
 {
+    PlaySound("Audios\\delete_residental_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for sale\\residential\n");
     char id[7], TEMP[21];
@@ -6448,6 +7145,7 @@ void delete_sale_buildings_Residential()
                 }
                 fclose(fp);
                 make_null_list_building_sale();
+                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("The building has deleted successfully");
                 Sleep(3000);
                 return;
@@ -6456,6 +7154,7 @@ void delete_sale_buildings_Residential()
             {
                 fclose(fp);
                 make_null_list_building_sale();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID\n");
                 Sleep(3000);
 
@@ -6468,6 +7167,8 @@ void delete_sale_buildings_Residential()
         fclose(fp);
         make_null_list_building_sale();
         system("cls");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         printf("There is no building to delete!");
         Sleep(2000);
         return;
@@ -6475,6 +7176,7 @@ void delete_sale_buildings_Residential()
 }
 void delete_sale_buildings_commercial()
 {
+    PlaySound("Audios\\delete_comm_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for sale\\commercial\n");
     char id[7], TEMP[21];
@@ -6563,6 +7265,7 @@ void delete_sale_buildings_commercial()
             {
                 fclose(fp);
                 make_null_list_building_sale();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID");
                 Sleep(3000);
 
@@ -6575,13 +7278,15 @@ void delete_sale_buildings_commercial()
         fclose(fp);
         make_null_list_building_sale();
         system("cls");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("There is no building to delete!");
-        Sleep(2000);
+        Sleep(2500);
         return;
     }
 }
 void delete_sale_buildings_filed()
 {
+    PlaySound("Audios\\delete_filed_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for sale\\field\n");
     char id[7], TEMP[21];
@@ -6663,6 +7368,7 @@ void delete_sale_buildings_filed()
             {
                 fclose(fp);
                 make_null_list_building_sale();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID");
                 Sleep(3000);
 
@@ -6675,13 +7381,15 @@ void delete_sale_buildings_filed()
         fclose(fp);
         make_null_list_building_sale();
         system("cls");
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("There is no building to delete!");
-        Sleep(2000);
+        Sleep(2500);
         return;
     }
 }
 void delete_menu_rent_buildings()
 {
+    PlaySound("Audios\\delete_main_menu_for_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     while(1)
     {
@@ -6720,8 +7428,9 @@ void delete_menu_rent_buildings()
         default:
         {
             system("cls");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("Please enter a valid option");
-            Sleep(1000);
+            Sleep(3000);
             break;
         }
         }
@@ -6731,6 +7440,7 @@ void delete_menu_rent_buildings()
 }
 void delete_rent_buildings_Residential()
 {
+    PlaySound("Audios\\delete_residental_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\residential\n");
     char id[7], TEMP[21];
@@ -6821,9 +7531,9 @@ void delete_rent_buildings_Residential()
             {
                 fclose(fp);
                 make_null_list_building_rent();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID");
                 Sleep(3000);
-
             }
         }
     }
@@ -6833,12 +7543,14 @@ void delete_rent_buildings_Residential()
         make_null_list_building_rent();
         system("cls");
         printf("There is no building to delete!");
-        Sleep(2000);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(2500);
         return;
     }
 }
 void delete_rent_buildings_commercial()
 {
+    PlaySound("Audios\\delete_comm_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\commercial\n");
     char id[7], TEMP[21];
@@ -6873,8 +7585,6 @@ void delete_rent_buildings_commercial()
     {
         while(1)
         {
-
-
             flag = 0;
             printf("For deleting the building please enter its id:");
             gets(id);
@@ -6931,6 +7641,7 @@ void delete_rent_buildings_commercial()
             {
                 fclose(fp);
                 make_null_list_building_rent();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID");
                 Sleep(3000);
 
@@ -6944,12 +7655,14 @@ void delete_rent_buildings_commercial()
         make_null_list_building_rent();
         system("cls");
         printf("There is no building to delete!");
-        Sleep(2000);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(2500);
         return;
     }
 }
 void delete_rent_buildings_filed()
 {
+    PlaySound("Audios\\delete_filed_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\filed\n");
     char id[7], TEMP[21];
@@ -7032,6 +7745,7 @@ void delete_rent_buildings_filed()
             {
                 fclose(fp);
                 make_null_list_building_rent();
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Please enter a valid ID");
                 Sleep(3000);
 
@@ -7045,11 +7759,11 @@ void delete_rent_buildings_filed()
         make_null_list_building_rent();
         system("cls");
         printf("There is no building to delete!");
-        Sleep(2000);
+        PlaySound("Audios\\No_item.wav",NULL,SND_ASYNC | SND_FILENAME);
+        Sleep(2500);
         return;
     }
 }
-
 void report_time_user()
 {
     unsigned long int time;
@@ -7613,6 +8327,7 @@ int PreStart_Checker()
 }
 void Pre_Start()
 {
+    PlaySound("Audios\\Prestart.wav",NULL,SND_ASYNC | SND_FILENAME);
     char *name[52];
     FILE *fp;
     printf("Thank You for choosing our program!\n");
@@ -7626,6 +8341,8 @@ void Pre_Start()
         {
             printf("Please enter a name less than 50 characters!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
         else
         {
@@ -7636,9 +8353,284 @@ void Pre_Start()
     fputs(name, fp);
     fclose(fp);
 }
+void menu_edit_application()
+{
+    PlaySound("Audios\\App_edit.wav",NULL,SND_ASYNC | SND_FILENAME);
+    system("cls");
+    int option = 0;
+    while(1)
+    {
+        printf("1. Change application name\n");
+        printf("2. Change application background color\n");
+        printf("3. Change application text color\n");
+        printf("4. back");
+        printf("\nPlease chose an option: ");
+        scanf("%d", &option);
+        getchar();
+        switch(option)
+        {
+        case 1:
+        {
+            Edit_application_name();
+            break;
+        }
+        case 2:
+        {
+            Edit_application_background_color();
+            break;
+        }
+        case 3:
+        {
+            Edit_application_text_color();
+        }
+        case 4:
+        {
+            return;
+            break;
+        }
+        default:
+        {
+            printf("Please enter a valid option!");
+            PlaySound("Audios\\Invalid_input.wav", NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(3000);
+            system("cls");
+            break;
+        }
+        }
+    }
+}
+void Edit_application_background_color()
+{
+    char *name[52], *BG_color[20], *Text_color[20];
+    int option = 0, flag = 0;
+    PlaySound("Audios\\App_edit_BG.wav", NULL,SND_ASYNC | SND_FILENAME);
+    FILE *fp;
+    printf("for getting back , press b: ");
+    if(islower(getche()) == 'b')
+    {
+        return;
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt", "r+");
+    fgets(name, 52, fp);
+    fgets(BG_color, 20, fp);
+    fgets(Text_color, 20, fp);
+    fclose(fp);
+    printf("\33[2K\r");
+    while(flag == 0)
+    {
+        printf("1. black\n");
+        printf("2. red\n");
+        printf("3. Green\n");
+        printf("4. Yellow\n");
+        printf("5. Blue\n");
+        printf("6. Magenta \n");
+        printf("7. Cyan \n");
+        printf("8. White\n");
+        printf("Please choose a option for background color: ");
+        scanf("%d", &option);
+        switch(option)
+        {
+        case 1:
+        {
+            strcpy(BG_color, "\33[40m");
+            flag = 1;
+            break;
 
+        }
+        case 2:
+        {
+            strcpy(BG_color, "\33[41m");
+            flag = 1;
+            break;
+
+        }
+        case 3:
+        {
+            strcpy(BG_color, "\33[42m");
+            flag = 1;
+            break;
+
+        }
+        case 4:
+        {
+            strcpy(BG_color, "\33[43m");
+            flag = 1;
+            break;
+
+        }
+        case 5:
+        {
+            strcpy(BG_color, "\33[44m");
+            flag = 1;
+            break;
+
+        }
+        case 6:
+        {
+            strcpy(BG_color, "\33[45m");
+            flag = 1;
+            break;
+
+        }
+        case 7:
+        {
+            strcpy(BG_color, "\33[46m");
+            flag = 1;
+            break;
+
+        }
+        case 8:
+        {
+            strcpy(BG_color, "\33[47m");
+            flag = 1;
+            break;
+
+        }
+        case 9:
+        {
+            strcpy(BG_color, "\33[107m");
+            flag = 1;
+            break;
+
+        }
+        default:
+        {
+            printf("Please enter a valid option!\n");
+            fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(2500);
+        }
+        }
+
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt", "w+");
+    fputs(name, fp);
+    fputs(BG_color, fp);
+    fputs("\n", fp);
+    fputs(Text_color, fp);
+    fclose(fp);
+    printf("the text color of program is changed successfully!");
+    PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+    Sleep(2000);
+}
+void Edit_application_text_color()
+{
+    char *name[52], *BG_color[20], *Text_color[20];
+    int option = 0, flag = 0;
+    PlaySound("Audios\\App_edit_text.wav", NULL,SND_ASYNC | SND_FILENAME);
+    FILE *fp;
+    printf("for getting back , press b: ");
+    if(islower(getche()) == 'b')
+    {
+        return;
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt", "r+");
+    fgets(name, 52, fp);
+    fgets(BG_color, 20, fp);
+    fgets(Text_color, 20, fp);
+    fclose(fp);
+    printf("\33[2K\r");
+    while(flag == 0)
+    {
+        printf("1. black\n");
+        printf("2. red\n");
+        printf("3. Green\n");
+        printf("4. Yellow\n");
+        printf("5. Blue\n");
+        printf("6. Magenta \n");
+        printf("7. Cyan \n");
+        printf("8. White\n");
+        printf("Please choose a option for background color: ");
+        scanf("%d", &option);
+        switch(option)
+        {
+        case 1:
+        {
+            strcpy(Text_color, "\33[30m");
+            flag = 1;
+            break;
+
+        }
+        case 2:
+        {
+            strcpy(Text_color, "\33[31m");
+            flag = 1;
+            break;
+
+        }
+        case 3:
+        {
+            strcpy(Text_color, "\33[32m");
+            flag = 1;
+            break;
+
+        }
+        case 4:
+        {
+            strcpy(Text_color, "\33[33m");
+            flag = 1;
+            break;
+
+        }
+        case 5:
+        {
+            strcpy(Text_color, "\33[34m");
+            flag = 1;
+            break;
+
+        }
+        case 6:
+        {
+            strcpy(Text_color, "\33[35m");
+            flag = 1;
+            break;
+
+        }
+        case 7:
+        {
+            strcpy(Text_color, "\33[36m");
+            flag = 1;
+            break;
+
+        }
+        case 8:
+        {
+            strcpy(Text_color, "\33[37m");
+            flag = 1;
+            break;
+
+        }
+        case 9:
+        {
+            strcpy(Text_color, "\33[97m");
+            flag = 1;
+            break;
+
+        }
+        default:
+        {
+            printf("Please enter a valid option!\n");
+            fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            Sleep(2500);
+        }
+        }
+
+    }
+    fp = fopen("Files\\PreStart\\Settings.txt", "w+");
+    fputs(name, fp);
+    fputs("\n", fp);
+    fputs(BG_color, fp);
+    fputs("\n", fp);
+    fputs(Text_color, fp);
+    fclose(fp);
+    printf("the background color of program is changed successfully!");
+    PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+    Sleep(2000);
+}
 void Edit_application_name()
 {
+    PlaySound("Audios\\App_edit_name.wav", NULL,SND_ASYNC | SND_FILENAME);
     char *name[52];
     FILE *fp;
     printf("for getting back , press b: ");
@@ -7656,6 +8648,7 @@ void Edit_application_name()
         {
             printf("Please enter a name less than 50 characters!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
         else
         {
@@ -7665,11 +8658,13 @@ void Edit_application_name()
     fp = fopen("Files\\PreStart\\Settings.txt", "w+");
     fputs(name, fp);
     fclose(fp);
+    printf("the name of program is changed successfully!");
+    PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
+    Sleep(2000);
 }
 void main()
 {
     make_ansiescape_work();
-
     if(PreStart_Checker() == 0)
     {
         Pre_Start();

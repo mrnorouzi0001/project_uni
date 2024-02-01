@@ -796,21 +796,25 @@ void main_page()
 const char * getting_app_name()
 {
     static char * name[52];
+    char temp[52];
     FILE *fp;
     fp = fopen("Files\\PreStart\\Settings.txt", "r");
-    fgets(name, 52, fp);
-    name[strlen(name) - 1] = '\0';
+    fgets(temp, 52, fp);
+    temp[strlen(temp) - 1] = '\0';
+    strcpy(name, temp);
     fclose(fp);
     return name;
 }
 const char * getting_app_background_color()
 {
     static char * BG_color[52];
+    char temp[52];
     FILE *fp;
     fp = fopen("Files\\PreStart\\Settings.txt", "r");
-    fgets(BG_color, 52, fp);
-    fgets(BG_color, 52, fp);
-    BG_color[strlen(BG_color) - 1] = '\0';
+    fgets(temp, 52, fp);
+    fgets(temp, 12, fp);
+    temp[strlen(temp) - 1] = '\0';
+    strcpy(BG_color, temp);
     fclose(fp);
     return BG_color;
 }
@@ -821,7 +825,7 @@ const char * getting_app_Text_color()
     fp = fopen("Files\\PreStart\\Settings.txt", "r");
     fgets(Text_color, 52, fp);
     fgets(Text_color, 52, fp);
-    fgets(Text_color, 52, fp);
+    fgets(Text_color, 6, fp);
     fclose(fp);
     return Text_color;
 }
@@ -1394,9 +1398,9 @@ void Start_Page()
         flag = 0;
         checker = 0;
         system("cls");
-        printf("Welcome to the %s real state agency!\n", getting_app_name());
         printf("%s", getting_app_background_color());
         printf("%s", getting_app_Text_color());
+        printf("            Welcome to the %s real state agency!\n", getting_app_name());
         printf("1. sign up\n");
         printf("2. sign in\n");
         printf("3. exit\n");
@@ -8427,12 +8431,12 @@ void Edit_application_background_color()
         switch(option)
         {
         case 1:
-            {
-                strcpy(BG_color, "\33[40m");
-                flag = 1;
-                break;
+        {
+            strcpy(BG_color, "\33[40m");
+            flag = 1;
+            break;
 
-            }
+        }
         case 2:
         {
             strcpy(BG_color, "\33[41m");
@@ -8501,7 +8505,6 @@ void Edit_application_background_color()
     }
     fp = fopen("Files\\PreStart\\Settings.txt", "w+");
     fputs(name, fp);
-    fputs("\n", fp);
     fputs(BG_color, fp);
     fputs("\n", fp);
     fputs(Text_color, fp);
@@ -8662,7 +8665,6 @@ void Edit_application_name()
 void main()
 {
     make_ansiescape_work();
-
     if(PreStart_Checker() == 0)
     {
         Pre_Start();
