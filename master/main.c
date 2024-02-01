@@ -561,9 +561,9 @@ void sign_in()
                     }
                     else
                     {
-                        fputs("1", user_fp);
-                        fputs("\n", user_fp);
-                        fputs("0", user_fp);
+                        fputs(temp->isactive , user_fp);
+                        itoa(temp->time_banish, time_tmep, 10);
+                        fputs(time_tmep, user_fp);
                         fputs("\n", user_fp);
                     }
                     temp = temp->link;
@@ -649,6 +649,7 @@ void main_page()
         printf("3. Reports\n");
         printf("4. settings\n");
         printf("5. sign out\n");
+        printf("6. application settings\n");
         printf("Please choice your option: ");
         scanf("%d", &option);
         getchar();
@@ -687,6 +688,19 @@ void main_page()
             printf("Logging out");
             Sleep(2000);
             return;
+        }
+        case 6:
+        {
+                system("cls");
+                if(strcmp(current_user->user_name , "admin\n") == 0){
+                     Edit_application_name();
+                     break;
+                }
+                else{
+                    printf("Only admin can change the program settings!");
+                    Sleep(2000);
+                }
+                break;
         }
         default:
         {
