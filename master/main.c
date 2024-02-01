@@ -4,6 +4,8 @@
 #include<string.h>
 #include<ctype.h>
 #include "cryptography\cryptography.h"
+#include <mmsystem.h>
+#pragma comment(lib,"Winmm.lib")
 struct building_sale
 {
     char *municipalitys_area[6];
@@ -171,6 +173,7 @@ void Start_Page();
 void user_edit();
 void sign_up()
 {
+    PlaySound("Audios\\Sign_up.wav",NULL,SND_ASYNC | SND_FILENAME);
     int index = 0, stars = 0, checker = 0;
     char temp_time[31], option, character, password[30];
     system("cls");
@@ -206,6 +209,7 @@ void sign_up()
             {
                 printf("User name can not be more than 28 characters!");
                 fflush(stdin);
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             }
         }
 
@@ -213,6 +217,7 @@ void sign_up()
         if(search_username_list_user(user->user_name)== 1)
         {
             printf("This user name has already taken.");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
         else
         {
@@ -264,32 +269,39 @@ void sign_up()
         {
             printf("your password can have 18 characters at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(checker == 4)
         {
             printf("You need to enter at least 8 characters for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(checker == 0)
         {
             printf("You need to enter at least 1 number for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(checker == 1)
         {
             printf("You need to enter at least a lower case alphabet for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(checker == 2)
         {
             printf("You need to enter at least a upper case alphabet for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(checker == 3)
         {
             printf("You need to enter at least a Special character(@,#,%) for your password!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         if(checker == 5)
         {
@@ -307,11 +319,13 @@ void sign_up()
         {
             printf("Your name can have 23 character at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(user->name, strlen(user->name)) == 0)
         {
             printf("Please enter a valid name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -324,11 +338,13 @@ void sign_up()
         {
             printf("Your last name can have 43 character at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(user->last_name, strlen(user->last_name)) == 0)
         {
             printf("Please enter a valid last name!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -341,16 +357,19 @@ void sign_up()
         {
             printf("Your phone number must have 11 digits!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(user->phone[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(user->phone, strlen(user->phone)) == 0)
         {
             printf("Please enter a valid phone number!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -363,11 +382,13 @@ void sign_up()
         {
             printf("Your email can have 33 characters at maximum!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isemail(user->email, strlen(user->email)) == -1)
         {
             printf("Please enter a valid email!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -380,11 +401,13 @@ void sign_up()
         {
             printf("your ID must have 10 digits!");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(user->ID, strlen(user->ID)) == 0)
         {
             printf("Please enter a valid ID!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -420,11 +443,12 @@ void sign_up()
             fputs("\n", user_fp);
             system("cls");
             Sleep(2000);
+            PlaySound("Audios\\Sign_up_sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("the user has added to the application successfully!");
             free(user);
             free(user_fp);
             fclose(user_fp);
-            Sleep(2000);
+            Sleep(3000);
             return;
         }
         if(option == 'N' || option == 'n')
@@ -436,7 +460,8 @@ void sign_up()
         }
         else
         {
-            printf("Please enter a valid character");
+            printf("Please enter a valid character!");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         }
     }
 
@@ -463,9 +488,18 @@ void sign_in()
         fclose(user_fp);
         exit(0);
     }
-    char user_name[30], password[25];
-    printf("Please enter your user name: ");
-    gets(user_name);
+    char *user_name[30], *password[25];
+    while(1){
+       printf("Please enter your user name: ");
+        gets(user_name);
+        if(strlen(user_name) > 28){
+            printf("Please enter user name that is 28 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            continue;
+        }
+        break;
+    }
+
     printf("%s", user_name);
     strcat(user_name, "\n");
     make_list_user(user_fp);
@@ -478,6 +512,7 @@ void sign_in()
         {
             if(strcmp(user_name, temp->user_name) == 0 && strcmp(temp->isactive, "0\n") == 0 && (time(NULL) - temp->time_banish) < 900)
             {
+                PlaySound("Audios\\Banned.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("\nYou are banned from the application for %ld:%ld", 15 - (time(NULL) - temp->time_banish)/ 60, 60 - ((time(NULL) - temp->time_banish) % 60));
                 free(temp);
                 fclose(user_fp);
@@ -529,8 +564,9 @@ void sign_in()
             strcat(password, "\n");
             if(tries == 5)
             {
+                PlaySound("Audios\\Failed_attemps.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("Too many failed attempts. You are banned for 15 minutes from application!");
-                Sleep(2000);
+                Sleep(10000);
                 system("cls");
                 fclose(user_fp);
                 user_fp = fopen("Files\\users\\user.txt", "w+");
@@ -579,10 +615,13 @@ void sign_in()
             }
             else
             {
-                printf("wrong password! %d tries left!\n", 5 - tries );
-                tries++;
+                    PlaySound("Audios\\Pass_not_match.wav",NULL,SND_ASYNC | SND_FILENAME);
+                    printf("wrong password! %d tries left!\n", 5 - tries );
+                    tries++;
+                    Sleep(5000);
             }
         }
+        PlaySound("Audios\\Sucess_login.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("logging in. please wait!");
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt", "w+");
@@ -619,7 +658,7 @@ void sign_in()
             }
             temp = temp->link;
         }
-        Sleep(2000);
+        Sleep(3000);
         fclose(user_fp);
         make_null_list_user();
         system("cls");
@@ -627,8 +666,9 @@ void sign_in()
     }
     else
     {
+        PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("we don't have this user name!");
-        Sleep(2000);
+        Sleep(3000);
         fclose(user_fp);
         make_null_list_user();
         return;
@@ -1265,7 +1305,7 @@ void logout_time()
 }
 void Start_Page()
 {
-
+    PlaySound("Audios\\Start_page.wav",NULL,SND_ASYNC | SND_FILENAME);
     int checker = 0;
     int flag = 0;
     while(1)
@@ -1299,9 +1339,11 @@ void Start_Page()
         default:
         {
             system("cls");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             printf("Please enter a valid option");
-            Sleep(1000);
+            Sleep(3500);
             system("cls");
+
             break;
         }
         }
@@ -2938,9 +2980,19 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter a municipality area: ");
+            char *chose[12];
+            while(1){
+                printf("Please enter a municipality area: ");
             gets(chose);
+            if(strlen(chose) > 4){
+                printf("maximum municipality area is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(chose , strlen(chose)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
+
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_area(chose);
@@ -2955,11 +3007,30 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char age_start[6], age_finish[6];
+            char *age_start[6], *age_finish[6];
+            while(1){
             printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
             gets(age_start);
+            if(strlen(age_start) > 4){
+                printf("maximum age is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(age_start , strlen(age_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
+             while(1){
             printf("Please enter the end of age range: ");
             gets(age_finish);
+            if(strlen(age_finish) > 4){
+                printf("maximum age is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(age_finish , strlen(age_finish)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
+
             system("cls");
             report_sale_residential_age(age_start, age_finish);
             report_sale_commercial_age(age_start, age_finish);
@@ -2971,11 +3042,29 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char size_start[6], size_finish[6];
-            printf("Please enter the start of size range(if you wish to only look for a specific age enter 0 for this filed): ");
+            char *size_start[6], *size_finish[6];
+            while(1){
+            printf("Please enter the start of size range(if you wish to only look for a specific size enter 0 for this filed): ");
             gets(size_start);
+            if(strlen(size_start) > 8){
+                printf("maximum size is 99999999 m^2!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(size_start , strlen(size_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
+             while(1){
             printf("Please enter the end of size range: ");
             gets(size_finish);
+            if(strlen(size_finish) > 8){
+                printf("maximum size is 99999999 m^2!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(size_finish , strlen(size_finish)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
             system("cls");
             report_sale_residential_size(size_start, size_finish);
             report_sale_commercial_size(size_start, size_finish);
@@ -2989,11 +3078,29 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char price_start[20], price_finish[20];
-            printf("Please enter the start of price range(if you wish to only look for a specific age enter 0 for this filed): ");
+            char *price_start[20], *price_finish[20];
+            while(1){
+            printf("Please enter the start of price range(if you wish to only look for a specific price enter 0 for this filed): ");
             gets(price_start);
+            if(strlen(price_start) > 13){
+                printf("maximum price is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(price_start , strlen(price_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
+             while(1){
             printf("Please enter the end of price range: ");
             gets(price_finish);
+            if(strlen(price_finish) > 13){
+                 printf("maximum price is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(price_finish , strlen(price_finish)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
             system("cls");
             report_sale_residential_price(price_start, price_finish);
             report_sale_commercial_price(price_start, price_finish);
@@ -3004,11 +3111,29 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char floor_start[6], floor_finish[6];
-            printf("Please enter the start of room range(if you wish to only look for a specific age enter 0 for this filed): ");
+            char *floor_start[6], *floor_finish[6];
+             while(1){
+            printf("Please enter the start of floor range(if you wish to only look for a specific floor enter 0 for this filed): ");
             gets(floor_start);
-            printf("Please enter the end of room range: ");
+            if(strlen(floor_start) > 4){
+                printf("maximum floor is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(floor_start , strlen(floor_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
+             while(1){
+            printf("Please enter the end of floor range: ");
             gets(floor_finish);
+            if(strlen(floor_finish) > 4){
+                 printf("maximum floor is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(floor_finish , strlen(floor_finish)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
             system("cls");
             report_rent_residential_room(floor_start, floor_finish);
             report_rent_commercial_room(floor_start, floor_finish);
@@ -3038,15 +3163,52 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
-            printf("Please enter the start of prepayment range(if you wish to only look for a specific age enter 0 for this filed): ");
+            char *prepayment_start[20], *prepayment_end[20], *rent_start[20], *rent_end[20];
+            while(1){
+            printf("Please enter the start of prepayment range(if you wish to only look for a specific prepayment enter 0 for this filed): ");
             gets(prepayment_start);
-            printf("Please enter the end of room range: ");
+            if(strlen(prepayment_start) > 13){
+                printf("maximum prepayment is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(prepayment_start , strlen(prepayment_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
+             while(1){
+            printf("Please enter the end of prepayment range: ");
             gets(prepayment_end);
-            printf("Please enter the start of rent range(if you wish to only look for a specific age enter 0 for this filed): ");
+            if(strlen(prepayment_end) > 13){
+                 printf("maximum prepayment is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(prepayment_end , strlen(prepayment_end)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
+            while(1){
+            printf("Please enter the start of rent range(if you wish to only look for a specific rent enter 0 for this filed): ");
             gets(rent_start);
-            printf("Please enter the end of rent range:");
+            if(strlen(rent_start) > 13){
+                printf("maximum rent is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(rent_start , strlen(rent_start)) == 0){
+                printf("Please enter a valid option\n");
+            }
+
+            }
+             while(1){
+            printf("Please enter the end of rent range: ");
             gets(rent_end);
+            if(strlen(rent_end) > 13){
+                 printf("maximum rent is 9-999-999-999-999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(rent_end , strlen(rent_end)) == 0){
+                printf("Please enter a valid option\n");
+            }
+             }
             system("cls");
             report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
             report_rent_commercial_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
@@ -3071,9 +3233,18 @@ void page_admin_report()
         {
             system("cls");
             inner_flag = 0;
-            char chose[12];
-            printf("Please enter an amount for floor: ");
+            char *chose[12];
+            while(1){
+                printf("Please enter a floor amount: ");
             gets(chose);
+            if(strlen(chose) > 4){
+                printf("maximum floor  is 9999!\n");
+                fflush(stdin);
+            }
+            if(isalldigit(chose , strlen(chose)) == 0){
+                printf("Please enter a valid option\n");
+            }
+            }
             strcat(chose, "\n");
             system("cls");
             report_sale_residential_floor(chose);
@@ -3143,7 +3314,7 @@ void report_date_main_deleted_buildings()
         case 3:
         {
             inner_flag = 0;
-            report_date_main_deleted_building__three_month();
+            report_date_main_deleted_building_three_month();
             break;
         }
         case 4:
@@ -7627,6 +7798,7 @@ int PreStart_Checker()
 }
 void Pre_Start()
 {
+    PlaySound("Audios\\Prestart.wav",NULL,SND_ASYNC | SND_FILENAME);
     char *name[52];
     FILE *fp;
     printf("Thank You for choosing our program!\n");
@@ -7640,6 +7812,8 @@ void Pre_Start()
         {
             printf("Please enter a name less than 50 characters!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
         }
         else
         {
