@@ -342,7 +342,7 @@ void sign_up()
     printf("\n");
     crypto(user->password, strlen(user->password));
 
-    printf("\n            personal information\n");
+    printf("\n            personal information");
     while(1)
     {
         printf("\nPlease enter your name: ");
