@@ -3,61 +3,64 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include <conio.h>
+#include <time.h>
+
 #include "cryptography\cryptography.h"
 #include <mmsystem.h>
 #pragma comment(lib,"Winmm.lib")
 struct building_sale
 {
-    char *municipalitys_area[6];
-    char *address_of_building[100];
-    char *model[20];
-    char *age_of_building[6];
-    char *size_of_the_infrastructure[10];
-    char *amount_of_floors[6];
-    char *size_of_the_main_land[10];
-    char *phone_number_of_owner[15];
-    char *amount_of_rooms[6];
-    char *price[15];
-    char *user[30];
+    char municipalitys_area[6];
+    char address_of_building[100];
+    char model[20];
+    char age_of_building[6];
+    char size_of_the_infrastructure[10];
+    char amount_of_floors[6];
+    char size_of_the_main_land[10];
+    char phone_number_of_owner[15];
+    char amount_of_rooms[6];
+    char price[15];
+    char user[30];
     unsigned long int time;
-    char *isactive[3];
+    char isactive[3];
     char id[7];
     unsigned long int time_delete;
     struct building_sale *link;
 }*start_building_sale = NULL, *last_building_sale;
 struct building_rent
 {
-    char *municipalitys_area[6];
-    char *address_of_building[100];
-    char *model[20];
-    char *age_of_building[6];
-    char *size_of_the_infrastructure[10];
-    char *amount_of_floors[6];
-    char *size_of_the_main_land[10];
-    char *phone_number_of_owner[15];
-    char *amount_of_rooms[6];
-    char *prepayment[15];
-    char *rent_per_month[15];
-    char *user[30];
+    char municipalitys_area[6];
+    char address_of_building[100];
+    char model[20];
+    char age_of_building[6];
+    char size_of_the_infrastructure[10];
+    char amount_of_floors[6];
+    char size_of_the_main_land[10];
+    char phone_number_of_owner[15];
+    char amount_of_rooms[6];
+    char prepayment[15];
+    char rent_per_month[15];
+    char user[30];
     unsigned long int time;
-    char *isactive[3];
-    char *id[7];
+    char isactive[3];
+    char id[7];
     unsigned long int time_delete;
     struct building_rent *link;
 }*start_building_rent, *last_building_rent;
 struct user
 {
-    char *user_name[30];
-    char *password[20];
-    char *name[25];
-    char *last_name[45];
-    char *phone[15];
-    char *email[35];
+    char user_name[30];
+    char password[20];
+    char name[25];
+    char last_name[45];
+    char phone[15];
+    char email[35];
     unsigned long int time_login;
     unsigned long int time_logout;
     int registered_builiding;
-    char *ID[20];
-    char *isactive[3];
+    char ID[20];
+    char isactive[3];
     unsigned long int time_banish;
     struct user *link;
 }*start_user = NULL, *last_user = NULL;
@@ -176,6 +179,7 @@ void sortLinkedList(USER **head);
 void sortListHelper(USER **head, USER *newNode);
 void Start_Page();
 void user_edit();
+void report_date_main_deleted_building_month();
 void sign_up()
 {
     PlaySound("Audios\\Sign_up.wav",NULL,SND_ASYNC | SND_FILENAME);
@@ -205,8 +209,14 @@ void sign_up()
         while(1)
         {
             printf("\nPlease enter a user name: ");
-            gets(user->user_name);
-            if(strlen(user->user_name) <= 28)
+            fgets(user->user_name, 50, stdin);
+            if(strcmp(user->user_name , "\n") == 0){
+                 printf("Please enter a user name!");
+                fflush(stdin);
+                PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+                continue;
+            }
+            if(strlen(user->user_name) < 29)
             {
                 break;
             }
@@ -218,7 +228,6 @@ void sign_up()
             }
         }
 
-        strcat(user->user_name, "\n");
         if(search_username_list_user(user->user_name)== 1)
         {
             printf("This user name has already taken.");
@@ -271,7 +280,7 @@ void sign_up()
             }
             checker = password_checker(user->password, strlen(user->password));
 
-            if(strlen(user->password) > 18)
+            if(strlen(user->password) > 19)
             {
                 printf("your password can have 18 characters at maximum!");
                 fflush(stdin);
@@ -318,8 +327,8 @@ void sign_up()
         while(1)
         {
             printf("Please enter your password again: ");
-            gets(password);
-            if(strlen(password) > 18)
+            fgets(password, 50, stdin);
+            if(strlen(password) > 19)
             {
                 printf("passwords aren't matched!\n");
                 fflush(stdin);
@@ -328,7 +337,9 @@ void sign_up()
             }
             break;
         }
-        if(strcmp(password, user->password) ==0)
+
+        password[strlen(password) - 1] = '\0';
+        if(strcmp(password, user->password) == 0)
         {
             break;
         }
@@ -338,6 +349,7 @@ void sign_up()
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
+        break;
     }
     printf("\n");
     crypto(user->password, strlen(user->password));
@@ -346,8 +358,8 @@ void sign_up()
     while(1)
     {
         printf("\nPlease enter your name: ");
-        gets(user->name);
-        if(23 < strlen(user->name))
+        fgets(user->name, 50, stdin);
+        if(24 < strlen(user->name))
         {
             printf("Your name can have 23 character at maximum!");
             fflush(stdin);
@@ -365,8 +377,8 @@ void sign_up()
     while(1)
     {
         printf("\nPlease enter your last name: ");
-        gets(user->last_name);
-        if(43 < strlen(user->last_name))
+        fgets(user->last_name, 50, stdin);
+        if(44 < strlen(user->last_name))
         {
             printf("Your last name can have 43 character at maximum!");
             fflush(stdin);
@@ -384,8 +396,8 @@ void sign_up()
     while(1)
     {
         printf("\nPlease enter Your phone number: ");
-        gets(user->phone);
-        if(strlen(user->phone) != 11)
+        fgets(user->phone, 30, stdin);
+        if(strlen(user->phone) != 12)
         {
             printf("Your phone number must have 11 digits!");
             fflush(stdin);
@@ -409,8 +421,8 @@ void sign_up()
     while(1)
     {
         printf("\nPlease enter Your email: ");
-        gets(user->email);
-        if(strlen(user->email) > 33)
+        fgets(user->email, 50, stdin);
+        if(strlen(user->email) > 34)
         {
             printf("Your email can have 33 characters at maximum!");
             fflush(stdin);
@@ -428,8 +440,8 @@ void sign_up()
     while(1)
     {
         printf("\nPlease enter Your ID: ");
-        gets(user->ID);
-        if(strlen(user->ID) != 10)
+        fgets(user->ID, 50, stdin);
+        if(strlen(user->ID) != 11)
         {
             printf("your ID must have 10 digits!");
             fflush(stdin);
@@ -455,20 +467,18 @@ void sign_up()
             fputs(user->password, user_fp);
             fputs("\n", user_fp);
             fputs(user->name, user_fp);
-            fputs("\n", user_fp);
             fputs(user->last_name, user_fp);
-            fputs("\n", user_fp);
             fputs(user->phone, user_fp);
-            fputs("\n", user_fp);
+
             fputs(user->email, user_fp);
-            fputs("\n", user_fp);
+
             itoa(0, temp_time, 10);
             fputs(temp_time, user_fp);
             fputs("\n", user_fp);
             fputs("0", user_fp);
             fputs("\n", user_fp);
             fputs(user->ID, user_fp);
-            fputs("\n", user_fp);
+
             fputs("1", user_fp);
             fputs("\n", user_fp);
             fputs("0", user_fp);
@@ -500,6 +510,7 @@ void sign_up()
 }
 void sign_in()
 {
+    PlaySound("Audios\\Sign_in.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("For getting back press b: ");
     if(tolower(getche()) == 'b')
@@ -520,12 +531,12 @@ void sign_in()
         fclose(user_fp);
         exit(0);
     }
-    char *user_name[30], *password[25];
+    char user_name[30], password[25];
     while(1)
     {
         printf("Please enter your user name: ");
-        gets(user_name);
-        if(strlen(user_name) > 28)
+        fgets(user_name, 50, stdin);
+        if(strlen(user_name) > 29)
         {
             printf("Please enter user name that is 28 characters at maximum!\n");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
@@ -535,7 +546,7 @@ void sign_in()
     }
 
     printf("%s", user_name);
-    strcat(user_name, "\n");
+
     make_list_user(user_fp);
     int tries = 0;
     if(search_username_list_user(user_name) == 1)
@@ -547,7 +558,7 @@ void sign_in()
             if(strcmp(user_name, temp->user_name) == 0 && strcmp(temp->isactive, "0\n") == 0 && (time(NULL) - temp->time_banish) < 900)
             {
                 PlaySound("Audios\\Banned.wav",NULL,SND_ASYNC | SND_FILENAME);
-                printf("\nYou are banned from the application for %ld:%ld", 15 - (time(NULL) - temp->time_banish)/ 60, 60 - ((time(NULL) - temp->time_banish) % 60));
+                printf("\nYou are banned from the application for %ld:%ld", 14 - (time(NULL) - temp->time_banish)/ 60, 59 - ((time(NULL) - temp->time_banish) % 60));
                 free(temp);
                 fclose(user_fp);
                 Sleep(2000);
@@ -649,13 +660,14 @@ void sign_in()
             }
             else
             {
-                PlaySound("Audios\\Pass_not_match.wav",NULL,SND_ASYNC | SND_FILENAME);
+
                 printf("wrong password! %d tries left!\n", 5 - tries );
+                PlaySound("Audios\\Pass_not_match.wav",NULL,SND_ASYNC | SND_FILENAME);
                 tries++;
                 Sleep(5000);
             }
         }
-        PlaySound("Audios\\Sucess_login.wav",NULL,SND_ASYNC | SND_FILENAME);
+        PlaySound("Audios\\Sucess_loging.wav",NULL,SND_ASYNC | SND_FILENAME);
         printf("logging in. please wait!");
         fclose(user_fp);
         user_fp = fopen("Files\\users\\user.txt", "w+");
@@ -758,6 +770,7 @@ void main_page()
         }
         case 5:
         {
+        PlaySound("Audios\\Logout.wav",NULL,SND_ASYNC | SND_FILENAME);
             logout_time();
             free(current_user);
             printf("Logging out");
@@ -825,7 +838,7 @@ const char * getting_app_Text_color()
     fp = fopen("Files\\PreStart\\Settings.txt", "r");
     fgets(Text_color, 52, fp);
     fgets(Text_color, 52, fp);
-    fgets(Text_color, 6, fp);
+    fgets(Text_color, 8, fp);
     fclose(fp);
     return Text_color;
 }
@@ -833,23 +846,24 @@ void user_edit()
 {
     PlaySound("Audios\\User_edit.wav",NULL,SND_ASYNC | SND_FILENAME);
     int index = 0, stars = 0;
+
     system("cls");
-    char *tempstr[34], *temp_pass_valid[25], *temp_user[25], *temp_time[15], checker, character;
-    FILE *user_fp;
-    user_fp = fopen("Files\\users\\user.txt", "r");
-    make_list_user(user_fp);
-    USER *temp, *temp_current = NULL;
-    printf("For getting back, press b: ");
+     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
         return;
     }
-    fclose(user_fp);
+    char tempstr[34], temp_pass_valid[25], temp_user[25], temp_time[15], checker, character;
+    FILE *user_fp;
+    user_fp = fopen("Files\\users\\user.txt", "r");
+    make_list_user(user_fp);
+    USER *temp, *temp_current = NULL;
     printf("\33[2K\r");
     if(temp_current == NULL)
     {
         temp_current = malloc(sizeof(USER));
     }
+    strcpy(temp_current->isactive , current_user->isactive);
     printf("User settings\n");
     printf("        if you don't want to change a filed , leave it blank\n\n");
 
@@ -858,8 +872,8 @@ void user_edit()
     {
 
         printf("\nPlease enter your new name: ");
-        gets(tempstr);
-        if(strcmp(tempstr, "") == 0)
+        fgets(tempstr, 100, stdin);
+        if(strcmp(tempstr, "\n") == 0)
         {
             break;
         }
@@ -869,7 +883,7 @@ void user_edit()
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
-        if(strlen(tempstr) > 23)
+        if(strlen(tempstr) > 24)
         {
             printf("Your name can have 23 character at maximum!");
             fflush(stdin);
@@ -878,9 +892,9 @@ void user_edit()
         }
         break;
     }
-    if(strcmp(tempstr, "") != 0)
+    if(strcmp(tempstr, "\n") != 0)
     {
-        strcat(tempstr, "\n");
+
         strcpy(temp_current->name,  tempstr);
     }
     else
@@ -890,8 +904,8 @@ void user_edit()
     while(1)
     {
         printf("\nPlease enter your last new name: ");
-        gets(tempstr);
-        if(strcmp(tempstr, "") == 0)
+        fgets(tempstr, 100, stdin);
+        if(strcmp(tempstr, "\n") == 0)
         {
             break;
         }
@@ -902,7 +916,7 @@ void user_edit()
             continue;
 
         }
-        if(strlen(tempstr) > 43)
+        if(strlen(tempstr) > 44)
         {
 
             printf("Your last name can have 43 character at maximum!");
@@ -913,9 +927,9 @@ void user_edit()
 
         break;
     }
-    if(strcmp(tempstr, "") != 0)
+    if(strcmp(tempstr, "\n") != 0)
     {
-        strcat(tempstr, "\n");
+
         strcpy(temp_current->last_name, tempstr);
     }
     else
@@ -925,12 +939,12 @@ void user_edit()
     while(1)
     {
         printf("\nPlease enter your new ID: ");
-        gets(tempstr);
-        if(strcmp(tempstr, "") == 0)
+        fgets(tempstr, 100, stdin);
+        if(strcmp(tempstr, "\n") == 0)
         {
             break;
         }
-        if(strlen(tempstr) != 10)
+        if(strlen(tempstr) != 11)
         {
             printf("your ID must have 10 digits!");
             fflush(stdin);
@@ -938,7 +952,7 @@ void user_edit()
 
             continue;
         }
-        if(isallalpha(tempstr, strlen(tempstr)) == 0)
+        if(isalldigit(tempstr, strlen(tempstr)) == 0)
         {
             printf("Please enter a valid ID!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
@@ -948,9 +962,9 @@ void user_edit()
         break;
 
     }
-    if(strcmp(tempstr, "") != 0)
+    if(strcmp(tempstr, "\n") != 0)
     {
-        strcat(tempstr, "\n");
+
         strcpy(temp_current->ID, tempstr);
     }
     else
@@ -961,12 +975,12 @@ void user_edit()
     {
         printf("\nPlease enter your new Phone: ");
 
-        gets(tempstr);
-        if(strcmp(tempstr, "") == 0)
+        fgets(tempstr, 100, stdin);
+        if(strcmp(tempstr, "\n") == 0)
         {
             break;
         }
-        if(strlen(tempstr) != 10)
+        if(strlen(tempstr) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 10 digits!");
@@ -991,9 +1005,9 @@ void user_edit()
 
         break;
     }
-    if(strcmp(tempstr, "") != 0)
+    if(strcmp(tempstr, "\n") != 0)
     {
-        strcat(tempstr, "\n");
+
         strcpy(temp_current->phone, tempstr);
     }
     else
@@ -1003,12 +1017,12 @@ void user_edit()
     while(1)
     {
         printf("\nPlease enter your new Email:");
-        gets(tempstr);
-        if(strcmp(tempstr, "") == 0)
+        fgets(tempstr, 100, stdin);
+        if(strcmp(tempstr, "\n") == 0)
         {
             break;
         }
-        if(strlen(tempstr) > 33)
+        if(strlen(tempstr) > 34)
         {
             printf("Your email can have 33 characters at maximum!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
@@ -1024,9 +1038,9 @@ void user_edit()
         }
         break;
     }
-    if(strcmp(tempstr, "") != 0)
+    if(strcmp(tempstr, "\n") != 0)
     {
-        strcat(tempstr, "\n");
+
         strcpy(temp_current->email, tempstr);
     }
     else
@@ -1050,7 +1064,7 @@ void user_edit()
             {
 
                 printf("\33[2K\r");
-                printf("\nPlease enter your password: ");
+                printf("Please enter your password: ");
                 for(int i = 0 ; i < stars - 1 ; i++)
                 {
                     printf("%c", '*');
@@ -1073,9 +1087,9 @@ void user_edit()
         {
             break;
         }
-        if(strlen(tempstr) > 18)
+        if(strlen(tempstr) > 19)
         {
-            printf("your password can have 18 characters at maximum!");
+            printf("\nyour password can have 18 characters at maximum!");
             fflush(stdin);
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
@@ -1083,35 +1097,35 @@ void user_edit()
         }
         if(password_checker(tempstr, strlen(tempstr)) == 4)
         {
-            printf("You need to enter at least 8 characters for your password!");
+            printf("\nYou need to enter at least 8 characters for your password!");
 
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 0)
         {
-            printf("You need to enter at least 1 number for your password!");
+            printf("\nYou need to enter at least 1 number for your password!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 1)
         {
-            printf("You need to enter at least a lower case alphabet for your password!");
+            printf("\nYou need to enter at least a lower case alphabet for your password!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 2)
         {
-            printf("You need to enter at least a upper case alphabet for your password!");
+            printf("\nYou need to enter at least a upper case alphabet for your password!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
             continue;
         }
         if(password_checker(tempstr, strlen(tempstr)) == 3)
         {
-            printf("You need to enter at least a Special character(@,#,%) for your password!");
+            printf("\nYou need to enter at least a Special character(@,#,%) for your password!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
             continue;
@@ -1120,12 +1134,11 @@ void user_edit()
         {
             break;
         }
-
     }
     printf("\n");
     while(1)
     {
-        printf("Please enter your new password again: ");
+        printf("\nPlease enter your new password again: ");
         make_str_null(temp_pass_valid);
         index = 0;
         stars = 0;
@@ -1139,7 +1152,7 @@ void user_edit()
             if(character == 8)
             {
                 printf("\33[2K\r");
-                printf("\nPlease enter your password again: ");
+                printf("Please enter your password again: ");
                 for(int i = 0 ; i < stars - 1 ; i++)
                 {
                     printf("%c", '*');
@@ -1158,18 +1171,19 @@ void user_edit()
                 stars++;
             }
         }
-        if(strcmp(tempstr, "") == 0)
+        if(strcmp(temp_pass_valid, "") == 0)
         {
             break;
         }
-        if(strlen(temp_pass_valid) > 18)
+        if(strlen(temp_pass_valid) > 19)
         {
             fflush(stdin);
-            printf("your password can have 18 characters at maximum!");
+            printf("\nyour password can have 18 characters at maximum!");
             PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
             continue;
         }
+        break;
     }
     printf("\n");
     if(strcmp(tempstr, "") != 0)
@@ -1187,9 +1201,9 @@ void user_edit()
             {
                 index = 0;
                 stars = 0;
-                printf("your password isn't matched!\n");
+                printf("\nyour password isn't matched!\n");
                 make_str_null(tempstr);
-                printf("Please enter your new password: ");
+                printf("\nPlease enter your new password: ");
                 while(1)
                 {
                     character = getch();
@@ -1221,7 +1235,7 @@ void user_edit()
                     }
                 }
                 printf("\n");
-                printf("Please enter your new password again: ");
+                printf("\nPlease enter your new password again: ");
                 make_str_null(temp_pass_valid);
                 index = 0;
                 stars = 0;
@@ -1318,6 +1332,7 @@ void user_edit()
                 }
                 temp = temp->link;
             }
+            strcpy(temp_current->user_name , current_user->user_name);
             current_user = temp_current;
             make_null_list_user();
             fclose(user_fp);
@@ -1546,7 +1561,7 @@ void adding_sale_buildings_Residential()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_sale_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for sale\\residential\n");
@@ -1559,16 +1574,18 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area, 50, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1576,33 +1593,38 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 102, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
-            continue;
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+
+           continue;
         }
         break;
     }
     while(1)
     {
         printf("Please enter model of building: ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 25, stdin);
+        if(strlen(building->model) > 19)
         {
             fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
         {
             printf("Please enter a valid model!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1610,16 +1632,18 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter age of building: ");
-        gets(building->age_of_building);
-        if(strlen(building->age_of_building) > 4)
+        fgets(building->age_of_building, 20, stdin);
+        if(strlen(building->age_of_building) > 5)
         {
             fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->age_of_building, strlen(building->age_of_building)) == 0)
         {
             printf("Please enter a valid age!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1627,8 +1651,8 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 15, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
@@ -1644,33 +1668,38 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter amount of floors: ");
-        gets(building->amount_of_floors);
-        if(strlen(building->amount_of_floors)> 4)
+        fgets(building->amount_of_floors, 10, stdin);
+        if(strlen(building->amount_of_floors)> 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_floors, strlen(building->amount_of_floors)) == 0)
         {
             printf("Please enter a valid number for floors!\n");
-            continue;
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+           continue;
         }
         break;
     }
     while(1)
     {
         printf("Please enter The size of the main land: ");
-        gets(building->size_of_the_main_land);
-        if(strlen(building->size_of_the_main_land)> 8)
+        fgets(building->size_of_the_main_land, 12, stdin);
+        if(strlen(building->size_of_the_main_land)> 9)
         {
             fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         if(isalldigit(building->size_of_the_main_land, strlen(building->size_of_the_main_land)) == 0)
         {
             printf("Please enter a valid number for size of main land!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1678,21 +1707,24 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 50 , stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1700,16 +1732,18 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter amount of rooms: ");
-        gets(building->amount_of_rooms);
-        if(strlen(building->amount_of_rooms) > 4)
+        fgets(building->amount_of_rooms, 10, stdin);
+        if(strlen(building->amount_of_rooms) > 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_rooms, strlen(building->amount_of_rooms)) == 0)
         {
             printf("Please enter a valid number for amount of rooms!\n");
+        PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1718,16 +1752,18 @@ void adding_sale_buildings_Residential()
     while(1)
     {
         printf("Please enter price: ");
-        gets(building->price);
-        if(strlen(building->price) > 13)
+        fgets(building->price, 19, stdin);
+        if(strlen(building->price) > 14)
         {
             fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->price, strlen(building->price)) == 0)
         {
             printf("Please enter a valid price for price!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1744,31 +1780,31 @@ void adding_sale_buildings_Residential()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->address_of_building, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->model, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->age_of_building, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->size_of_the_infrastructure, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->amount_of_floors, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->size_of_the_main_land, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->phone_number_of_owner, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->amount_of_rooms, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->price, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->user, file_sale_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_sale_res);
@@ -1806,7 +1842,7 @@ void adding_sale_buildings_commercial()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_sale_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for sale\\commercial\n");
@@ -1818,16 +1854,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area, 8, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1835,16 +1873,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 105, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1852,8 +1892,8 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter model of building: ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 25, stdin);
+        if(strlen(building->model) > 19)
         {
             fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
@@ -1869,16 +1909,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter age of building: ");
-        gets(building->age_of_building);
-        if(strlen(building->age_of_building) > 4)
+        fgets(building->age_of_building, 10, stdin);
+        if(strlen(building->age_of_building) > 5)
         {
             fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->age_of_building, strlen(building->age_of_building)) == 0)
         {
             printf("Please enter a valid age!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1886,16 +1928,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 12, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
         {
             printf("Please enter a valid size!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1903,16 +1947,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter amount of floors: ");
-        gets(building->amount_of_floors);
-        if(strlen(building->amount_of_floors)> 4)
+        fgets(building->amount_of_floors, 10, stdin);
+        if(strlen(building->amount_of_floors)> 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_floors, strlen(building->amount_of_floors)) == 0)
         {
             printf("Please enter a valid number for floors!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1920,16 +1966,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter The size of the main land: ");
-        gets(building->size_of_the_main_land);
-        if(strlen(building->size_of_the_main_land)> 8)
+        fgets(building->size_of_the_main_land, 12, stdin);
+        if(strlen(building->size_of_the_main_land)>9)
         {
             fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_main_land, strlen(building->size_of_the_main_land)) == 0)
         {
             printf("Please enter a valid number for size of main land!\n");
+         PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1937,21 +1985,24 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 16, stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+        PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1959,16 +2010,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter amount of rooms: ");
-        gets(building->amount_of_rooms);
-        if(strlen(building->amount_of_rooms) > 4)
+        fgets(building->amount_of_rooms, 10, stdin);
+        if(strlen(building->amount_of_rooms) > 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_rooms, strlen(building->amount_of_rooms)) == 0)
         {
             printf("Please enter a valid number for amount of rooms!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -1977,16 +2030,18 @@ void adding_sale_buildings_commercial()
     while(1)
     {
         printf("Please enter price: ");
-        gets(building->price);
-        if(strlen(building->price) > 13)
+        fgets(building->price, 20, stdin);
+        if(strlen(building->price) > 14)
         {
             fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
+          PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->price, strlen(building->price)) == 0)
         {
             printf("Please enter a valid price for price!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2002,39 +2057,40 @@ void adding_sale_buildings_commercial()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->address_of_building, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->model, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->age_of_building, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->size_of_the_infrastructure, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->amount_of_floors, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->size_of_the_main_land, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->phone_number_of_owner, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->amount_of_rooms, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->price, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->user, file_sale_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_sale_res);
         fputs("\n", file_sale_res);
         fputs(building->isactive, file_sale_res);
-        fputs("\n", file_sale_res);
+        fputs("\n" , file_sale_res);
         fputs(building->id, file_sale_res);
-        fputs("\n", file_sale_res);
+        fputs("\n" , file_sale_res);
+
         fputs("0", file_sale_res);
         fputs("\n", file_sale_res);
         free(building);
@@ -2064,7 +2120,7 @@ void adding_sale_buildings_filed()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_sale_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for sale\\filed\n");
@@ -2077,16 +2133,18 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area, 10, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
+           PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2094,16 +2152,18 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 120, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2111,16 +2171,18 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter model of building: ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 25, stdin);
+        if(strlen(building->model) > 19)
         {
             fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
         {
             printf("Please enter a valid model!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2128,16 +2190,18 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 12, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
         {
             printf("Please enter a valid size!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2147,21 +2211,25 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 16, stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2170,16 +2238,18 @@ void adding_sale_buildings_filed()
     while(1)
     {
         printf("Please enter price: ");
-        gets(building->price);
-        if(strlen(building->price) > 13)
+        fgets(building->price, 20, stdin);
+        if(strlen(building->price) > 14)
         {
             fflush(stdin);
             printf("Your building price can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->price, strlen(building->price)) == 0)
         {
             printf("Please enter a valid price for price!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2196,31 +2266,31 @@ void adding_sale_buildings_filed()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->address_of_building, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->model, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->size_of_the_infrastructure, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->phone_number_of_owner, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->price, file_sale_res);
-        fputs("\n", file_sale_res);
+
         fputs(building->user, file_sale_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_sale_res);
         fputs("\n", file_sale_res);
         fputs(building->isactive, file_sale_res);
-        fputs("\n", file_sale_res);
+        fputs("\n" , file_sale_res);
         fputs(building->id, file_sale_res);
-        fputs("\n", file_sale_res);
+         fputs("\n" , file_sale_res);
         fputs("0", file_sale_res);
         fputs("\n", file_sale_res);
         free(building);
@@ -2299,7 +2369,7 @@ void adding_rent_buildings_Residential()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_rent_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for rent\\residential\n");
@@ -2311,33 +2381,38 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area, 10, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         break;
     }
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 102, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2345,16 +2420,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter model of building(apartment or villa): ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 63, stdin);
+        if(strlen(building->model) > 19)
         {
             fflush(stdin);
             printf("Your model type can have 18 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
         {
             printf("Please enter a valid model!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2362,16 +2439,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter age of building: ");
-        gets(building->age_of_building);
-        if(strlen(building->age_of_building) > 4)
+        fgets(building->age_of_building, 9, stdin);
+        if(strlen(building->age_of_building) > 5)
         {
             fflush(stdin);
             printf("Your building can be 9999 years old at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->age_of_building, strlen(building->age_of_building)) == 0)
         {
             printf("Please enter a valid age!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2379,33 +2458,38 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 13, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
         {
             printf("Please enter a valid size!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         break;
     }
     while(1)
     {
         printf("Please enter amount of floors: ");
-        gets(building->amount_of_floors);
-        if(strlen(building->amount_of_floors)> 4)
+        fgets(building->amount_of_floors, 9, stdin);
+        if(strlen(building->amount_of_floors)> 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 floors at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_floors, strlen(building->amount_of_floors)) == 0)
         {
             printf("Please enter a valid number for floors!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2413,16 +2497,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter The size of the main land: ");
-        gets(building->size_of_the_main_land);
-        if(strlen(building->size_of_the_main_land)> 8)
+        fgets(building->size_of_the_main_land, 20, stdin);
+        if(strlen(building->size_of_the_main_land)> 9)
         {
             fflush(stdin);
             printf("Your building can have 99999999 m^2 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_main_land, strlen(building->size_of_the_main_land)) == 0)
         {
             printf("Please enter a valid number for size of main land!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2430,21 +2516,24 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 15, stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2452,16 +2541,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter amount of rooms: ");
-        gets(building->amount_of_rooms);
-        if(strlen(building->amount_of_rooms) > 4)
+        fgets(building->amount_of_rooms, 8, stdin);
+        if(strlen(building->amount_of_rooms) > 5)
         {
             fflush(stdin);
             printf("Your building can have 9999 rooms at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_rooms, strlen(building->amount_of_rooms)) == 0)
         {
             printf("Please enter a valid number for amount of rooms!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2470,16 +2561,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter prepayment: ");
-        gets(building->prepayment);
-        if(strlen(building->prepayment) > 13)
+        fgets(building->prepayment, 20, stdin);
+        if(strlen(building->prepayment) > 14)
         {
             fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->prepayment, strlen(building->prepayment)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2487,16 +2580,18 @@ void adding_rent_buildings_Residential()
     while(1)
     {
         printf("Please enter pay per month(for mortgage only enter 0): ");
-        gets(building->rent_per_month);
-        if(strlen(building->rent_per_month) > 13)
+        fgets(building->rent_per_month, 20, stdin);
+        if(strlen(building->rent_per_month) > 14)
         {
             fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->rent_per_month, strlen(building->rent_per_month)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2512,41 +2607,41 @@ void adding_rent_buildings_Residential()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->address_of_building, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->model, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->age_of_building, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->size_of_the_infrastructure, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->amount_of_floors, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->size_of_the_main_land, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->phone_number_of_owner, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->amount_of_rooms, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->prepayment, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->rent_per_month, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->user, file_rent_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_rent_res);
         fputs("\n", file_rent_res);
         fputs(building->isactive, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
         fputs(building->id, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
         fputs("0", file_rent_res);
         fputs("\n", file_rent_res);
         free(building);
@@ -2575,7 +2670,7 @@ void adding_rent_buildings_commercial()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_rent_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for rent\\commercial\n");
@@ -2587,16 +2682,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area, 15, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             printf("You can have 9999 municipality areas at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2604,16 +2701,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 102, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             printf("Your address can have 98 characters at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2621,16 +2720,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter model of building: ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 22, stdin);
+        if(strlen(building->model) > 19)
         {
             printf("Your model type can have 18 characters at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
         {
             printf("Please enter a valid model!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2638,50 +2739,58 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter age of building: ");
-        gets(building->age_of_building);
-        if(strlen(building->age_of_building) > 4)
+        fgets(building->age_of_building, 9, stdin);
+        if(strlen(building->age_of_building) > 5)
         {
             printf("Your building can be 9999 years old at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->age_of_building, strlen(building->age_of_building)) == 0)
         {
             printf("Please enter a valid age!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         break;
     }
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 12, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             printf("your building can be 99999999 m^2 at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
         {
             printf("Please enter a valid size!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
+
         }
         break;
     }
     while(1)
     {
         printf("Please enter amount of floors: ");
-        gets(building->amount_of_floors);
-        if(strlen(building->amount_of_floors)> 4)
+        fgets(building->amount_of_floors, 14, stdin);
+        if(strlen(building->amount_of_floors)> 5)
         {
             printf("Your building can have 9999 floors at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_floors, strlen(building->amount_of_floors)) == 0)
         {
             printf("Please enter a valid number for floors!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2689,16 +2798,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter The size of the main land: ");
-        gets(building->size_of_the_main_land);
-        if(strlen(building->size_of_the_main_land)> 8)
+        fgets(building->size_of_the_main_land, 20, stdin);
+        if(strlen(building->size_of_the_main_land)> 9)
         {
             printf("Your building can have 99999999 m^2 at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_main_land, strlen(building->size_of_the_main_land)) == 0)
         {
             printf("Please enter a valid number for size of main land!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2706,21 +2817,24 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 20, stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             printf("Your phone number must have 11 digits!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2728,16 +2842,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter amount of rooms: ");
-        gets(building->amount_of_rooms);
-        if(strlen(building->amount_of_rooms) > 4)
+        fgets(building->amount_of_rooms, 10, stdin);
+        if(strlen(building->amount_of_rooms) > 5)
         {
             printf("Your building can have 9999 rooms at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->amount_of_rooms, strlen(building->amount_of_rooms)) == 0)
         {
             printf("Please enter a valid number for amount of rooms!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2746,16 +2862,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter prepayment: ");
-        gets(building->prepayment);
-        if(strlen(building->prepayment) > 13)
+        fgets(building->prepayment, 20, stdin);
+        if(strlen(building->prepayment) > 14)
         {
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->prepayment, strlen(building->prepayment)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2763,16 +2881,18 @@ void adding_rent_buildings_commercial()
     while(1)
     {
         printf("Please enter pay per month(for mortgage only enter 0): ");
-        gets(building->rent_per_month);
-        if(strlen(building->rent_per_month) > 13)
+        fgets(building->rent_per_month, 20, stdin);
+        if(strlen(building->rent_per_month) > 14)
         {
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
             fflush(stdin);
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->rent_per_month, strlen(building->rent_per_month)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2788,41 +2908,42 @@ void adding_rent_buildings_commercial()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->address_of_building, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->model, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->age_of_building, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->size_of_the_infrastructure, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->amount_of_floors, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->size_of_the_main_land, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->phone_number_of_owner, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->amount_of_rooms, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->prepayment, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->rent_per_month, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->user, file_rent_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_rent_res);
         fputs("\n", file_rent_res);
         fputs(building->isactive, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
         fputs(building->id, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
+
         fputs("0", file_rent_res);
         fputs("\n", file_rent_res);
         free(building);
@@ -2853,7 +2974,7 @@ void adding_rent_buildings_filed()
     printf("For getting back, press b: ");
     if(tolower(getche()) == 'b')
     {
-        menu_rent_buildings();
+        return;
     }
     system("cls");
     printf("Adding building\\for rent\\filed\n");
@@ -2863,16 +2984,18 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter the municipality's area: ");
-        gets(building->municipalitys_area);
-        if(strlen(building->municipalitys_area) > 4)
+        fgets(building->municipalitys_area,  8, stdin);
+        if(strlen(building->municipalitys_area) > 5)
         {
             fflush(stdin);
             printf("You can have 9999 municipality areas at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->municipalitys_area, strlen(building->municipalitys_area)) == 0)
         {
             printf("Please enter a valid number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2880,16 +3003,18 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter the address of building: ");
-        gets(building->address_of_building);
-        if(strlen(building->address_of_building) > 98)
+        fgets(building->address_of_building, 102, stdin);
+        if(strlen(building->address_of_building) > 99)
         {
             fflush(stdin);
             printf("Your address can have 98 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isaddress(building->address_of_building, strlen(building->address_of_building)) == 0)
         {
             printf("Please enter a valid address!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2897,16 +3022,19 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter model of building: ");
-        gets(building->model);
-        if(strlen(building->model) > 18)
+        fgets(building->model, 50, stdin);
+          if(strlen(building->model) > 19)
         {
-            fflush(stdin);
+
             printf("Your model type can have 18 characters at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
+            fflush(stdin);
             continue;
         }
         if(isallalpha(building->model, strlen(building->model)) == 0)
         {
             printf("Please enter a valid model!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2914,16 +3042,18 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter The size of the infrastructure: ");
-        gets(building->size_of_the_infrastructure);
-        if(strlen(building->size_of_the_infrastructure) > 8)
+        fgets(building->size_of_the_infrastructure, 13, stdin);
+        if(strlen(building->size_of_the_infrastructure) > 9)
         {
             fflush(stdin);
             printf("your building can be 99999999 m^2 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->size_of_the_infrastructure, strlen(building->size_of_the_infrastructure)) == 0)
         {
             printf("Please enter a valid size!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2931,21 +3061,24 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter phone number of owner: ");
-        gets(building->phone_number_of_owner);
-        if(strlen(building->phone_number_of_owner) != 11)
+        fgets(building->phone_number_of_owner, 22, stdin);
+        if(strlen(building->phone_number_of_owner) != 12)
         {
             fflush(stdin);
             printf("Your phone number must have 11 digits!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(building->phone_number_of_owner[0] != '0')
         {
             printf("Your phone number must starts with 0 digit!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->phone_number_of_owner, strlen(building->phone_number_of_owner)) == 0)
         {
             printf("Please enter a valid phone number!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2953,16 +3086,18 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter prepayment: ");
-        gets(building->prepayment);
-        if(strlen(building->prepayment) > 13)
+        fgets(building->prepayment, 19, stdin);
+        if(strlen(building->prepayment) > 14)
         {
             fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->prepayment, strlen(building->prepayment)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2970,16 +3105,18 @@ void adding_rent_buildings_filed()
     while(1)
     {
         printf("Please enter pay per month(for mortgage only enter 0): ");
-        gets(building->rent_per_month);
-        if(strlen(building->rent_per_month) > 13)
+        fgets(building->rent_per_month, 19, stdin);
+        if(strlen(building->rent_per_month) > 14)
         {
             fflush(stdin);
             printf("Your building prepayment can be 9-999-999-999-999 at maximum!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         if(isalldigit(building->rent_per_month, strlen(building->rent_per_month)) == 0)
         {
             printf("Please enter a valid price for prepayment!\n");
+            PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
             continue;
         }
         break;
@@ -2995,35 +3132,35 @@ void adding_rent_buildings_filed()
     file_ID = fopen("Files\\building\\ID.txt", "w+");
     fputs(char_id, file_ID);
     printf("\nAre you sure you want to add this building to your sale list?(Y/N)");
-    if(getchar() == 'Y')
+    if(toupper(getchar()) == 'Y')
     {
         system("cls");
         printf("processing");
         Sleep(2000);
         fputs(building->municipalitys_area, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->address_of_building, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->model, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->size_of_the_infrastructure, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->phone_number_of_owner, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->prepayment, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->rent_per_month, file_rent_res);
-        fputs("\n", file_rent_res);
+
         fputs(building->user, file_rent_res);
         itoa(building->time, temp, 10);
         fputs(temp, file_rent_res);
         fputs("\n", file_rent_res);
         fputs(building->isactive, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
         fputs(building->id, file_rent_res);
-        fputs("\n", file_rent_res);
-        fputs(building->id, file_rent_res);
-        fputs("\n", file_rent_res);
+        fputs("\n" , file_rent_res);
+
+
         fputs("0", file_rent_res);
         fputs("\n", file_rent_res);
         free(building);
@@ -3084,26 +3221,25 @@ void page_admin_report()
             PlaySound("Audios\\Report_MA.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *chose[12];
+            char chose[12];
             while(1)
             {
                 printf("Please enter a municipality area: ");
-                gets(chose);
-                if(strlen(chose) > 4)
+                fgets(chose, 10, stdin);
+                if(strlen(chose) > 5)
                 {
                     printf("maximum municipality area is 9999!\n");
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                     fflush(stdin);
-
                 }
                 if(isalldigit(chose, strlen(chose)) == 0)
                 {
                     printf("Please enter a valid option\n");
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 }
+                break;
             }
 
-            strcat(chose, "\n");
             system("cls");
             report_sale_residential_area(chose);
             report_sale_commercial_area(chose);
@@ -3118,12 +3254,12 @@ void page_admin_report()
             PlaySound("Audios\\Report_age.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *age_start[6], *age_finish[6];
+            char age_start[6], age_finish[6];
             while(1)
             {
                 printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
-                gets(age_start);
-                if(strlen(age_start) > 4)
+                fgets(age_start, 10, stdin);
+                if(strlen(age_start) > 5)
                 {
                     printf("maximum age is 9999!\n");
                     fflush(stdin);
@@ -3136,12 +3272,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of age range: ");
-                gets(age_finish);
-                if(strlen(age_finish) > 4)
+                fgets(age_finish, 10, stdin);
+                if(strlen(age_finish) > 5)
                 {
                     printf("maximum age is 9999!\n");
                     fflush(stdin);
@@ -3154,6 +3291,7 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
 
             system("cls");
@@ -3168,12 +3306,12 @@ void page_admin_report()
             PlaySound("Audios\\Report_Size.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *size_start[6], *size_finish[6];
+            char size_start[6], size_finish[6];
             while(1)
             {
                 printf("Please enter the start of size range(if you wish to only look for a specific size enter 0 for this filed): ");
-                gets(size_start);
-                if(strlen(size_start) > 8)
+                fgets(size_start, 12, stdin);
+                if(strlen(size_start) > 9)
                 {
                     printf("maximum size is 99999999 m^2!\n");
                     fflush(stdin);
@@ -3186,12 +3324,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of size range: ");
-                gets(size_finish);
-                if(strlen(size_finish) > 8)
+                fgets(size_finish, 12, stdin);
+                if(strlen(size_finish) > 9)
                 {
                     printf("maximum size is 99999999 m^2!\n");
                     fflush(stdin);
@@ -3204,6 +3343,7 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_sale_residential_size(size_start, size_finish);
@@ -3219,12 +3359,12 @@ void page_admin_report()
             PlaySound("Audios\\Report_price.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *price_start[20], *price_finish[20];
+            char price_start[20], price_finish[20];
             while(1)
             {
                 printf("Please enter the start of price range(if you wish to only look for a specific price enter 0 for this filed): ");
-                gets(price_start);
-                if(strlen(price_start) > 13)
+                fgets(price_start, 20, stdin);
+                if(strlen(price_start) > 14)
                 {
                     printf("maximum price is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3237,12 +3377,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of price range: ");
-                gets(price_finish);
-                if(strlen(price_finish) > 13)
+                fgets(price_finish, 20, stdin);
+                if(strlen(price_finish) > 14)
                 {
                     printf("maximum price is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3255,6 +3396,7 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_sale_residential_price(price_start, price_finish);
@@ -3264,15 +3406,15 @@ void page_admin_report()
         }
         case 6:
         {
-            PlaySound("Audios\\Report_room.wav",NULL,SND_ASYNC | SND_FILENAME);
+            PlaySound("Audios\\Reprot_room.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *room_start[6], *room_finish[6];
+            char room_start[6], room_finish[6];
             while(1)
             {
                 printf("Please enter the start of room range(if you wish to only look for a specific room enter 0 for this filed): ");
-                gets(room_start);
-                if(strlen(room_start) > 4)
+                fgets(room_start, 9, stdin);
+                if(strlen(room_start) > 5)
                 {
                     printf("maximum room is 9999!\n");
                     fflush(stdin);
@@ -3285,12 +3427,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of room range: ");
-                gets(room_finish);
-                if(strlen(room_finish) > 4)
+                fgets(room_finish, 8, stdin);
+                if(strlen(room_finish) > 5)
                 {
                     printf("maximum room is 9999!\n");
                     fflush(stdin);
@@ -3303,6 +3446,7 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_rent_residential_room(room_start, room_finish);
@@ -3338,12 +3482,12 @@ void page_admin_report()
             PlaySound("Audios\\Report_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *prepayment_start[20], *prepayment_end[20], *rent_start[20], *rent_end[20];
+            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
             while(1)
             {
                 printf("Please enter the start of prepayment range(if you wish to only look for a specific prepayment enter 0 for this filed): ");
-                gets(prepayment_start);
-                if(strlen(prepayment_start) > 13)
+                fgets(prepayment_start, 20,stdin);
+                if(strlen(prepayment_start) > 14)
                 {
                     printf("maximum prepayment is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3356,12 +3500,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of prepayment range: ");
-                gets(prepayment_end);
-                if(strlen(prepayment_end) > 13)
+                fgets(prepayment_end, 20, stdin);
+                if(strlen(prepayment_end) > 14)
                 {
                     printf("maximum prepayment is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3374,12 +3519,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the start of rent range(if you wish to only look for a specific rent enter 0 for this filed): ");
-                gets(rent_start);
-                if(strlen(rent_start) > 13)
+                fgets(rent_start, 20, stdin);
+                if(strlen(rent_start) > 14)
                 {
                     printf("maximum rent is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3392,12 +3538,13 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of rent range: ");
-                gets(rent_end);
-                if(strlen(rent_end) > 13)
+                fgets(rent_end, 20, stdin);
+                if(strlen(rent_end) > 14)
                 {
                     printf("maximum rent is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -3410,6 +3557,7 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
@@ -3438,12 +3586,12 @@ void page_admin_report()
             PlaySound("Audios\\Report_floor.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *chose[12];
+            char chose[12];
             while(1)
             {
                 printf("Please enter a floor amount: ");
-                gets(chose);
-                if(strlen(chose) > 4)
+                fgets(chose, 10, stdin);
+                if(strlen(chose) > 5)
                 {
                     printf("maximum floor  is 9999!\n");
                     fflush(stdin);
@@ -3456,8 +3604,9 @@ void page_admin_report()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
-            strcat(chose, "\n");
+
             system("cls");
             report_sale_residential_floor(chose);
             report_rent_residential_floor(chose);
@@ -3564,9 +3713,9 @@ void report_date_main_deleted_building_month()
     while(sale->link != NULL)
     {
         file_time = sale->time_delete;
-        if((file_time -current_time ) <= (31 * 24 * 60 * 60))
+        if((current_time-file_time ) <= (31 * 24 * 60 * 60))
         {
-            if(strcmp(sale->isactive, "0\n" == 0))
+            if(strcmp(sale->isactive, "0\n") == 0)
             {
                 printf("ID: %s", sale->id);
                 printf("Municipality's area: %s", sale->municipalitys_area);
@@ -3592,8 +3741,9 @@ void report_date_main_deleted_building_month()
     sale = start_building_sale;
     while(sale->link != NULL)
     {
+
         file_time = sale->time_delete;
-        if((file_time -current_time ) <= (31 * 24 * 60 * 60))
+        if((current_time-file_time) <= (31 * 24 * 60 * 60))
         {
             if(strcmp(sale->isactive, "0\n") == 0)
             {
@@ -3745,9 +3895,9 @@ void report_date_main_deleted_building_three_month()
     while(sale->link != NULL)
     {
         file_time = sale->time_delete;
-        if(strcmp(sale->isactive, "0\n" == 0))
+        if(strcmp(sale->isactive, "0\n") == 0)
         {
-            if(file_time -current_time  <= (3* 31 * 24 * 60 * 60))
+            if(current_time - file_time  <= (3* 31 * 24 * 60 * 60))
 
             {
                 printf("ID: %s", sale->id);
@@ -3775,7 +3925,7 @@ void report_date_main_deleted_building_three_month()
     while(sale->link != NULL)
     {
         file_time = sale->time_delete;
-        if(((file_time -current_time ) <= ( 3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive, "0\n") == 0)
+        if((( -file_time ) <= ( 3* 31 * 24 * 60 * 60)) && strcmp(sale->isactive, "0\n") == 0)
         {
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
@@ -3920,9 +4070,9 @@ void report_date_main_deleted_building_week()
     while(sale->link != NULL)
     {
         file_time = sale->time_delete;
-        if((file_time -current_time ) <= (7 * 24 * 60 * 60))
+        if((current_time -  file_time) <= (7 * 24 * 60 * 60))
         {
-            if(strcmp(sale->isactive, "0\n" == 0))
+            if(strcmp(sale->isactive, "0\n") == 0)
             {
                 printf("ID: %s", sale->id);
                 printf("Municipality's area: %s", sale->municipalitys_area);
@@ -3949,7 +4099,7 @@ void report_date_main_deleted_building_week()
     while(sale->link != NULL)
     {
         file_time = sale->time_delete;
-        if(((file_time -current_time ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive, "0\n" == 0))
+        if(((current_time - file_time  ) <= (7 * 24 * 60 * 60)) && strcmp(sale->isactive, "0\n") == 0)
         {
             printf("ID: %s", sale->id);
             printf("Municipality's area: %s", sale->municipalitys_area);
@@ -4304,7 +4454,7 @@ void report_date_main_registered_building_month()
 void report_date_main_registered_building_three_month()
 {
     PlaySound("Audios\\Report_add_3_month.wav",NULL,SND_ASYNC | SND_FILENAME);
-
+    system("cls");
     FILE *fp;
     BUILDING_RENT *rent;
     BUILDING_SALE *sale;
@@ -4659,7 +4809,7 @@ void report_user_trunover()
     fp_user = fopen("Files\\users\\user.txt", "r");
     make_list_user(fp_user);
     temp = start_user;
-    while(temp != NULL)
+    while(temp != last_user)
     {
         temp->registered_builiding = 0;
         fp_building = fopen("Files\\building\\for_sale\\Residential.txt", "r");
@@ -5122,6 +5272,9 @@ void report_rent_residential_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_RENT *temp;
     FILE *fp;
@@ -5250,6 +5403,9 @@ void report_sale_commercial_room(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -5295,7 +5451,7 @@ void report_sale_commercial_room(char start_age[6], char end_age[6])
 }
 void report_rent_residential_age(char start_age[6], char end_age[6])
 {
-    int age_start, age_end,  age_file;
+    long int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
     if(age_start == 0)
@@ -5835,6 +5991,9 @@ void report_sale_commercial_age(char start_age[6], char end_age[6])
     int age_start, age_end,  age_file;
     age_start = atoi(start_age);
     age_end = atoi(end_age);
+    if(age_start == 0){
+        age_start = age_end;
+    }
     char id[7], TEMP[21];
     BUILDING_SALE *temp;
     FILE *fp;
@@ -6241,7 +6400,7 @@ void report_rent_residential()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_rent();
+         return;
     }
     while(1)
     {
@@ -6299,7 +6458,7 @@ void report_rent_commercial()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_rent();
+         return;
     }
     while(1)
     {
@@ -6354,7 +6513,7 @@ void report_rent_filed()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_rent();
+         return;
     }
     while(1)
     {
@@ -6412,7 +6571,7 @@ void report_sale_residential()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_sale();
+        return;
     }
     while(1)
     {
@@ -6470,7 +6629,7 @@ void report_sale_commercial()
     {
         printf("There is no item to show!");
         Sleep(2500);
-        report_model_building_model_sale();
+        return;
     }
     while(1)
     {
@@ -6494,12 +6653,12 @@ void report_sale_filed()
     PlaySound("Audios\\Report_filed_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
 
     system("cls");
-    printf("Reports\\specific model of buildings\\for sale\\field\n");
+    printf("Reports\\specific model of buildings\\for sale\\Filed\n");
     char id[7], TEMP[21], checker;
     int flag = 0;
     BUILDING_SALE *temp;
     FILE *fp;
-    fp = fopen("Files\\building\\for_sale\\Commercial.txt", "r+");
+    fp = fopen("Files\\building\\for_sale\\Filed.txt", "r+");
     make_list_building_sale_filed(fp);
     temp = start_building_sale;
     while(temp != NULL)
@@ -6580,12 +6739,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_MA.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *chose[12];
+            char chose[12];
             while(1)
             {
                 printf("Please enter a municipality area: ");
-                gets(chose);
-                if(strlen(chose) > 4)
+                fgets(chose, 10, stdin);
+                if(strlen(chose) > 5)
                 {
                     printf("maximum municipality area is 9999!\n");
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
@@ -6597,9 +6756,10 @@ void page_reports_normal()
                     printf("Please enter a valid option\n");
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
                 }
+                break;
             }
 
-            strcat(chose, "\n");
+
             system("cls");
             report_sale_residential_area(chose);
             report_sale_commercial_area(chose);
@@ -6614,12 +6774,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_age.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *age_start[6], *age_finish[6];
+            char age_start[6], age_finish[6];
             while(1)
             {
                 printf("Please enter the start of age range(if you wish to only look for a specific age enter 0 for this filed): ");
-                gets(age_start);
-                if(strlen(age_start) > 4)
+                fgets(age_start, 14, stdin);
+                if(strlen(age_start) > 5)
                 {
                     printf("maximum age is 9999!\n");
                     fflush(stdin);
@@ -6632,12 +6792,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of age range: ");
-                gets(age_finish);
-                if(strlen(age_finish) > 4)
+                fgets(age_finish, 16, stdin);
+                if(strlen(age_finish) > 5)
                 {
                     printf("maximum age is 9999!\n");
                     fflush(stdin);
@@ -6650,6 +6811,7 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
 
             system("cls");
@@ -6664,12 +6826,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_Size.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *size_start[6], *size_finish[6];
+            char size_start[6], size_finish[6];
             while(1)
             {
                 printf("Please enter the start of size range(if you wish to only look for a specific size enter 0 for this filed): ");
-                gets(size_start);
-                if(strlen(size_start) > 8)
+                fgets(size_start, 20, stdin);
+                if(strlen(size_start) > 9)
                 {
                     printf("maximum size is 99999999 m^2!\n");
                     fflush(stdin);
@@ -6682,12 +6844,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of size range: ");
-                gets(size_finish);
-                if(strlen(size_finish) > 8)
+                fgets(size_finish, 20, stdin);
+                if(strlen(size_finish) > 9)
                 {
                     printf("maximum size is 99999999 m^2!\n");
                     fflush(stdin);
@@ -6700,6 +6863,7 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_sale_residential_size(size_start, size_finish);
@@ -6715,12 +6879,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_price.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *price_start[20], *price_finish[20];
+            char price_start[20], price_finish[20];
             while(1)
             {
                 printf("Please enter the start of price range(if you wish to only look for a specific price enter 0 for this filed): ");
-                gets(price_start);
-                if(strlen(price_start) > 13)
+                fgets(price_start, 20, stdin);
+                if(strlen(price_start) > 14)
                 {
                     printf("maximum price is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6733,12 +6897,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of price range: ");
-                gets(price_finish);
-                if(strlen(price_finish) > 13)
+                fgets(price_finish, 20, stdin);
+                if(strlen(price_finish) > 14)
                 {
                     printf("maximum price is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6751,6 +6916,7 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_sale_residential_price(price_start, price_finish);
@@ -6760,15 +6926,15 @@ void page_reports_normal()
         }
         case 6:
         {
-            PlaySound("Audios\\Report_room.wav",NULL,SND_ASYNC | SND_FILENAME);
+            PlaySound("Audios\\Reprot_room.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *room_start[6], *room_finish[6];
+            char room_start[6], room_finish[6];
             while(1)
             {
                 printf("Please enter the start of room range(if you wish to only look for a specific room enter 0 for this filed): ");
-                gets(room_start);
-                if(strlen(room_start) > 4)
+                fgets(room_start, 20, stdin);
+                if(strlen(room_start) > 5)
                 {
                     printf("maximum room is 9999!\n");
                     fflush(stdin);
@@ -6781,12 +6947,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of room range: ");
-                gets(room_finish);
-                if(strlen(room_finish) > 4)
+                fgets(room_finish, 20, stdin);
+                if(strlen(room_finish) > 5)
                 {
                     printf("maximum room is 9999!\n");
                     fflush(stdin);
@@ -6799,6 +6966,7 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_rent_residential_room(room_start, room_finish);
@@ -6834,12 +7002,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *prepayment_start[20], *prepayment_end[20], *rent_start[20], *rent_end[20];
+            char prepayment_start[20], prepayment_end[20], rent_start[20], rent_end[20];
             while(1)
             {
                 printf("Please enter the start of prepayment range(if you wish to only look for a specific prepayment enter 0 for this filed): ");
-                gets(prepayment_start);
-                if(strlen(prepayment_start) > 13)
+                fgets(prepayment_start, 20, stdin);
+                if(strlen(prepayment_start) > 14)
                 {
                     printf("maximum prepayment is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6852,12 +7020,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of prepayment range: ");
-                gets(prepayment_end);
-                if(strlen(prepayment_end) > 13)
+                fgets(prepayment_end, 20, stdin);
+                if(strlen(prepayment_end) > 14)
                 {
                     printf("maximum prepayment is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6870,12 +7039,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the start of rent range(if you wish to only look for a specific rent enter 0 for this filed): ");
-                gets(rent_start);
-                if(strlen(rent_start) > 13)
+                fgets(rent_start, 20, stdin);
+                if(strlen(rent_start) > 14)
                 {
                     printf("maximum rent is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6888,12 +7058,13 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             while(1)
             {
                 printf("Please enter the end of rent range: ");
-                gets(rent_end);
-                if(strlen(rent_end) > 13)
+                fgets(rent_end, 20, stdin );
+                if(strlen(rent_end) > 14)
                 {
                     printf("maximum rent is 9-999-999-999-999!\n");
                     fflush(stdin);
@@ -6906,6 +7077,7 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
             system("cls");
             report_rent_residential_rent_mortgage(prepayment_start, prepayment_end, rent_start, rent_end);
@@ -6925,12 +7097,12 @@ void page_reports_normal()
             PlaySound("Audios\\Report_floor.wav",NULL,SND_ASYNC | SND_FILENAME);
             system("cls");
             inner_flag = 0;
-            char *chose[12];
+            char chose[12];
             while(1)
             {
                 printf("Please enter a floor amount: ");
-                gets(chose);
-                if(strlen(chose) > 4)
+                fgets(chose, 9, stdin);
+                if(strlen(chose) > 5)
                 {
                     printf("maximum floor  is 9999!\n");
                     fflush(stdin);
@@ -6943,8 +7115,9 @@ void page_reports_normal()
                     PlaySound("Audios\\Invalid_input.wav",NULL,SND_ASYNC | SND_FILENAME);
 
                 }
+                break;
             }
-            strcat(chose, "\n");
+
             system("cls");
             report_sale_residential_floor(chose);
             report_rent_residential_floor(chose);
@@ -7067,6 +7240,11 @@ void delete_sale_buildings_Residential()
     PlaySound("Audios\\delete_residental_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for sale\\residential\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -7100,8 +7278,8 @@ void delete_sale_buildings_Residential()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_sale;
             while(temp != NULL)
             {
@@ -7179,6 +7357,11 @@ void delete_sale_buildings_commercial()
     PlaySound("Audios\\delete_comm_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for sale\\commercial\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -7212,8 +7395,8 @@ void delete_sale_buildings_commercial()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_sale;
             while(temp != NULL)
             {
@@ -7288,7 +7471,12 @@ void delete_sale_buildings_filed()
 {
     PlaySound("Audios\\delete_filed_sale.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
-    printf("Deleting buildings\\for sale\\field\n");
+    printf("Deleting buildings\\for sale\\Filed\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_SALE *temp;
@@ -7318,8 +7506,8 @@ void delete_sale_buildings_filed()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_sale;
             while(temp != NULL)
             {
@@ -7443,6 +7631,11 @@ void delete_rent_buildings_Residential()
     PlaySound("Audios\\delete_residental_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\residential\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -7477,8 +7670,8 @@ void delete_rent_buildings_Residential()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_rent;
             while(temp != NULL)
             {
@@ -7553,6 +7746,11 @@ void delete_rent_buildings_commercial()
     PlaySound("Audios\\delete_comm_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\commercial\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -7587,8 +7785,8 @@ void delete_rent_buildings_commercial()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_rent;
             while(temp != NULL)
             {
@@ -7665,6 +7863,11 @@ void delete_rent_buildings_filed()
     PlaySound("Audios\\delete_filed_rent.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
     printf("Deleting buildings\\for rent\\filed\n");
+    printf("For getting back , press b....");
+    if(tolower(getche()) == 'b'){
+        return;
+    }
+    printf("\33[2K\r");
     char id[7], TEMP[21];
     int flag = 0;
     BUILDING_RENT *temp;
@@ -7695,8 +7898,8 @@ void delete_rent_buildings_filed()
         {
             flag = 0;
             printf("For deleting the building please enter its id:");
-            gets(id);
-            strcat(id, "\n");
+            fgets(id, 100, stdin);
+
             temp = start_building_rent;
             while(temp != NULL)
             {
@@ -7772,20 +7975,17 @@ void report_time_user()
     struct tm *info;
     USER *temp;
     fp = fopen("Files\\users\\user.txt", "r");
-    if(fp == NULL)
-    {
-        printf("as");
-    }
     make_list_user(fp);
     temp = start_user;
     while(temp != last_user)
     {
         temp->user_name[strlen(temp->user_name) - 1] = '\0';
-        time = start_user->time_login;
+        time = temp->time_login;
+
         info = localtime(&time);
         strftime (time_str,80,"20%y/%m/%d %H:%M:%S",info);
         printf("last time of %s user login is:%s\n",temp->user_name,time_str);
-        time = start_user->time_logout;
+        time = temp->time_logout;
         info = localtime(&time);
         strftime (time_str,80,"20%y/%m/%d %H:%M:%S",info);
         printf("last time of %s user logout is:%s\n",temp->user_name, time_str);
@@ -7966,7 +8166,7 @@ void make_list_building_sale_filed(FILE *building_sale_fp)
 }
 void make_null_list_building_sale()
 {
-    struct BUILDING_SALE *temp;
+    BUILDING_SALE *temp;
     do
     {
         temp = malloc(sizeof(BUILDING_SALE));
@@ -8119,7 +8319,7 @@ int isalldigit(char string[], int lenght)
     int flag = 0;
     for(int index = 0 ; index < lenght ; index++)
     {
-        if(isdigit(string[index]) == 0)
+        if(isdigit(string[index]) == 0 && string[index] != '\n' || lenght == 1)
         {
             flag = 1;
         }
@@ -8187,11 +8387,11 @@ int isaddress(char string[], int lenght)
     int flag = 0;
     for(int index = 0 ; index < lenght ; index++)
     {
-        if(isalnum(string[index]) == 0 && string[index] != '-')
+        if(isalnum(string[index]) == 0 && string[index] != '-' && string[index] != '\n' || lenght == 1)
         {
             flag = 1;
         }
-        if(string[index] == '-' && (string[index + 1] == '\0' || string[index + 1] == '-'))
+        if(string[index] == '-' && (string[index + 1] == '\0' || string[index + 1] == '-') ||  lenght == 1)
         {
             flag = 1;
         }
@@ -8210,7 +8410,7 @@ int isallalpha(char string[], int lenght)
     int flag = 0;
     for(int index = 0 ; index < lenght ; index++)
     {
-        if(isalpha(string[index]) == 0)
+        if(isalpha(string[index]) == 0 && string[index] != '\n' ||  lenght == 1)
         {
             flag = 1;
         }
@@ -8231,7 +8431,7 @@ int isemail(char email[], int lenght)
     int Index_of_Dot = 0;
     for(int index = 0 ; index  < lenght ; index++)
     {
-        if(isalnum(email[index] == 0) && (email[index] != '@' || email[index] != '_' ||  email[index] != '.'))
+        if(isalnum(email[index] == 0) && (email[index] != '@' || email[index] != '_' ||  email[index] != '.' || email[index] != '\n') || lenght == 1)
         {
             isfalse = 1;
             isfalse = 1;
@@ -8275,7 +8475,7 @@ int isemail(char email[], int lenght)
         {
             Index_of_Dot = index;
         }
-        else if(isalpha(email[index]) <= 0)
+        else if(isalpha(email[index]) <= 0 && email[index] != '\n' )
         {
             if(email[index] != '.' || isdigit(email[index]) == 1)
             {
@@ -8328,7 +8528,7 @@ int PreStart_Checker()
 void Pre_Start()
 {
     PlaySound("Audios\\Prestart.wav",NULL,SND_ASYNC | SND_FILENAME);
-    char *name[52];
+    char name[52];
     FILE *fp;
     printf("Thank You for choosing our program!\n");
     printf("\33[2K\r");
@@ -8336,7 +8536,7 @@ void Pre_Start()
     {
 
         printf("Please choose a new name for your application(50 characters at maximum): ");
-        gets(name);
+        fgets(name, 100, stdin);
         if(strlen(name) > 50)
         {
             printf("Please enter a name less than 50 characters!\n");
@@ -8355,8 +8555,8 @@ void Pre_Start()
 }
 void menu_edit_application()
 {
-    PlaySound("Audios\\App_edit.wav",NULL,SND_ASYNC | SND_FILENAME);
     system("cls");
+    PlaySound("Audios\\App_edit.wav",NULL,SND_ASYNC | SND_FILENAME);
     int option = 0;
     while(1)
     {
@@ -8401,7 +8601,8 @@ void menu_edit_application()
 }
 void Edit_application_background_color()
 {
-    char *name[52], *BG_color[20], *Text_color[20];
+    system("cls");
+    char name[52], BG_color[20], Text_color[20];
     int option = 0, flag = 0;
     PlaySound("Audios\\App_edit_BG.wav", NULL,SND_ASYNC | SND_FILENAME);
     FILE *fp;
@@ -8433,6 +8634,7 @@ void Edit_application_background_color()
         case 1:
         {
             strcpy(BG_color, "\33[40m");
+            printf("%s" , "\33[40m");
             flag = 1;
             break;
 
@@ -8440,6 +8642,7 @@ void Edit_application_background_color()
         case 2:
         {
             strcpy(BG_color, "\33[41m");
+             printf("%s" , "\33[41m");
             flag = 1;
             break;
 
@@ -8447,6 +8650,7 @@ void Edit_application_background_color()
         case 3:
         {
             strcpy(BG_color, "\33[42m");
+             printf("%s" , "\33[42m");
             flag = 1;
             break;
 
@@ -8454,6 +8658,7 @@ void Edit_application_background_color()
         case 4:
         {
             strcpy(BG_color, "\33[43m");
+             printf("%s" , "\33[43m");
             flag = 1;
             break;
 
@@ -8461,6 +8666,7 @@ void Edit_application_background_color()
         case 5:
         {
             strcpy(BG_color, "\33[44m");
+             printf("%s" , "\33[44m");
             flag = 1;
             break;
 
@@ -8468,6 +8674,7 @@ void Edit_application_background_color()
         case 6:
         {
             strcpy(BG_color, "\33[45m");
+             printf("%s" , "\33[45m");
             flag = 1;
             break;
 
@@ -8475,6 +8682,7 @@ void Edit_application_background_color()
         case 7:
         {
             strcpy(BG_color, "\33[46m");
+             printf("%s" , "\33[46m");
             flag = 1;
             break;
 
@@ -8482,6 +8690,7 @@ void Edit_application_background_color()
         case 8:
         {
             strcpy(BG_color, "\33[47m");
+             printf("%s" , "\33[47m");
             flag = 1;
             break;
 
@@ -8489,6 +8698,7 @@ void Edit_application_background_color()
         case 9:
         {
             strcpy(BG_color, "\33[107m");
+             printf("%s" , "\33[107m");
             flag = 1;
             break;
 
@@ -8515,7 +8725,8 @@ void Edit_application_background_color()
 }
 void Edit_application_text_color()
 {
-    char *name[52], *BG_color[20], *Text_color[20];
+    system("cls");
+    char name[52], BG_color[20], Text_color[20];
     int option = 0, flag = 0;
     PlaySound("Audios\\App_edit_text.wav", NULL,SND_ASYNC | SND_FILENAME);
     FILE *fp;
@@ -8547,6 +8758,7 @@ void Edit_application_text_color()
         case 1:
         {
             strcpy(Text_color, "\33[30m");
+            printf("%s" , "\33[30m");
             flag = 1;
             break;
 
@@ -8554,6 +8766,7 @@ void Edit_application_text_color()
         case 2:
         {
             strcpy(Text_color, "\33[31m");
+            printf("%s" , "\33[31m");
             flag = 1;
             break;
 
@@ -8561,6 +8774,7 @@ void Edit_application_text_color()
         case 3:
         {
             strcpy(Text_color, "\33[32m");
+            printf("%s" , "\33[32m");
             flag = 1;
             break;
 
@@ -8568,6 +8782,7 @@ void Edit_application_text_color()
         case 4:
         {
             strcpy(Text_color, "\33[33m");
+            printf("%s" , "\33[33m");
             flag = 1;
             break;
 
@@ -8575,6 +8790,7 @@ void Edit_application_text_color()
         case 5:
         {
             strcpy(Text_color, "\33[34m");
+            printf("%s" , "\33[34m");
             flag = 1;
             break;
 
@@ -8582,6 +8798,7 @@ void Edit_application_text_color()
         case 6:
         {
             strcpy(Text_color, "\33[35m");
+            printf("%s" , "\33[35m");
             flag = 1;
             break;
 
@@ -8589,6 +8806,7 @@ void Edit_application_text_color()
         case 7:
         {
             strcpy(Text_color, "\33[36m");
+            printf("%s" , "\33[36m");
             flag = 1;
             break;
 
@@ -8596,6 +8814,7 @@ void Edit_application_text_color()
         case 8:
         {
             strcpy(Text_color, "\33[37m");
+            printf("%s" , "\33[37m");
             flag = 1;
             break;
 
@@ -8603,6 +8822,7 @@ void Edit_application_text_color()
         case 9:
         {
             strcpy(Text_color, "\33[97m");
+            printf("%s" , "\33[97m");
             flag = 1;
             break;
 
@@ -8619,9 +8839,7 @@ void Edit_application_text_color()
     }
     fp = fopen("Files\\PreStart\\Settings.txt", "w+");
     fputs(name, fp);
-    fputs("\n", fp);
     fputs(BG_color, fp);
-    fputs("\n", fp);
     fputs(Text_color, fp);
     fclose(fp);
     printf("the background color of program is changed successfully!");
@@ -8630,8 +8848,9 @@ void Edit_application_text_color()
 }
 void Edit_application_name()
 {
+    system("cls");
     PlaySound("Audios\\App_edit_name.wav", NULL,SND_ASYNC | SND_FILENAME);
-    char *name[52];
+    char name[52];
     FILE *fp;
     printf("for getting back , press b: ");
     if(islower(getche()) == 'b')
@@ -8643,7 +8862,7 @@ void Edit_application_name()
     {
 
         printf("Please choose a new name for your application(50 characters at maximum): ");
-        gets(name);
+        fgets(name, 100, stdin);
         if(strlen(name) > 50)
         {
             printf("Please enter a name less than 50 characters!\n");
