@@ -1821,6 +1821,7 @@ void adding_sale_buildings_Residential()
         fclose(file_sale_res);
         system("cls");
         printf("building has added successfully");
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
         Sleep(2000);
         return;
     }
@@ -2650,6 +2651,7 @@ void adding_rent_buildings_Residential()
         fclose(file_rent_res);
         system("cls");
         printf("building has added successfully");
+        PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
         Sleep(2000);
         return;
     }
@@ -7328,8 +7330,8 @@ void delete_sale_buildings_Residential()
                 }
                 fclose(fp);
                 make_null_list_building_sale();
-                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 printf("The building has deleted successfully");
+                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 Sleep(3000);
                 return;
             }
@@ -7447,6 +7449,7 @@ void delete_sale_buildings_commercial()
                 fclose(fp);
                 make_null_list_building_sale();
                 printf("The building has deleted successfully");
+                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 Sleep(3000);
                 return;
             }
@@ -7556,6 +7559,7 @@ void delete_sale_buildings_filed()
                 fclose(fp);
                 make_null_list_building_sale();
                 printf("The building has deleted successfully");
+               PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 Sleep(3000);
                 return;
             }
@@ -7841,6 +7845,7 @@ void delete_rent_buildings_commercial()
                 fclose(fp);
                 make_null_list_building_rent();
                 printf("The building has deleted successfully");
+                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 Sleep(3000);
                 return;
             }
@@ -7951,6 +7956,7 @@ void delete_rent_buildings_filed()
                 fclose(fp);
                 make_null_list_building_rent();
                 printf("The building has deleted successfully");
+                PlaySound("Audios\\Sucess.wav",NULL,SND_ASYNC | SND_FILENAME);
                 Sleep(3000);
                 return;
             }
